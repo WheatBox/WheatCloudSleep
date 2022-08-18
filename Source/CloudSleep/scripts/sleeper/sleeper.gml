@@ -8,3 +8,14 @@ globalvar myName, myType;
 myName = "";
 myType = SleeperType.Boy;
 
+function GetSleeperType(val) {
+	switch(val) {
+		case 0:
+			return SleeperType.Girl;
+		case 1:
+			return SleeperType.Boy;
+	}
+	
+	return SleeperType.Boy;
+}
+

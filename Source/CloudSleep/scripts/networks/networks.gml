@@ -1,5 +1,3 @@
-#macro while_ until !
-
 globalvar serverIP, serverPort, socket;
 serverIP = "";
 serverPort = -1;

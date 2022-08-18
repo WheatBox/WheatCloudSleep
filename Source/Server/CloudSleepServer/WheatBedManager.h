@@ -58,6 +58,8 @@ public:
 
 	bool IsBedEmpty(int checkBedSleepId);
 
+	SleeperType GetSleeperType(int val);
+
 private:
 	Bed m_arrBeds[256];
 

@@ -24,6 +24,20 @@ bool WheatBedManager::IsBedEmpty(int checkBedSleepId)
 	return m_arrBeds[checkBedSleepId].empty;
 }
 
+SleeperType WheatBedManager::GetSleeperType(int val)
+{
+	switch(val) {
+		case 0:
+			return SleeperType::Girl;
+			break;
+		case 1:
+			return SleeperType::Boy;
+			break;
+	}
+
+	return SleeperType::Boy;
+}
+
 SleeperType Sleeper::TransformIntToSleeperType(int _intval)
 {
 	switch(_intval) {

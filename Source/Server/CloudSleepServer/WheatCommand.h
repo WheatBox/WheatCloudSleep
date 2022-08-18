@@ -1,5 +1,6 @@
 #pragma once
 
+#include <vector>
 #include <string>
 
 enum class WheatCommandType {
@@ -19,8 +20,8 @@ enum class WheatCommandType {
 
 struct WheatCommand {
 	WheatCommandType type = WheatCommandType::unknown;
-	std::string strParam;
-	int nParam[2];
+	std::string strParam = "";
+	int nParam[2] = {0};
 };
 
 // 指令程序员，负责本公司的服务端的指令解析与生成工作
@@ -33,6 +34,14 @@ public:
 
 	// 根据指令生成消息
 	const char * MakeMessage(WheatCommand & command);
+
+	// 切割消息
+	// buf 填入要分割的消息，delimiterChar 填入分割符号，pieces 表示要切片的份数，默认0为分割完成每一份
+	// 例如 ("ABC$DEF$114$514", '$', 3) 则会得到 "ABC" "DEF" "114$514"
+	std::vector<std::string> CutMessage(const char * buf, const char delimiterChar, int pieces = 0);
+	std::vector<std::string> CutMessage(const char * buf, size_t len, const char delimiterChar, int pieces = 0);
+
+	WheatCommandType GetCommandTypeFromString(const char * sz);
 
 private:
 

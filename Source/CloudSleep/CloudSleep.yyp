@@ -1,5 +1,6 @@
 {
   "resources": [
+    {"id":{"name":"WheatCommand","path":"scripts/WheatCommand/WheatCommand.yy",},"order":5,},
     {"id":{"name":"obj_makeMyCharacterOverButton","path":"objects/obj_makeMyCharacterOverButton/obj_makeMyCharacterOverButton.yy",},"order":1,},
     {"id":{"name":"spr_bedBoy","path":"sprites/spr_bedBoy/spr_bedBoy.yy",},"order":2,},
     {"id":{"name":"textbox_fns","path":"scripts/textbox_fns/textbox_fns.yy",},"order":0,},
@@ -7,13 +8,14 @@
     {"id":{"name":"obj_camera","path":"objects/obj_camera/obj_camera.yy",},"order":3,},
     {"id":{"name":"rm_bedroom","path":"rooms/rm_bedroom/rm_bedroom.yy",},"order":1,},
     {"id":{"name":"obj_bed","path":"objects/obj_bed/obj_bed.yy",},"order":0,},
+    {"id":{"name":"Others","path":"scripts/Others/Others.yy",},"order":6,},
     {"id":{"name":"textbox","path":"objects/textbox/textbox.yy",},"order":1,},
     {"id":{"name":"rm_makeMyCharacter","path":"rooms/rm_makeMyCharacter/rm_makeMyCharacter.yy",},"order":2,},
     {"id":{"name":"obj_inputMyNameTextbox","path":"objects/obj_inputMyNameTextbox/obj_inputMyNameTextbox.yy",},"order":2,},
     {"id":{"name":"spr_bedGirl","path":"sprites/spr_bedGirl/spr_bedGirl.yy",},"order":1,},
     {"id":{"name":"Camera","path":"scripts/Camera/Camera.yy",},"order":3,},
     {"id":{"name":"obj_client","path":"objects/obj_client/obj_client.yy",},"order":2,},
-    {"id":{"name":"NetworkCodes","path":"notes/NetworkCodes/NetworkCodes.yy",},"order":0,},
+    {"id":{"name":"NetworkCommandType","path":"notes/NetworkCommandType/NetworkCommandType.yy",},"order":0,},
     {"id":{"name":"spr_Girl","path":"sprites/spr_Girl/spr_Girl.yy",},"order":6,},
     {"id":{"name":"Networks","path":"scripts/Networks/Networks.yy",},"order":0,},
     {"id":{"name":"spr_bedEmpty","path":"sprites/spr_bedEmpty/spr_bedEmpty.yy",},"order":3,},
