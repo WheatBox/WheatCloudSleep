@@ -15,6 +15,7 @@ int main() {
 	myServer.Run();
 
 	myServer.CloseServer();
+
 	return 0;
 }
 
