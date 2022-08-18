@@ -12,7 +12,7 @@ cameraH = camera_get_view_height(view_camera[0]);
 mouseXPrevious ??= mouse_x;
 mouseYPrevious ??= mouse_y;
 
-if(mouse_check_button(mb_right)) {
+if(mouse_check_button(mb_left)) {
 	cameraCenterX -= mouse_x - mouseXPrevious;
 	cameraCenterY -= mouse_y - mouseYPrevious;
 }
