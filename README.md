@@ -10,4 +10,4 @@ Wheat Cloud Sleep software, which is meaningless. All you need to do is just ope
 
 Server(C++) Source Path: 服务端(C++)源代码路径： ./Source/Server/CloudSleepServer/
 
-Client(GameMaker) Source Path: 客户端(GameMaker)源代码路径： ./Source/Server/CloudSleepServer/
+Client(GameMaker) Source Path: 客户端(GameMaker)源代码路径： ./Source/CloudSleep/
