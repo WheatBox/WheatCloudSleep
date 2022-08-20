@@ -8,7 +8,7 @@ if(asyncType == network_type_non_blocking_connect) {
 		room_goto(rm_bedroom);
 	} else {
 		show_message("连接服务器 " + serverIP + ":" + string(serverPort) + " 失败！！！");
-		game_end();
+		game_restart();
 	}
 }
 

@@ -52,7 +52,7 @@ int WheatBedManager::FindSleeperId(SOCKET sleeperSocket)
 	return -1;
 }
 
-void WheatBedManager::LoginNewSleeper(Sleeper sleeper)
+void WheatBedManager::RegisterNewSleeper(Sleeper sleeper)
 {
 	int emptyId = FindEmptySleeperId();
 	
@@ -62,6 +62,16 @@ void WheatBedManager::LoginNewSleeper(Sleeper sleeper)
 	}
 
 	m_sleepers[emptyId].copy(sleeper);
+}
+
+void WheatBedManager::CancelSleeper(int sleeperId)
+{
+	m_sleepers[sleeperId].clear();
+}
+
+void WheatBedManager::CancelSleeper(SOCKET sleeperSocket)
+{
+	CancelSleeper(FindSleeperId(sleeperSocket));
 }
 
 int WheatBedManager::FindEmptySleeperId()
@@ -77,6 +87,11 @@ int WheatBedManager::FindEmptySleeperId()
 Sleeper::Sleeper()
 {
 	set(true, 0, "", SleeperType::Boy);
+}
+
+Sleeper::Sleeper(SOCKET _sock)
+{
+	set(true, _sock, "", SleeperType::Boy);
 }
 
 Sleeper::Sleeper(bool _empty, SOCKET _sock, const char* _name, SleeperType _type)

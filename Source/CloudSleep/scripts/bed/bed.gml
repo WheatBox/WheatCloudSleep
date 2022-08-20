@@ -3,9 +3,10 @@
 /// @param {real} _y y
 /// @param {real} _depth depth
 /// @param {real} _bedSleepId 床位睡觉id
-function CreateBed(_x, _y, _depth, _bedSleepId) {
-	var newins = instance_create_depth(_x, _y, _depth, obj_bed);
+function CreateBed(_x, _y, _bedSleepId) {
+	var newins = instance_create_depth(_x, _y, 0, obj_bed);
 	InitBed(newins, _bedSleepId);
+	return newins;
 }
 
 /// @desc 初始化床

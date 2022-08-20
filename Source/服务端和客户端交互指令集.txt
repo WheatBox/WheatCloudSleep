@@ -1,6 +1,7 @@
 指令集
 
-name$ 角色名称，同时代表新睡客加入，name$小麦
+sleeper$ 新睡客加入，后跟 睡客id，该消息仅会由服务端发送，sleeper$12
+name$ 角色名称，name$小麦
 type$ 角色类型(SleeperType)，type$0
 
 sleep$ 睡觉，后加床位id，sleep$28

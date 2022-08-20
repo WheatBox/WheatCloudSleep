@@ -1,6 +1,7 @@
 enum CommandType {
 	unknown,
 	
+	sleeper,
 	name,
 	type,
 	
@@ -15,6 +16,8 @@ enum CommandType {
 
 function GetCommandTypeFromString(buf) {
 	switch(buf) {
+		case "sleeper":
+			return CommandType.sleeper;
 		case "name":
 			return CommandType.name;
 		case "type":
@@ -38,7 +41,8 @@ function GetCommandTypeFromString(buf) {
 }
 
 /// 返回一个数组，[0] = CommandType，[1] = params（可能为字符串，数字，数组）
-function CommandParse(buf) {
+function CommandParse(stringWhichNeedsToParse) {
+	var buf = stringWhichNeedsToParse;
 	var result = [undefined, undefined];
 	
 	/* 获取 result[0]，CommandTypes部分 */
@@ -61,6 +65,10 @@ function CommandParse(buf) {
 	
 	var strTemp = string_copy(buf, i + 1, string_length(buf) - i);
 	switch(result[0]) {
+		case CommandType.sleeper:
+			result[1] = real(string_digits(strTemp));
+			break;
+		
 		case CommandType.name:
 		// result[1] = 名称 (string)
 			result[1] = strTemp;
@@ -140,16 +148,19 @@ function CommandMakeMessage(_CommandType, params = undefined) {
 	var res = "";
 	
 	switch(_CommandType) {
+		case CommandType.sleeper:
+			break;
+		
 		case CommandType.name:
 			res += "name$" + params;
 			break;
 			
 		case CommandType.type:
-			res += "name$" + string(params[0]);
+			res += "type$" + string(params[0]);
 			break;
 			
 		case CommandType.sleep:
-			res += "sleep$" + params[0];
+			res += "sleep$" + string(params[0]);
 			break;
 			
 		case CommandType.getup:

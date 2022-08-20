@@ -56,6 +56,8 @@ void WheatTCPServer::Run()
 
 				printf("New Client %lld Joined  %s:%d\n", clientSocket, inet_ntoa(clientAddr.sin_addr), ntohs(clientAddr.sin_port));
 
+				m_bedManager.RegisterNewSleeper(Sleeper(clientSocket));
+
 				if(selectRes == 1) {
 					continue;
 				}
@@ -70,15 +72,35 @@ void WheatTCPServer::Run()
 						FD_CLR(i, &fd);
 
 						printf("Client %d Left\n", i);
+
+						m_bedManager.CancelSleeper(i);
 					} else {
-						SendMessageToFdSet(fd, fdMax, buf, sizeof(buf));
+						// SendMessageToFdSet(fd, fdMax, buf, sizeof(buf));
 
 						printf("Client %d : %s\n", i, buf);
+
+						WheatCommand command = m_pCommandProgrammer->Parse(buf);
+						
+						if(command.type == WheatCommandType::unknown) {
+							printf("%d Unknown Command! SKIP!\n", i);
+							continue;
+						}
+
+						// m_pCommandProgrammer->PrintWheatCommand(command);
+
+						std::string strSleeperId = std::to_string(m_bedManager.FindSleeperId(i));
+						std::string strMessage = m_pCommandProgrammer->MakeMessage(command);
 					}
 				}
 			}
 		}
 	}
+}
+
+void WheatTCPServer::BufferCatenate(char* destBuf, const char* buf1, size_t buf1Size, const char* buf2, size_t buf2Size)
+{
+	memcpy(destBuf, buf1, buf1Size);
+	memcpy(destBuf + buf1Size, buf2, buf2Size);
 }
 
 void WheatTCPServer::SendMessageToFdSet(fd_set inputFdSet, int fdMax, const char * str) {

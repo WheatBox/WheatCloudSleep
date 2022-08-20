@@ -2,15 +2,13 @@ var left = x - 48;
 var right = x + 48;
 var top = y - 24;
 var bottom = y + 24;
-if(mouse_x >= left && mouse_y >= top && mouse_x <= right && mouse_y <= bottom) {
-	if(mouse_check_button_pressed(mb_left)) {
-		if(instance_exists(obj_inputMyNameTextbox)) {
-			myName = textbox_return(obj_inputMyNameTextbox.myTextbox);
-			if(string_length(myName) < 2) {
-				show_message("名称太短！");
-			} else {
-				room_goto(rm_connect);
-			}
+if(keyboard_check_pressed(vk_enter) || (mouse_check_button_pressed(mb_left) && mouse_x >= left && mouse_y >= top && mouse_x <= right && mouse_y <= bottom)) {
+	if(instance_exists(obj_inputMyNameTextbox)) {
+		myName = textbox_return(obj_inputMyNameTextbox.myTextbox);
+		if(string_length(myName) < 2) {
+			show_message("名称太短！");
+		} else {
+			room_goto(rm_connect);
 		}
 	}
 }

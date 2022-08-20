@@ -6,6 +6,7 @@
 enum class WheatCommandType {
 	unknown,
 
+	sleeper,
 	name,
 	type,
 
@@ -42,6 +43,8 @@ public:
 	std::vector<std::string> CutMessage(const char * buf, size_t len, const char delimiterChar, int pieces = 0);
 
 	WheatCommandType GetCommandTypeFromString(const char * sz);
+
+	void PrintWheatCommand(WheatCommand & command);
 
 private:
 

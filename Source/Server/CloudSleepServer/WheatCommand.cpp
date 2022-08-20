@@ -22,6 +22,9 @@ WheatCommand WheatCommandProgrammer::Parse(const char* buf)
 	/* 获取 resultCommand.nParam 或 resultCommand.strParam，params部分 */
 
 	switch(resultCommand.type) {
+		case WheatCommandType::sleeper:
+			resultCommand.type = WheatCommandType::unknown;
+			break;
 		case WheatCommandType::name:
 			resultCommand.strParam = vecCuttedBuf[1];
 			break;
@@ -57,6 +60,9 @@ const char* WheatCommandProgrammer::MakeMessage(WheatCommand& command)
 	std::string res = "";
 
 	switch(command.type) {
+		case WheatCommandType::sleeper:
+			res = res + "sleeper$" + std::to_string(command.nParam[0]);
+			break;
 		case WheatCommandType::name:
 			res = res + "name$" + command.strParam;
 			break;
@@ -127,6 +133,8 @@ std::vector<std::string> WheatCommandProgrammer::CutMessage(const char* buf, siz
 
 WheatCommandType WheatCommandProgrammer::GetCommandTypeFromString(const char* sz)
 {
+	if(strcmp(sz, "sleeper") == 0)
+		return WheatCommandType::sleeper;
 	if(strcmp(sz, "name") == 0)
 		return WheatCommandType::name;
 	if(strcmp(sz, "type") == 0)
@@ -146,5 +154,14 @@ WheatCommandType WheatCommandProgrammer::GetCommandTypeFromString(const char* sz
 		return WheatCommandType::pos;
 	
 	return WheatCommandType::unknown;
+}
+
+void WheatCommandProgrammer::PrintWheatCommand(WheatCommand& command)
+{
+	printf("--------- Command Print ---------\n");
+	printf("type: %d\n", static_cast<int>(command.type));
+	printf("strParam: %s\n", command.strParam.c_str());
+	printf("nParams: [ %d, %d ]\n", command.nParam[0], command.nParam[1]);
+	printf("---------------------------------\n");
 }
 

@@ -1,5 +1,6 @@
 {
   "resources": [
+    {"id":{"name":"GetPositionOnGUI","path":"scripts/GetPositionOnGUI/GetPositionOnGUI.yy",},"order":8,},
     {"id":{"name":"WheatCommand","path":"scripts/WheatCommand/WheatCommand.yy",},"order":5,},
     {"id":{"name":"obj_makeMyCharacterOverButton","path":"objects/obj_makeMyCharacterOverButton/obj_makeMyCharacterOverButton.yy",},"order":1,},
     {"id":{"name":"spr_bedBoy","path":"sprites/spr_bedBoy/spr_bedBoy.yy",},"order":2,},
@@ -8,9 +9,10 @@
     {"id":{"name":"obj_camera","path":"objects/obj_camera/obj_camera.yy",},"order":3,},
     {"id":{"name":"rm_bedroom","path":"rooms/rm_bedroom/rm_bedroom.yy",},"order":1,},
     {"id":{"name":"obj_bed","path":"objects/obj_bed/obj_bed.yy",},"order":0,},
-    {"id":{"name":"STLvector","path":"scripts/STLvector/STLvector.yy",},"order":7,},
+    {"id":{"name":"STLvector","path":"scripts/STLvector/STLvector.yy",},"order":9,},
     {"id":{"name":"Others","path":"scripts/Others/Others.yy",},"order":6,},
     {"id":{"name":"textbox","path":"objects/textbox/textbox.yy",},"order":1,},
+    {"id":{"name":"spr_SleeperHitbox","path":"sprites/spr_SleeperHitbox/spr_SleeperHitbox.yy",},"order":8,},
     {"id":{"name":"rm_makeMyCharacter","path":"rooms/rm_makeMyCharacter/rm_makeMyCharacter.yy",},"order":2,},
     {"id":{"name":"obj_inputMyNameTextbox","path":"objects/obj_inputMyNameTextbox/obj_inputMyNameTextbox.yy",},"order":2,},
     {"id":{"name":"spr_bedGirl","path":"sprites/spr_bedGirl/spr_bedGirl.yy",},"order":1,},
@@ -18,6 +20,7 @@
     {"id":{"name":"obj_client","path":"objects/obj_client/obj_client.yy",},"order":2,},
     {"id":{"name":"spr_Girl","path":"sprites/spr_Girl/spr_Girl.yy",},"order":6,},
     {"id":{"name":"Networks","path":"scripts/Networks/Networks.yy",},"order":0,},
+    {"id":{"name":"obj_sleeper","path":"objects/obj_sleeper/obj_sleeper.yy",},"order":5,},
     {"id":{"name":"spr_bedEmpty","path":"sprites/spr_bedEmpty/spr_bedEmpty.yy",},"order":3,},
     {"id":{"name":"obj_clientConnect","path":"objects/obj_clientConnect/obj_clientConnect.yy",},"order":1,},
     {"id":{"name":"obj_chooseSleeperTypeButton","path":"objects/obj_chooseSleeperTypeButton/obj_chooseSleeperTypeButton.yy",},"order":0,},

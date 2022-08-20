@@ -12,11 +12,12 @@ enum class SleeperType {
 class Sleeper {
 public:
 	Sleeper();
+	Sleeper(SOCKET _sock);
 	Sleeper(bool _empty, SOCKET _sock,  const char * _name, SleeperType _type);
 
 	bool empty = true;
 	SOCKET sock;
-	std::string name;
+	std::string name = "";
 	SleeperType type = SleeperType::Boy;
 
 	void set(bool _empty, SOCKET _sock, const char * _name, SleeperType _type) {
@@ -70,7 +71,11 @@ public:
 
 	// 登记新的睡客
 	// 如果有空闲的 睡客id，则替换掉该 睡客id 的 睡客，如果没有空闲的 睡客id，push_back() 一个新的 睡客id
-	void LoginNewSleeper(Sleeper sleeper);
+	void RegisterNewSleeper(Sleeper sleeper);
+
+	// 注销睡客，有睡客离开
+	void CancelSleeper(int sleeperId);
+	void CancelSleeper(SOCKET sleeperSocket);
 
 	// 查找首个空闲的 睡客id，如果没有空闲 睡客id，返回 -1
 	int FindEmptySleeperId();

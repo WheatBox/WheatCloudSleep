@@ -141,6 +141,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="ProjectCommon.cpp" />
     <ClCompile Include="WheatBedManager.cpp" />
     <ClCompile Include="WheatCommand.cpp" />
     <ClCompile Include="WheatTCPServer.cpp" />
