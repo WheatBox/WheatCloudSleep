@@ -38,6 +38,52 @@ SleeperType WheatBedManager::GetSleeperType(int val)
 	return SleeperType::Boy;
 }
 
+int WheatBedManager::FindSleeperId(SOCKET sleeperSocket)
+{
+	for(int i = 0; i < m_sleepers.size(); i++) {
+		if(m_sleepers[i].empty == true) {
+			continue;
+		}
+
+		if(m_sleepers[i].sock == sleeperSocket) {
+			return i;
+		}
+	}
+	return -1;
+}
+
+void WheatBedManager::LoginNewSleeper(Sleeper sleeper)
+{
+	int emptyId = FindEmptySleeperId();
+	
+	if(emptyId == -1) {
+		m_sleepers.push_back(sleeper);
+		return;
+	}
+
+	m_sleepers[emptyId].copy(sleeper);
+}
+
+int WheatBedManager::FindEmptySleeperId()
+{
+	for(int i = 0; i < m_sleepers.size(); i++) {
+		if(m_sleepers[i].empty) {
+			return i;
+		}
+	}
+	return -1;
+}
+
+Sleeper::Sleeper()
+{
+	set(true, 0, "", SleeperType::Boy);
+}
+
+Sleeper::Sleeper(bool _empty, SOCKET _sock, const char* _name, SleeperType _type)
+{
+	set(_empty, _sock, _name, _type);
+}
+
 SleeperType Sleeper::TransformIntToSleeperType(int _intval)
 {
 	switch(_intval) {

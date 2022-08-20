@@ -137,6 +137,37 @@ function CommandParse(buf) {
 /// @arg _CommandType CommandType.xxxxx
 /// @arg params（可能为字符串，数字，数组）
 function CommandMakeMessage(_CommandType, params = undefined) {
+	var res = "";
 	
+	switch(_CommandType) {
+		case CommandType.name:
+			res += "name$" + params;
+			break;
+			
+		case CommandType.type:
+			res += "name$" + string(params[0]);
+			break;
+			
+		case CommandType.sleep:
+			res += "sleep$" + params[0];
+			break;
+			
+		case CommandType.getup:
+			res += "getup$";
+			break;
+			
+		case CommandType.chat:
+			res += "chat$" + params;
+			break;
+			
+		case CommandType.move:
+			res += "move$" + string(params[0]) + "," + string(params[1]);
+			break;
+		case CommandType.pos:
+			res += "pos$" + string(params[0]) + "," + string(params[1]);
+			break;
+	}
+	
+	return res;
 }
 

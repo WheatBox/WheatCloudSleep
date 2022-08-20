@@ -1,6 +1,6 @@
 指令集
 
-name$ 角色名称，name$小麦
+name$ 角色名称，同时代表新睡客加入，name$小麦
 type$ 角色类型(SleeperType)，type$0
 
 sleep$ 睡觉，后加床位id，sleep$28

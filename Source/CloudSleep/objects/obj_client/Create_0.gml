@@ -8,3 +8,5 @@ for(var iy = 0; iy < 16; iy++) {
 	}
 }
 
+sleepers = new vector();
+

@@ -54,7 +54,37 @@ WheatCommand WheatCommandProgrammer::Parse(const char* buf)
 
 const char* WheatCommandProgrammer::MakeMessage(WheatCommand& command)
 {
-	return nullptr;
+	std::string res = "";
+
+	switch(command.type) {
+		case WheatCommandType::name:
+			res = res + "name$" + command.strParam;
+			break;
+		case WheatCommandType::type:
+			res = res + "type$" + std::to_string(command.nParam[0]);
+			break;
+
+		case WheatCommandType::sleep:
+			res = res + "sleep$" + std::to_string(command.nParam[0]);
+			break;
+		case WheatCommandType::getup:
+			res += "getup$";
+			break;
+
+		case WheatCommandType::chat:
+			res = res + "chat$" + command.strParam;
+			break;
+
+		case WheatCommandType::move:
+			res = res + "move$" + std::to_string(command.nParam[0]) + "," + std::to_string(command.nParam[1]);
+			break;
+		case WheatCommandType::pos:
+			res = res + "pos$" + std::to_string(command.nParam[0]) + "," + std::to_string(command.nParam[1]);
+			break;
+	}
+
+	const char * szRes = res.c_str();
+	return szRes;
 }
 
 std::vector<std::string> WheatCommandProgrammer::CutMessage(const char* buf, const char delimiterChar, int pieces)

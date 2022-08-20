@@ -8,6 +8,7 @@
     {"id":{"name":"obj_camera","path":"objects/obj_camera/obj_camera.yy",},"order":3,},
     {"id":{"name":"rm_bedroom","path":"rooms/rm_bedroom/rm_bedroom.yy",},"order":1,},
     {"id":{"name":"obj_bed","path":"objects/obj_bed/obj_bed.yy",},"order":0,},
+    {"id":{"name":"STLvector","path":"scripts/STLvector/STLvector.yy",},"order":7,},
     {"id":{"name":"Others","path":"scripts/Others/Others.yy",},"order":6,},
     {"id":{"name":"textbox","path":"objects/textbox/textbox.yy",},"order":1,},
     {"id":{"name":"rm_makeMyCharacter","path":"rooms/rm_makeMyCharacter/rm_makeMyCharacter.yy",},"order":2,},
