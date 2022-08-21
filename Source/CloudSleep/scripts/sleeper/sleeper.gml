@@ -7,9 +7,10 @@ enum SleeperType {
 	Boy
 };
 
-globalvar myName, myType;
+globalvar myName, myType, mySleeperId;
 myName = "";
 myType = SleeperType.Boy;
+mySleeperId = -1;
 
 function GetSleeperType(val) {
 	switch(val) {

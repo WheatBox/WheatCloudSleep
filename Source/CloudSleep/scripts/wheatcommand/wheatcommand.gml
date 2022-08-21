@@ -1,6 +1,7 @@
 enum CommandType {
 	unknown,
 	
+	yourid,
 	sleeper,
 	name,
 	type,
@@ -16,6 +17,8 @@ enum CommandType {
 
 function GetCommandTypeFromString(buf) {
 	switch(buf) {
+		case "yourid":
+			return CommandType.yourid;
 		case "sleeper":
 			return CommandType.sleeper;
 		case "name":
@@ -65,8 +68,12 @@ function CommandParse(stringWhichNeedsToParse) {
 	
 	var strTemp = string_copy(buf, i + 1, string_length(buf) - i);
 	switch(result[0]) {
+		case CommandType.yourid:
+			result[1][0] = real(string_digits(strTemp));
+			break;
+		
 		case CommandType.sleeper:
-			result[1] = real(string_digits(strTemp));
+			result[1][0] = real(string_digits(strTemp));
 			break;
 		
 		case CommandType.name:
@@ -81,7 +88,7 @@ function CommandParse(stringWhichNeedsToParse) {
 				result[0] = CommandType.unknown;
 				break;
 			}
-			result[1] = GetSleeperType(real(_strTrans));
+			result[1][0] = GetSleeperType(real(_strTrans));
 			break;
 			
 		case CommandType.sleep:
@@ -96,7 +103,7 @@ function CommandParse(stringWhichNeedsToParse) {
 				result[0] = CommandType.unknown;
 				break;
 			}
-			result[1] = real(_strTrans);
+			result[1][0] = real(_strTrans);
 			break;
 			
 		case CommandType.getup:
@@ -148,6 +155,7 @@ function CommandMakeMessage(_CommandType, params = undefined) {
 	var res = "";
 	
 	switch(_CommandType) {
+		case CommandType.yourid:
 		case CommandType.sleeper:
 			break;
 		

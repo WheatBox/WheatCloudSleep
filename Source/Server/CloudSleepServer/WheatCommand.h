@@ -6,6 +6,7 @@
 enum class WheatCommandType {
 	unknown,
 
+	yourid,
 	sleeper,
 	name,
 	type,
@@ -19,7 +20,11 @@ enum class WheatCommandType {
 	pos
 };
 
-struct WheatCommand {
+class WheatCommand {
+public:
+	WheatCommand() {}
+	WheatCommand(WheatCommandType _type, const char * _strParam, const int nParam_0, const int nParam_1) { type = _type; strParam = _strParam; nParam[0] = nParam_0; nParam[1] = nParam_1; }
+
 	WheatCommandType type = WheatCommandType::unknown;
 	std::string strParam = "";
 	int nParam[2] = {0};
@@ -34,7 +39,7 @@ public:
 	WheatCommand Parse(const char * buf);
 
 	// 根据指令生成消息
-	const char * MakeMessage(WheatCommand & command);
+	std::string MakeMessage(const WheatCommand & command);
 
 	// 切割消息
 	// buf 填入要分割的消息，delimiterChar 填入分割符号，pieces 表示要切片的份数，默认0为分割完成每一份

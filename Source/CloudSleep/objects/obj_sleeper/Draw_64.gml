@@ -1,10 +1,12 @@
 draw_set_color(c_black);
 draw_set_alpha(0.7);
+var edgeWidth = 8;
+var edgeHeight = 4;
 draw_rectangle(
-	GetPositionXOnGUI(x - string_width(name)),
-	GetPositionYOnGUI(y - string_height(name)),
-	GetPositionXOnGUI(x + string_width(name)),
-	GetPositionYOnGUI(y + string_height(name)),
+	GetPositionXOnGUI(x) - string_width(name) / 2 - edgeWidth,
+	GetPositionYOnGUI(y) - string_height(name) / 2 - edgeWidth + 4,
+	GetPositionXOnGUI(x) + string_width(name) / 2 + edgeHeight,
+	GetPositionYOnGUI(y) + string_height(name) / 2 + edgeHeight,
 	false
 );
 

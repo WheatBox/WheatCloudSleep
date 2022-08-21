@@ -8,6 +8,8 @@ if(map[? "type"] == network_type_data) {
 	var mesSleeperId = real(buffer_read(buf, buffer_string));
 	var mes = buffer_read(buf, buffer_string);
 	
+	show_debug_message(mes);
+	
 	var arrParse = CommandParse(mes);
 	
 	var commandType = arrParse[0];
@@ -17,6 +19,12 @@ if(map[? "type"] == network_type_data) {
 		case CommandType.unknown:
 			break;
 			
+		case CommandType.yourid:
+			mySleeperId = real(params[0]);
+			if(mySleeperId > mesSleeperIdMax || !instance_exists(sleepers[mySleeperId])) {
+				sleepers[mySleeperId] = CreateSleeper(NewSleeperPosX, NewSleeperPosY);
+			}
+			break;
 		case CommandType.sleeper:
 			if(real(params[0]) <= mesSleeperIdMax) {
 				if(instance_exists(sleepers[real(params[0])])) {

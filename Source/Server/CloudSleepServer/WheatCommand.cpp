@@ -22,6 +22,7 @@ WheatCommand WheatCommandProgrammer::Parse(const char* buf)
 	/* 获取 resultCommand.nParam 或 resultCommand.strParam，params部分 */
 
 	switch(resultCommand.type) {
+		case WheatCommandType::yourid:
 		case WheatCommandType::sleeper:
 			resultCommand.type = WheatCommandType::unknown;
 			break;
@@ -55,11 +56,14 @@ WheatCommand WheatCommandProgrammer::Parse(const char* buf)
 	return resultCommand;
 }
 
-const char* WheatCommandProgrammer::MakeMessage(WheatCommand& command)
+std::string WheatCommandProgrammer::MakeMessage(const WheatCommand& command)
 {
 	std::string res = "";
 
 	switch(command.type) {
+		case WheatCommandType::yourid:
+			res = res + "yourid$" + std::to_string(command.nParam[0]);
+			break;
 		case WheatCommandType::sleeper:
 			res = res + "sleeper$" + std::to_string(command.nParam[0]);
 			break;
@@ -90,7 +94,7 @@ const char* WheatCommandProgrammer::MakeMessage(WheatCommand& command)
 	}
 
 	const char * szRes = res.c_str();
-	return szRes;
+	return res;
 }
 
 std::vector<std::string> WheatCommandProgrammer::CutMessage(const char* buf, const char delimiterChar, int pieces)
@@ -133,6 +137,8 @@ std::vector<std::string> WheatCommandProgrammer::CutMessage(const char* buf, siz
 
 WheatCommandType WheatCommandProgrammer::GetCommandTypeFromString(const char* sz)
 {
+	if(strcmp(sz, "yourid") == 0)
+		return WheatCommandType::yourid;
 	if(strcmp(sz, "sleeper") == 0)
 		return WheatCommandType::sleeper;
 	if(strcmp(sz, "name") == 0)

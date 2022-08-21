@@ -9,7 +9,7 @@
 #define MYPORT 11451
 
 int main() {
-	system("chcp 936"); // 设置为 Unicode(UTF-8 带签名) - 代码页 65001
+	system("chcp 65001"); // 设置为 Unicode(UTF-8 带签名) - 代码页 65001
 
 	WheatTCPServer myServer;
 	myServer.Init(MYPORT);
