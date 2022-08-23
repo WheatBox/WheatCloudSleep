@@ -1,8 +1,6 @@
 #include "WheatCommand.h"
 #include "ProjectCommon.h"
 
-#include "WheatBedManager.h"
-
 WheatCommand WheatCommandProgrammer::Parse(const char* buf)
 {
 	WheatCommand resultCommand;
@@ -31,6 +29,10 @@ WheatCommand WheatCommandProgrammer::Parse(const char* buf)
 			break;
 		case WheatCommandType::type:
 			resultCommand.nParam[0] = atoi(vecCuttedBuf[1].c_str());
+			break;
+
+		case WheatCommandType::leave:
+			resultCommand.type = WheatCommandType::unknown;
 			break;
 
 		case WheatCommandType::sleep:
@@ -72,6 +74,10 @@ std::string WheatCommandProgrammer::MakeMessage(const WheatCommand& command)
 			break;
 		case WheatCommandType::type:
 			res = res + "type$" + std::to_string(command.nParam[0]);
+			break;
+
+		case WheatCommandType::leave:
+			res = res + "leave$" + std::to_string(command.nParam[0]);
 			break;
 
 		case WheatCommandType::sleep:
@@ -145,6 +151,9 @@ WheatCommandType WheatCommandProgrammer::GetCommandTypeFromString(const char* sz
 		return WheatCommandType::name;
 	if(strcmp(sz, "type") == 0)
 		return WheatCommandType::type;
+	
+	if(strcmp(sz, "leave") == 0)
+		return WheatCommandType::leave;
 
 	if(strcmp(sz, "sleep") == 0)
 		return WheatCommandType::sleep;
@@ -169,5 +178,25 @@ void WheatCommandProgrammer::PrintWheatCommand(WheatCommand& command)
 	printf("strParam: %s\n", command.strParam.c_str());
 	printf("nParams: [ %d, %d ]\n", command.nParam[0], command.nParam[1]);
 	printf("---------------------------------\n");
+}
+
+void WheatCommandProgrammer::VectorPushBackOriginalSleepersData(std::vector<int>* vectorDestSleepersIds, std::vector<WheatCommand>* vectorDestSleepersCommands, WheatBedManager & srcBedManager, int originalSleeperId)
+{
+	std::vector<int>* vecIds = vectorDestSleepersIds;
+	std::vector<WheatCommand>* vecCmds = vectorDestSleepersCommands;
+	WheatBedManager & bedManager = srcBedManager;
+	int sleeperId = originalSleeperId;
+	
+	vecIds->push_back(sleeperId);
+	vecCmds->push_back(WheatCommand(WheatCommandType::sleeper, "", sleeperId, 0));
+	vecIds->push_back(sleeperId);
+	vecCmds->push_back(WheatCommand(WheatCommandType::name, bedManager.m_sleepers[sleeperId].name.c_str(), 0, 0));
+	vecIds->push_back(sleeperId);
+	vecCmds->push_back(WheatCommand(WheatCommandType::type, "", static_cast<int>(bedManager.m_sleepers[sleeperId].type), 0));
+
+	vecIds->push_back(sleeperId);
+	vecCmds->push_back(WheatCommand(WheatCommandType::pos, "", bedManager.m_sleepers[sleeperId].posLastData.x, bedManager.m_sleepers[sleeperId].posLastData.y));
+	vecIds->push_back(sleeperId);
+	vecCmds->push_back(WheatCommand(WheatCommandType::move, "", bedManager.m_sleepers[sleeperId].moveLastData.x, bedManager.m_sleepers[sleeperId].moveLastData.y));
 }
 

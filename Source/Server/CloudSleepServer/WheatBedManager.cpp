@@ -54,6 +54,7 @@ int WheatBedManager::FindSleeperId(SOCKET sleeperSocket)
 
 int WheatBedManager::RegisterNewSleeper(Sleeper sleeper)
 {
+	sleeper.empty = false;
 	int emptyId = FindEmptySleeperId();
 	
 	if(emptyId == -1) {
@@ -96,6 +97,11 @@ Sleeper::Sleeper()
 Sleeper::Sleeper(SOCKET _sock)
 {
 	set(false, _sock, "", SleeperType::Boy);
+}
+
+Sleeper::Sleeper(SOCKET _sock, const char* _name, SleeperType _type)
+{
+	set(false, _sock, _name, _type);
 }
 
 Sleeper::Sleeper(bool _empty, SOCKET _sock, const char* _name, SleeperType _type)

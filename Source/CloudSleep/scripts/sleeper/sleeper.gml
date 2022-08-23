@@ -1,5 +1,5 @@
-#macro NewSleeperPosX 640
-#macro NewSleeperPosY 360
+#macro NewSleeperPosX 3300
+#macro NewSleeperPosY 2700
 
 // 这里 SleeperType 的内容的顺序要和服务器上一样
 enum SleeperType {

@@ -39,11 +39,6 @@ void WheatTCPServer::Run()
 
 	int fdMax = static_cast<int>(m_socket);
 
-	std::string strSleeperId = "";
-	std::string strMessage = "";
-	size_t bufSendSize = 0;
-	char * bufSend = nullptr;
-
 	while(1) {
 		fd_set fdTemp = fd;
 		
@@ -55,31 +50,28 @@ void WheatTCPServer::Run()
 				int len = sizeof(sockaddr_in);
 
 				SOCKET clientSocket = accept(m_socket, (sockaddr *)& clientAddr, &len);
-					
+				
 				FD_SET(clientSocket, &fd);
 				fdMax = MAX(fdMax, static_cast<int>(clientSocket));
 
 				printf("New Client %lld Joined  %s:%d\n", clientSocket, inet_ntoa(clientAddr.sin_addr), ntohs(clientAddr.sin_port));
 
 				int newSleeperId = m_bedManager.RegisterNewSleeper(Sleeper(clientSocket));
-
-
-				strSleeperId = std::to_string(newSleeperId);
-				strMessage = m_pCommandProgrammer->MakeMessage(WheatCommand(WheatCommandType::yourid, "", newSleeperId, 0));
 				
-				bufSendSize = strSleeperId.length() + 1 + strMessage.length() + 1;
+				SendCommand(clientSocket, newSleeperId, WheatCommand(WheatCommandType::yourid, "", newSleeperId, 0));
+				SendCommandToFdSet(fd, fdMax, newSleeperId, WheatCommand(WheatCommandType::sleeper, "", newSleeperId, 0), clientSocket);
 
-				bufSend = new char[bufSendSize];
+				std::vector<WheatCommand> originalSleepersCommands;
+				std::vector<int> originalSleepersIds;
+				for(int iSleeperId = 0; iSleeperId < m_bedManager.m_sleepers.size(); iSleeperId++) {
+					if(m_bedManager.m_sleepers[iSleeperId].empty == false && iSleeperId != newSleeperId) {
+						m_pCommandProgrammer->VectorPushBackOriginalSleepersData(& originalSleepersIds, & originalSleepersCommands, m_bedManager, iSleeperId);
+					}
+				}
+				SendMultiCommand(clientSocket, originalSleepersIds, originalSleepersCommands);
 
-				BufferCatenate(bufSend, strSleeperId.c_str(), strSleeperId.length(), strMessage.c_str(), strMessage.length());
-				
-				send(clientSocket, bufSend, int(bufSendSize), 0);
 
-				delete [] bufSend;
-				bufSend = nullptr;
-
-
-				if(selectRes == 1) {
+				if(selectRes <= 1) {
 					continue;
 				}
 			}
@@ -94,7 +86,10 @@ void WheatTCPServer::Run()
 
 						printf("Client %d Left\n", i);
 
-						m_bedManager.CancelSleeper(SOCKET(i));
+						int leaveSleeperId = m_bedManager.FindSleeperId(i);
+						SendCommandToFdSet(fd, fdMax, leaveSleeperId, WheatCommand(WheatCommandType::leave, "", leaveSleeperId, 0));
+
+						m_bedManager.CancelSleeper(leaveSleeperId);
 					} else {
 						// SendMessageToFdSet(fd, fdMax, buf, sizeof(buf));
 
@@ -102,31 +97,107 @@ void WheatTCPServer::Run()
 
 						WheatCommand command = m_pCommandProgrammer->Parse(buf);
 						
-						if(command.type == WheatCommandType::unknown) {
-							printf("%d Unknown Command! SKIP!\n", i);
-							continue;
+						int whoSleeperId = m_bedManager.FindSleeperId(i);
+						switch(command.type) {
+							case WheatCommandType::unknown:
+								printf("%d Unknown Command! SKIP!\n", i);
+								continue;
+								break;
+
+							case WheatCommandType::name:
+								m_bedManager.m_sleepers[whoSleeperId].name = command.strParam;
+								break;
+							case WheatCommandType::type:
+								m_bedManager.m_sleepers[whoSleeperId].type = m_bedManager.GetSleeperType(command.nParam[0]);
+								break;
+							case WheatCommandType::move:
+								m_bedManager.m_sleepers[whoSleeperId].moveLastData = Vec2<int>(command.nParam[0], command.nParam[1]);
+								break;
+							case WheatCommandType::pos:
+								m_bedManager.m_sleepers[whoSleeperId].posLastData = Vec2<int>(command.nParam[0], command.nParam[1]);
+								break;
 						}
 
-						m_pCommandProgrammer->PrintWheatCommand(command);
+						// m_pCommandProgrammer->PrintWheatCommand(command);
 
-						strSleeperId = std::to_string(m_bedManager.FindSleeperId(i));
-						strMessage = m_pCommandProgrammer->MakeMessage(command);
+						SendCommandToFdSet(fd, fdMax, whoSleeperId, command);
 
-						bufSendSize = strSleeperId.length() + 1 + strMessage.length() + 1;
-
-						bufSend = new char[bufSendSize];
-
-						BufferCatenate(bufSend, strSleeperId.c_str(), strSleeperId.length(), strMessage.c_str(), strMessage.length());
-
-						SendMessageToFdSet(fd, fdMax, bufSend, bufSendSize);
-
-						delete [] bufSend;
-						bufSend = nullptr;
 					}
 				}
 			}
 		}
 	}
+}
+
+void WheatTCPServer::SendCommand(SOCKET destSocket, int sleeperIdWhoMakeThisCommand, const WheatCommand& command)
+{
+	int & sleeperId = sleeperIdWhoMakeThisCommand;
+	std::string strSleeperId = "";
+	std::string strMessage = "";
+	size_t bufSendSize = 0;
+	char * bufSend = nullptr;
+
+	strSleeperId = std::to_string(sleeperId);
+	strMessage = m_pCommandProgrammer->MakeMessage(command);
+
+	bufSendSize = strSleeperId.length() + 1 + strMessage.length() + 1;
+
+	bufSend = new char[bufSendSize];
+
+	BufferCatenate(bufSend, strSleeperId.c_str(), strSleeperId.length(), strMessage.c_str(), strMessage.length());
+
+	send(destSocket, bufSend, int(bufSendSize), 0);
+
+	printf("%s %s, Socket = %zd\n", bufSend, bufSend + 2, destSocket);
+
+	delete [] bufSend;
+	bufSend = nullptr;
+}
+
+void WheatTCPServer::SendCommandToFdSet(fd_set destFdSet, int fdMax, int sleeperIdWhoMakeThisCommand, const WheatCommand& command, SOCKET skipSocket)
+{
+	int & sleeperId = sleeperIdWhoMakeThisCommand;
+	std::string strSleeperId = "";
+	std::string strMessage = "";
+	size_t bufSendSize = 0;
+	char * bufSend = nullptr;
+
+	strSleeperId = std::to_string(sleeperId);
+	strMessage = m_pCommandProgrammer->MakeMessage(command);
+
+	bufSendSize = strSleeperId.length() + 1 + strMessage.length() + 1;
+
+	bufSend = new char[bufSendSize];
+
+	BufferCatenate(bufSend, strSleeperId.c_str(), strSleeperId.length(), strMessage.c_str(), strMessage.length());
+
+	SendBufferToFdSet(destFdSet, fdMax, bufSend, bufSendSize, skipSocket);
+
+	delete [] bufSend;
+	bufSend = nullptr;
+}
+
+void WheatTCPServer::SendMultiCommand(SOCKET destSocket, std::vector<int> & sleeperIdWhoMakeTheseCommands, const std::vector<WheatCommand>& commands)
+{
+	std::vector<int> & sleeperIds = sleeperIdWhoMakeTheseCommands;
+	std::string strSleeperId = "";
+	std::string strMessage = "";
+	size_t bufSendSize = 0;
+	char * bufSend = new char[20000];
+
+	for(int i = 0; i < commands.size(); i++) {
+		strSleeperId = std::to_string(sleeperIds[i]);
+		strMessage = m_pCommandProgrammer->MakeMessage(commands[i]);
+
+		BufferCatenate(bufSend, bufSendSize, strSleeperId.c_str(), strSleeperId.length(), strMessage.c_str(), strMessage.length());
+
+		bufSendSize += strSleeperId.length() + 1 + strMessage.length() + 1;
+	}
+
+	send(destSocket, bufSend, int(bufSendSize), 0);
+
+	delete [] bufSend;
+	bufSend = nullptr;
 }
 
 void WheatTCPServer::BufferCatenate(char* destBuf, const char* buf1, size_t buf1Size, const char* buf2, size_t buf2Size)
@@ -135,17 +206,23 @@ void WheatTCPServer::BufferCatenate(char* destBuf, const char* buf1, size_t buf1
 	memcpy(destBuf + buf1Size + 1, buf2, buf2Size + 1);
 }
 
-void WheatTCPServer::SendMessageToFdSet(fd_set inputFdSet, int fdMax, const char * str) {
-	SendMessageToFdSet(inputFdSet, fdMax, str, strlen(str));
+void WheatTCPServer::BufferCatenate(char * destBuf, size_t offset, const char * buf1, size_t buf1Size, const char * buf2, size_t buf2Size)
+{
+	memcpy(destBuf + offset, buf1, buf1Size + 1);
+	memcpy(destBuf + offset + buf1Size + 1, buf2, buf2Size + 1);
 }
 
-void WheatTCPServer::SendMessageToFdSet(fd_set inputFdSet, int fdMax, const char * str, size_t len)
+void WheatTCPServer::SendBufferToFdSet(fd_set inputFdSet, int fdMax, const char * str) {
+	SendBufferToFdSet(inputFdSet, fdMax, str, strlen(str));
+}
+
+void WheatTCPServer::SendBufferToFdSet(fd_set inputFdSet, int fdMax, const char * str, size_t len, SOCKET skipSocket)
 {
 	for(int i = 0; i <= fdMax; i++) {
+		if(i == skipSocket || i == m_socket) {
+			continue;
+		}
 		if(FD_ISSET(i, &inputFdSet)) {
-			if(i == m_socket) {
-				continue;
-			}
 			send(i, str, int(len), 0);
 		}
 	}

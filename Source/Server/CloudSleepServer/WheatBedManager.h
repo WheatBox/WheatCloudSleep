@@ -9,16 +9,29 @@ enum class SleeperType {
 	Boy
 };
 
+template<typename T>
+class Vec2 {
+public:
+	Vec2() { x = 0; y = 0; };
+	Vec2(T _x, T _y) { x = _x; y = _y; };
+	T x;
+	T y;
+};
+
 class Sleeper {
 public:
 	Sleeper();
 	Sleeper(SOCKET _sock);
+	Sleeper(SOCKET _sock, const char * _name, SleeperType _type);
 	Sleeper(bool _empty, SOCKET _sock,  const char * _name, SleeperType _type);
 
 	bool empty = true;
 	SOCKET sock;
 	std::string name = "";
 	SleeperType type = SleeperType::Boy;
+
+	Vec2<int> moveLastData;
+	Vec2<int> posLastData;
 
 	void set(bool _empty, SOCKET _sock, const char * _name, SleeperType _type) {
 		empty = _empty;
@@ -81,9 +94,10 @@ public:
 	// 查找首个空闲的 睡客id，如果没有空闲 睡客id，返回 -1
 	int FindEmptySleeperId();
 
+	std::vector<Sleeper> m_sleepers;
+
 private:
 	Bed m_arrBeds[256];
-	std::vector<Sleeper> m_sleepers;
 
 };
 

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "WheatBedManager.h"
+
 #include <vector>
 #include <string>
 
@@ -10,6 +12,8 @@ enum class WheatCommandType {
 	sleeper,
 	name,
 	type,
+
+	leave,
 
 	sleep,
 	getup,
@@ -50,6 +54,8 @@ public:
 	WheatCommandType GetCommandTypeFromString(const char * sz);
 
 	void PrintWheatCommand(WheatCommand & command);
+	
+	void VectorPushBackOriginalSleepersData(std::vector<int> * vectorDestSleepersIds, std::vector<WheatCommand> * vectorDestSleepersCommands, WheatBedManager & srcBedManager, int originalSleeperId);
 
 private:
 

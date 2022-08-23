@@ -6,6 +6,8 @@ enum CommandType {
 	name,
 	type,
 	
+	leave,
+	
 	sleep,
 	getup,
 	
@@ -13,6 +15,7 @@ enum CommandType {
 	
 	move,
 	pos,
+	
 };
 
 function GetCommandTypeFromString(buf) {
@@ -25,6 +28,9 @@ function GetCommandTypeFromString(buf) {
 			return CommandType.name;
 		case "type":
 			return CommandType.type;
+			
+		case "leave":
+			return CommandType.leave;
 			
 		case "sleep":
 			return CommandType.sleep;
@@ -89,6 +95,10 @@ function CommandParse(stringWhichNeedsToParse) {
 				break;
 			}
 			result[1][0] = GetSleeperType(real(_strTrans));
+			break;
+			
+		case CommandType.leave:
+			result[1][0] = real(string_digits(strTemp));
 			break;
 			
 		case CommandType.sleep:
@@ -165,6 +175,9 @@ function CommandMakeMessage(_CommandType, params = undefined) {
 			
 		case CommandType.type:
 			res += "type$" + string(params[0]);
+			break;
+			
+		case CommandType.leave:
 			break;
 			
 		case CommandType.sleep:

@@ -1,3 +1,8 @@
+if(canControlDelayTime > 0) {
+	canControlDelayTime--;
+	exit;
+}
+
 var cameraW = camera_get_view_width(view_camera[0]);
 var cameraH = camera_get_view_height(view_camera[0]);
 if(mouse_wheel_up()) {

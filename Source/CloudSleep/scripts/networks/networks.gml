@@ -42,6 +42,8 @@ function ReadAddress(filename) {
 	
 	result[1] = string_copy(srcString, left, right - left);
 	
+	file_text_close(file);
+	
 	return result;
 }
 
@@ -77,10 +79,10 @@ function SendChat(_chatStr) {
 }
 
 function SendMove(_x, _y) {
-	sendMessageQueue.push_back(CommandMakeMessage(CommandType.move, [_x, _y]));
+	sendMessageQueue.push_back(CommandMakeMessage(CommandType.move, [round(_x), round(_y)]));
 }
 
 function SendPos(_x, _y) {
-	sendMessageQueue.push_back(CommandMakeMessage(CommandType.pos, [_x, _y]));
+	sendMessageQueue.push_back(CommandMakeMessage(CommandType.pos, [round(_x), round(_y)]));
 }
 
