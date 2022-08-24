@@ -20,8 +20,7 @@ Client(GameMaker) Source Path: 客户端(GameMaker)源代码路径： ./Source/C
 
 这里我的修复方法是在 名为 textbox 的 Object 里的 Step事件，将前两行修改为
 
-  var mx = window_mouse_get_x(),
-  
+    var mx = window_mouse_get_x(),
     my = window_mouse_get_y(),
     
 就可以了
