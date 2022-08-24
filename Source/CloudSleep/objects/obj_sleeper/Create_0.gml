@@ -1,5 +1,9 @@
 mask_index = spr_SleeperHitbox;
 
+timeI = 0;
+moveTimeI = 0;
+anglePositive = choose(-1, 1);
+
 isMe = false; // 是不是我自己，也就是说是不是本客户端的睡客
 
 name = "";
@@ -23,6 +27,8 @@ MyPathGo = function(destX, destY) {
 		
 		myPathDestX = destX;
 		myPathDestY = destY;
+		
+		anglePositive = choose(-1, 1);
 	}
 }
 MyPathIsRunning = function() {
@@ -44,6 +50,13 @@ MySetPos = function(destX, destY) {
 		MyPathGo(pathDestXtemp, pathDestYtemp);
 	}
 }
+MyChat = function(_chatText) {
+	chatText = _chatText;
+	chatTime = 7 * 60; // 七秒后消失
+}
+
+chatText = "";
+chatTime = 0;
 
 myPathDestX = undefined;
 myPathDestY = undefined;

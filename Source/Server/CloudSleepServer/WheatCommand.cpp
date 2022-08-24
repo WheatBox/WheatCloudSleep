@@ -196,7 +196,9 @@ void WheatCommandProgrammer::VectorPushBackOriginalSleepersData(std::vector<int>
 
 	vecIds->push_back(sleeperId);
 	vecCmds->push_back(WheatCommand(WheatCommandType::pos, "", bedManager.m_sleepers[sleeperId].posLastData.x, bedManager.m_sleepers[sleeperId].posLastData.y));
-	vecIds->push_back(sleeperId);
-	vecCmds->push_back(WheatCommand(WheatCommandType::move, "", bedManager.m_sleepers[sleeperId].moveLastData.x, bedManager.m_sleepers[sleeperId].moveLastData.y));
+	if(bedManager.m_sleepers[sleeperId].firstMoved == true) {
+		vecIds->push_back(sleeperId);
+		vecCmds->push_back(WheatCommand(WheatCommandType::move, "", bedManager.m_sleepers[sleeperId].moveLastData.x, bedManager.m_sleepers[sleeperId].moveLastData.y));
+	}
 }
 

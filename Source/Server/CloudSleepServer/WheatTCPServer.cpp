@@ -110,8 +110,10 @@ void WheatTCPServer::Run()
 							case WheatCommandType::type:
 								m_bedManager.m_sleepers[whoSleeperId].type = m_bedManager.GetSleeperType(command.nParam[0]);
 								break;
+
 							case WheatCommandType::move:
 								m_bedManager.m_sleepers[whoSleeperId].moveLastData = Vec2<int>(command.nParam[0], command.nParam[1]);
+								m_bedManager.m_sleepers[whoSleeperId].firstMoved = true;
 								break;
 							case WheatCommandType::pos:
 								m_bedManager.m_sleepers[whoSleeperId].posLastData = Vec2<int>(command.nParam[0], command.nParam[1]);

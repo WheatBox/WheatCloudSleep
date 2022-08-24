@@ -13,3 +13,25 @@ if(mouse_check_button_pressed(mb_right)) {
 	}
 }
 
+if(keyboard_check_pressed(vk_enter)) {
+	if(myTextBox == noone) {
+		var _placeHolder = textboxPlaceHolders[irandom_range(0, array_length(textboxPlaceHolders) - 1)];
+		myTextBox = textbox_create(12, 720 - 48, 950, 28, "", _placeHolder, 128, fontRegular, function() {});
+		textbox_set_font(myTextBox, fontRegular, c_black, 28, 0);
+		
+		myTextBox.curt.fo = true;
+		
+		if(instance_exists(obj_camera)) {
+			obj_camera.mouseCameraMoveLock = true;
+		}
+	} else {
+		SendChat(textbox_return(myTextBox));
+		
+		instance_destroy(myTextBox);
+		myTextBox = noone;
+		if(instance_exists(obj_camera)) {
+			obj_camera.mouseCameraMoveLock = false;
+		}
+	}
+}
+

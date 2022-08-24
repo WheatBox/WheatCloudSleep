@@ -14,7 +14,7 @@ leave$ 睡客离开，该消息仅会由服务端发送，leave$12
 制作中）sleep$ 睡觉，后加床位id，sleep$28
 制作中）getup$ 起床，getup$
 
-制作中）chat$ 打字交流，chat$我爱你
+chat$ 打字交流，chat$我爱你
 
-制作中）move$ 移动，x轴和y轴之间用","分割，先x后y，move$320,300
-制作中）pos$ 直接设置坐标，pos$320,300
+move$ 移动，x轴和y轴之间用","分割，先x后y，move$320,300
+pos$ 直接设置坐标，pos$320,300

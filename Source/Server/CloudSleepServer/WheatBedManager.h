@@ -14,6 +14,9 @@ class Vec2 {
 public:
 	Vec2() { x = 0; y = 0; };
 	Vec2(T _x, T _y) { x = _x; y = _y; };
+
+	void operator=(const Vec2<T> & another) { x = another.x; y = another.y; };
+
 	T x;
 	T y;
 };
@@ -33,6 +36,8 @@ public:
 	Vec2<int> moveLastData;
 	Vec2<int> posLastData;
 
+	bool firstMoved = false; // 经历过首次移动
+
 	void set(bool _empty, SOCKET _sock, const char * _name, SleeperType _type) {
 		empty = _empty;
 		sock = _sock;
@@ -45,10 +50,16 @@ public:
 		sock = another.sock;
 		name = another.name;
 		type = another.type;
+
+		moveLastData = another.moveLastData;
+		posLastData = another.posLastData;
+
+		firstMoved = another.firstMoved;
 	}
 
 	void clear() {
 		empty = true;
+		firstMoved = false;
 	}
 
 	SleeperType TransformIntToSleeperType(int _intval);

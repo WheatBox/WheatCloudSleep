@@ -52,7 +52,12 @@ if(map[? "type"] == network_type_data) {
 			
 				instance_destroy(sleepers[mesSleeperId]);
 				break;
-			
+				
+			case CommandType.chat:
+				if(!MyCanUseSleeperId(mesSleeperId)) break;
+				
+				sleepers[mesSleeperId].MyChat(params);
+				break;
 			
 			case CommandType.move:
 				if(!MyCanUseSleeperId(mesSleeperId)) break;
@@ -61,7 +66,8 @@ if(map[? "type"] == network_type_data) {
 				break;
 			case CommandType.pos:
 				if(!MyCanUseSleeperId(mesSleeperId)) break;
-			
+				if(mesSleeperId == mySleeperId) break;
+				
 				sleepers[mesSleeperId].MySetPos(real(params[0]), real(params[1]));
 				break;
 		}
