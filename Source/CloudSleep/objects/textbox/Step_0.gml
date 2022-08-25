@@ -1,7 +1,7 @@
 // var mx = mouse_x,
 //	my = mouse_y,
-var mx = window_mouse_get_x(),
-	my = window_mouse_get_y(),
+var mx = GetPositionXOnGUI(mouse_x),
+	my = GetPositionYOnGUI(mouse_y),
 	sx = draw.sx,
 	sy = draw.sy,
 	vi = point_in_rectangle(mx, my, sx, sy, sx + draw.dw, sy + draw.dh);
