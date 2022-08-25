@@ -7,9 +7,33 @@ if(sendMessageQueue.size() > 0 && mySleeperId != -1) {
 }
 
 if(mouse_check_button_pressed(mb_right)) {
-	if(sleepers[mySleeperId].MyPathCanGo(mouse_x, mouse_y)) {
-		SendPos(sleepers[mySleeperId].x, sleepers[mySleeperId].y);
-		SendMove(mouse_x, mouse_y);
+	if(instance_exists(sleepers[mySleeperId])) {
+		if(sleepers[mySleeperId].sleepingBedId == -1) {
+			if(sleepers[mySleeperId].MyPathCanGo(mouse_x, mouse_y)) {
+				SendPos(sleepers[mySleeperId].x, sleepers[mySleeperId].y);
+				SendMove(mouse_x, mouse_y);
+				
+				sleepers[mySleeperId].willSleep = false;
+			} else {
+				var _dir = point_direction(sleepers[mySleeperId].x, sleepers[mySleeperId].y, mouse_x, mouse_y);
+				var _len1x = lengthdir_x(1, _dir);
+				var _len1y = lengthdir_y(1, _dir);
+				for(var ixy = 0; ixy < 200; ixy++) {
+					var _x = mouse_x - round(_len1x * ixy);
+					var _y = mouse_y - round(_len1y * ixy);
+					if(sleepers[mySleeperId].MyPathCanGo(_x, _y)) {
+						SendPos(sleepers[mySleeperId].x, sleepers[mySleeperId].y);
+						SendMove(_x, _y);
+						
+						sleepers[mySleeperId].willSleep = true;
+						
+						break;
+					}
+				}
+			}
+		} else {
+			SendGetup();
+		}
 	}
 }
 

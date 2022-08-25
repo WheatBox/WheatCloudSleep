@@ -56,7 +56,7 @@ function CommandParse(stringWhichNeedsToParse) {
 	
 	/* 获取 result[0]，CommandTypes部分 */
 	
-	for(var i = 0; i < string_length(buf); i++) {
+	for(var i = 1; i <= string_length(buf); i++) {
 		if(string_char_at(buf, i) == "$") {
 			result[0] = GetCommandTypeFromString(string_copy(buf, 0, i - 1));
 			break;
@@ -64,7 +64,7 @@ function CommandParse(stringWhichNeedsToParse) {
 	}
 	
 	// 没找到分隔符号，自动设为 unknown
-	if(i >= string_length(buf)) {
+	if(i > string_length(buf)) {
 		result[0] = CommandType.unknown;
 		
 		return result;

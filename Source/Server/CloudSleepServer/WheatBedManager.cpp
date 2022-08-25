@@ -3,25 +3,23 @@
 
 void WheatBedManager::GetupBed(int getupBedSleepId)
 {
-	m_arrBeds[getupBedSleepId].empty = true;
-	m_arrBeds[getupBedSleepId].pSleeper->clear();
+	m_arrBeds[getupBedSleepId].Clear();
 }
 
-bool WheatBedManager::SleepBed(int sleepBedSleepId, Sleeper & sleeper)
+bool WheatBedManager::SleepBed(int sleepBedSleepId)
 {
 	if(IsBedEmpty(sleepBedSleepId) == false) {
 		return false;
 	}
 
-	m_arrBeds[sleepBedSleepId].empty = false;
-	m_arrBeds[sleepBedSleepId].pSleeper->copy(sleeper);
+	m_arrBeds[sleepBedSleepId].Set(false, GetSleeper(FindSleeperId(sleepBedSleepId)));
 
 	return true;
 }
 
 bool WheatBedManager::IsBedEmpty(int checkBedSleepId)
 {
-	return m_arrBeds[checkBedSleepId].empty;
+	return m_arrBeds[checkBedSleepId].Empty();
 }
 
 SleeperType WheatBedManager::GetSleeperType(int val)
@@ -70,6 +68,10 @@ int WheatBedManager::RegisterNewSleeper(Sleeper sleeper)
 void WheatBedManager::CancelSleeper(int sleeperId)
 {
 	if(sleeperId > -1 && sleeperId < m_sleepers.size()) {
+		if(m_sleepers[sleeperId].sleepingBedId != -1) {
+			GetupBed(m_sleepers[sleeperId].sleepingBedId);
+		}
+
 		m_sleepers[sleeperId].clear();
 	}
 }

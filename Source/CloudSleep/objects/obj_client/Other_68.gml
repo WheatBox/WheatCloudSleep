@@ -26,6 +26,8 @@ if(map[? "type"] == network_type_data) {
 				if(!MyCanUseSleeperId(mySleeperId)) {
 					sleepers[mySleeperId] = CreateSleeper(NewSleeperPosX, NewSleeperPosY);
 					sleepers[mySleeperId].isMe = true;
+					
+					SendPos(sleepers[mySleeperId].x, sleepers[mySleeperId].y);
 				}
 				break;
 			case CommandType.sleeper:
@@ -51,6 +53,17 @@ if(map[? "type"] == network_type_data) {
 				if(!MyCanUseSleeperId(mesSleeperId)) break;
 			
 				instance_destroy(sleepers[mesSleeperId]);
+				break;
+				
+			case CommandType.sleep:
+				if(!MyCanUseSleeperId(mesSleeperId)) break;
+				
+				sleepers[mesSleeperId].MySleep(real(params[0]));
+				break;
+			case CommandType.getup:
+				if(!MyCanUseSleeperId(mesSleeperId)) break;
+				
+				sleepers[mesSleeperId].MyGetup();
 				break;
 				
 			case CommandType.chat:

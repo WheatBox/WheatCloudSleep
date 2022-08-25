@@ -84,7 +84,7 @@ void WheatTCPServer::Run()
 						closesocket(i);
 						FD_CLR(i, &fd);
 
-						printf("Client %d Left\n", i);
+						printf("Client %d Left.\n", i);
 
 						int leaveSleeperId = m_bedManager.FindSleeperId(i);
 						SendCommandToFdSet(fd, fdMax, leaveSleeperId, WheatCommand(WheatCommandType::leave, "", leaveSleeperId, 0));
@@ -109,6 +109,31 @@ void WheatTCPServer::Run()
 								break;
 							case WheatCommandType::type:
 								m_bedManager.m_sleepers[whoSleeperId].type = m_bedManager.GetSleeperType(command.nParam[0]);
+								break;
+
+							case WheatCommandType::sleep:
+							{
+								if(command.nParam[0] >= BED_NUM || command.nParam[0] < 0) {
+									printf("Wrong Bed Id!! %d\n", command.nParam[0]);
+									continue;
+								}
+
+								Bed * pBedTemp = m_bedManager.GetBed(command.nParam[0]);
+								if(!pBedTemp->Empty()) {
+									printf("Bed Is Not Empty. %d Can Not Sleep.\n", i);
+									continue;
+								} else {
+									printf("%d Sleep On Bed Which Is BedSleepId = %d\n", i, command.nParam[0]);
+									pBedTemp->Set(false, m_bedManager.GetSleeper(m_bedManager.FindSleeperId(i)));
+									m_bedManager.m_sleepers[whoSleeperId].sleepingBedId = command.nParam[0];
+								}
+							}
+							break;
+							case WheatCommandType::getup:
+								if(m_bedManager.m_sleepers[whoSleeperId].sleepingBedId != -1) {
+									m_bedManager.GetupBed(m_bedManager.m_sleepers[whoSleeperId].sleepingBedId);
+									m_bedManager.m_sleepers[whoSleeperId].sleepingBedId = -1;
+								}
 								break;
 
 							case WheatCommandType::move:

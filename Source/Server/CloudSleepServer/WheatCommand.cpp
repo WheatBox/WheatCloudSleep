@@ -194,11 +194,16 @@ void WheatCommandProgrammer::VectorPushBackOriginalSleepersData(std::vector<int>
 	vecIds->push_back(sleeperId);
 	vecCmds->push_back(WheatCommand(WheatCommandType::type, "", static_cast<int>(bedManager.m_sleepers[sleeperId].type), 0));
 
-	vecIds->push_back(sleeperId);
-	vecCmds->push_back(WheatCommand(WheatCommandType::pos, "", bedManager.m_sleepers[sleeperId].posLastData.x, bedManager.m_sleepers[sleeperId].posLastData.y));
-	if(bedManager.m_sleepers[sleeperId].firstMoved == true) {
+	if(bedManager.m_sleepers[sleeperId].sleepingBedId != -1) {
 		vecIds->push_back(sleeperId);
-		vecCmds->push_back(WheatCommand(WheatCommandType::move, "", bedManager.m_sleepers[sleeperId].moveLastData.x, bedManager.m_sleepers[sleeperId].moveLastData.y));
+		vecCmds->push_back(WheatCommand(WheatCommandType::sleep, "", bedManager.m_sleepers[sleeperId].sleepingBedId, 0));
+	} else {
+		vecIds->push_back(sleeperId);
+		vecCmds->push_back(WheatCommand(WheatCommandType::pos, "", bedManager.m_sleepers[sleeperId].posLastData.x, bedManager.m_sleepers[sleeperId].posLastData.y));
+		if(bedManager.m_sleepers[sleeperId].firstMoved == true) {
+			vecIds->push_back(sleeperId);
+			vecCmds->push_back(WheatCommand(WheatCommandType::move, "", bedManager.m_sleepers[sleeperId].moveLastData.x, bedManager.m_sleepers[sleeperId].moveLastData.y));
+		}
 	}
 }
 

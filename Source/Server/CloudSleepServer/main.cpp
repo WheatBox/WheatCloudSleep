@@ -11,8 +11,7 @@
 int main() {
 	system("chcp 65001"); // 设置为 Unicode(UTF-8 带签名) - 代码页 65001
 
-	WheatTCPServer myServer;
-	myServer.Init(MYPORT);
+	WheatTCPServer myServer(MYPORT);
 	
 	myServer.Run();
 

@@ -61,3 +61,34 @@ chatTime = 0;
 myPathDestX = undefined;
 myPathDestY = undefined;
 
+MySleep = function(_sleepBedId) {
+	if(!instance_exists(obj_client)) {
+		return;
+	}
+	
+	obj_client.beds[_sleepBedId].MySleep(type);
+	
+	sleepingBedId = _sleepBedId;
+	xBeforeSleep = x;
+	yBeforeSleep = y;
+	
+	x = obj_client.beds[_sleepBedId].x;
+	y = obj_client.beds[_sleepBedId].y + 88;
+}
+MyGetup = function() {
+	if(!instance_exists(obj_client) || sleepingBedId == -1) {
+		return;
+	}
+	
+	obj_client.beds[sleepingBedId].MyGetup();
+	
+	sleepingBedId = -1;
+	x = xBeforeSleep;
+	y = yBeforeSleep;
+}
+
+willSleep = false;
+sleepingBedId = -1;
+xBeforeSleep = x;
+yBeforeSleep = y;
+
