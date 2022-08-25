@@ -36,9 +36,4 @@ Space键 - 视角跟随睡客 | Space Key - Camera Follow Sleeper
 
 当然这个BUG可能是因为我用的方式不对，因为好像看星竍他本人的视频里就从没出现过这种情况，额……也不知道为啥，算了不管了
 
-这里我的修复方法是在 名为 textbox 的 Object 里的 Step事件，将前两行修改为
-
-    var mx = window_mouse_get_x(),
-    my = window_mouse_get_y(),
-    
-就可以了
+这里我是在 名为 textbox 的 Object 里的 Step事件，修改的前两行，有兴趣可以看一下，注意此处的 GetPositionXOnGUI() 和 GetPositionYOnGUI() 是我自己写的函数，非GameMaker内置，同时如果你要用这两个函数的话要注意一下这两个函数是和镜头绑定的，请确保镜头开启
