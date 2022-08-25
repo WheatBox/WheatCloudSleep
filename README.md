@@ -10,13 +10,9 @@ Client(GameMaker) Source Path: 客户端(GameMaker)源代码路径： ./Source/C
 
 ## 那么我该如何进入官方寝室睡觉呢？
 
-我会在该程序完工后在我的B站上放出视频和可执行文件的下载链接
+在这期视频的简介区可以下载到编译后的可执行文件 https://www.bilibili.com/video/bv1rT411F78r
 
-I will publish executable files on my bilibili after I finish this program
-
-我的B站账户：https://space.bilibili.com/317062050
-
-My Bilibili Account: https://space.bilibili.com/317062050
+The compiled executable can be downloaded in the introduction area of this video: https://www.bilibili.com/video/bv1rT411F78r
 
 ## 进入寝室后如何睡觉？
 
