@@ -11,8 +11,8 @@ type$ 角色类型(SleeperType)，type$0
 
 leave$ 睡客离开，该消息仅会由服务端发送，leave$12
 
-制作中）sleep$ 睡觉，后加床位id，sleep$28
-制作中）getup$ 起床，getup$
+sleep$ 睡觉，后加床位id，sleep$28
+getup$ 起床，getup$
 
 chat$ 打字交流，chat$我爱你
 
