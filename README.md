@@ -18,7 +18,7 @@ I will publish executable files on my bilibili after I finish this program
 
 My Bilibili Account: https://space.bilibili.com/317062050
 
-## 各位前来睡觉的睡客的操作方式
+## 进入寝室后如何睡觉？
 
 鼠标左键 - 拖动视角 | Mouse Left Button - Move Camera
 
