@@ -8,7 +8,7 @@ Server(C++) Source Path: 服务端(C++)源代码路径： ./Source/Server/CloudS
 
 Client(GameMaker) Source Path: 客户端(GameMaker)源代码路径： ./Source/CloudSleep/
 
-## 那么在哪里能玩到呢？
+## 那么我该如何进入官方寝室睡觉呢？
 
 我会在该程序完工后在我的B站上放出视频和可执行文件的下载链接
 
