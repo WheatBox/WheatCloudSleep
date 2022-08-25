@@ -31,7 +31,7 @@ if(MyPathIsRunning()) {
 	moveTimeI = 0;
 }
 
-timeI++;
+timeI += anglePositive;
 
 if(sleepingBedId == -1) {
 	draw_sprite_ext(sprite, 0, x, y, xscale, yscale, angle, c_white, 1);

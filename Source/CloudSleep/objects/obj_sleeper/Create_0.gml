@@ -1,6 +1,6 @@
 mask_index = spr_SleeperHitbox;
 
-timeI = 0;
+timeI = irandom_range(-180, 180);
 moveTimeI = 0;
 anglePositive = choose(-1, 1);
 
