@@ -24,6 +24,8 @@ My Bilibili Account: https://space.bilibili.com/317062050
 
 鼠标右键 - 移动 或 睡觉 或 起床 | Mouse Right Button - Move Or Sleep Or Getup
 
+鼠标滚轮 - 缩放 | Mouse Wheel - Zoom
+
 Space键 - 视角跟随睡客 | Space Key - Camera Follow Sleeper
 
 ## 关于文本输入框
