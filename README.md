@@ -28,6 +28,8 @@ My Bilibili Account: https://space.bilibili.com/317062050
 
 Space键 - 视角跟随睡客 | Space Key - Camera Follow Sleeper
 
+Enter键 - 聊天 | Enter - Chat
+
 ## 关于文本输入框
 
 文本输入框使用的是 bilibili UP主 星竍 的代码，这里是BV号：BV1qP4y1s7jt，我使用的是仅单行版本
