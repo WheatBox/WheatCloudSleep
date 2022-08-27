@@ -8,7 +8,7 @@
 
 #include "WheatChatRecorder.h"
 
-#define MYPORT 11455
+#define MYPORT 11451
 
 int main() {
 	system("chcp 65001"); // 设置为 Unicode(UTF-8 带签名) - 代码页 65001
