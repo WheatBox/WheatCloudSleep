@@ -91,6 +91,9 @@ void WheatTCPServer::Run()
 			}
 			
 			for(int i = 0; i <= fdMax; i++) {
+				if(i == m_socket) {
+					continue;
+				}
 				if(FD_ISSET(i, &fdTemp)) {
 					char buf[WHEATTCP_BUFFERSIZE];
 					memset(buf, 0, WHEATTCP_BUFFERSIZE);
