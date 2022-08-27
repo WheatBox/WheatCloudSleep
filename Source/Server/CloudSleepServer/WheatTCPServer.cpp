@@ -89,7 +89,8 @@ void WheatTCPServer::Run()
 			
 			for(int i = 0; i <= fdMax; i++) {
 				if(FD_ISSET(i, &fdTemp)) {
-					char buf[WHEATTCP_BUFFERSIZE] = {0};
+					char buf[WHEATTCP_BUFFERSIZE];
+					memset(buf, 0, WHEATTCP_BUFFERSIZE);
 					int recvRes = recv(i, buf, sizeof(buf) - 1, 0);
 					if(recvRes == SOCKET_ERROR || recvRes == 0) {
 						closesocket(i);
