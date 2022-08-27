@@ -12,11 +12,13 @@
     <ClCompile Include="WheatBedManager.cpp" />
     <ClCompile Include="WheatCommand.cpp" />
     <ClCompile Include="ProjectCommon.cpp" />
+    <ClCompile Include="WheatChatRecorder.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="WheatTCPServer.h" />
     <ClInclude Include="WheatBedManager.h" />
     <ClInclude Include="ProjectCommon.h" />
     <ClInclude Include="WheatCommand.h" />
+    <ClInclude Include="WheatChatRecorder.h" />
   </ItemGroup>
 </Project>

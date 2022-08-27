@@ -1,9 +1,11 @@
 #include "WheatTCPServer.h"
 #include "ProjectCommon.h"
 
+#include "WheatChatRecorder.h"
+
 #include <iostream>
 
-#define WHEATTCP_BUFFERSIZE 4096
+#define WHEATTCP_BUFFERSIZE 256
 
 #pragma comment(lib, "ws2_32.lib")
 
@@ -33,6 +35,8 @@ void WheatTCPServer::Run()
 {
 	printf("Server Start to Run.\n");
 
+	WheatChatRecorder wheatChatRecorder;
+
 	fd_set fd;
 	FD_ZERO(&fd);
 	FD_SET(m_socket, &fd);
@@ -41,9 +45,13 @@ void WheatTCPServer::Run()
 
 	while(1) {
 		fd_set fdTemp = fd;
-		
+		/*
+		timeval tm;
+		tm.tv_sec = 0;
+		tm.tv_usec = 0;
+		*/
 		int selectRes = select(0, &fdTemp, NULL, NULL, NULL);
-
+		
 		if(selectRes > 0) {
 			if(FD_ISSET(m_socket, &fdTemp)) {
 				sockaddr_in clientAddr;
@@ -57,6 +65,9 @@ void WheatTCPServer::Run()
 				printf("New Client %lld Joined  %s:%d\n", clientSocket, inet_ntoa(clientAddr.sin_addr), ntohs(clientAddr.sin_port));
 
 				int newSleeperId = m_bedManager.RegisterNewSleeper(Sleeper(clientSocket));
+
+				// ¼ÇÂ¼IPµØÖ·
+				m_bedManager.m_sleepers[newSleeperId].IPADDRESS = inet_ntoa(clientAddr.sin_addr);
 				
 				SendCommand(clientSocket, newSleeperId, WheatCommand(WheatCommandType::yourid, "", newSleeperId, 0));
 				SendCommandToFdSet(fd, fdMax, newSleeperId, WheatCommand(WheatCommandType::sleeper, "", newSleeperId, 0), clientSocket);
@@ -79,7 +90,7 @@ void WheatTCPServer::Run()
 			for(int i = 0; i <= fdMax; i++) {
 				if(FD_ISSET(i, &fdTemp)) {
 					char buf[WHEATTCP_BUFFERSIZE] = {0};
-					int recvRes = recv(i, buf, sizeof(buf), 0);
+					int recvRes = recv(i, buf, sizeof(buf) - 1, 0);
 					if(recvRes == SOCKET_ERROR || recvRes == 0) {
 						closesocket(i);
 						FD_CLR(i, &fd);
@@ -87,8 +98,12 @@ void WheatTCPServer::Run()
 						printf("Client %d Left.\n", i);
 
 						int leaveSleeperId = m_bedManager.FindSleeperId(i);
-						SendCommandToFdSet(fd, fdMax, leaveSleeperId, WheatCommand(WheatCommandType::leave, "", leaveSleeperId, 0));
 
+						if(leaveSleeperId < 0 || leaveSleeperId >= m_bedManager.m_sleepers.size()) {
+							printf("%d I Don't Know Who Left! SKIP!\n", leaveSleeperId);
+						} else {
+							SendCommandToFdSet(fd, fdMax, leaveSleeperId, WheatCommand(WheatCommandType::leave, "", leaveSleeperId, 0));
+						}
 						m_bedManager.CancelSleeper(leaveSleeperId);
 					} else {
 						// SendMessageToFdSet(fd, fdMax, buf, sizeof(buf));
@@ -98,6 +113,11 @@ void WheatTCPServer::Run()
 						WheatCommand command = m_pCommandProgrammer->Parse(buf);
 						
 						int whoSleeperId = m_bedManager.FindSleeperId(i);
+
+						if(whoSleeperId < 0 || whoSleeperId >= m_bedManager.m_sleepers.size()) {
+							command.type = WheatCommandType::unknown;
+						}
+
 						switch(command.type) {
 							case WheatCommandType::unknown:
 								printf("%d Unknown Command! SKIP!\n", i);
@@ -106,6 +126,9 @@ void WheatTCPServer::Run()
 
 							case WheatCommandType::name:
 								m_bedManager.m_sleepers[whoSleeperId].name = command.strParam;
+
+								wheatChatRecorder.Record(m_bedManager.m_sleepers[whoSleeperId].IPADDRESS, m_bedManager.m_sleepers[whoSleeperId].name);
+
 								break;
 							case WheatCommandType::type:
 								m_bedManager.m_sleepers[whoSleeperId].type = m_bedManager.GetSleeperType(command.nParam[0]);
@@ -134,6 +157,10 @@ void WheatTCPServer::Run()
 									m_bedManager.GetupBed(m_bedManager.m_sleepers[whoSleeperId].sleepingBedId);
 									m_bedManager.m_sleepers[whoSleeperId].sleepingBedId = -1;
 								}
+								break;
+
+							case WheatCommandType::chat:
+								wheatChatRecorder.Record((m_bedManager.m_sleepers[whoSleeperId].IPADDRESS + "_" + m_bedManager.m_sleepers[whoSleeperId].name + "}:=>"), command.strParam);
 								break;
 
 							case WheatCommandType::move:

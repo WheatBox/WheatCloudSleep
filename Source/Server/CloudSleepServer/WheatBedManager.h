@@ -38,6 +38,8 @@ public:
 	Vec2<int> moveLastData;
 	Vec2<int> posLastData;
 
+	std::string IPADDRESS = "";
+
 	bool firstMoved = false; // 经历过首次移动
 
 	int sleepingBedId = -1;
@@ -64,6 +66,8 @@ public:
 	void clear() {
 		empty = true;
 		firstMoved = false;
+
+		IPADDRESS = "";
 	}
 
 	SleeperType TransformIntToSleeperType(int _intval);
