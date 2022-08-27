@@ -2,7 +2,7 @@
 
 Wait!! BUG!!! I'm tring to fix!
 
-有BUG！！！正在修了！正在修了！
+有BUG！！！正在修了！正在修了！目前最大的BUG就是服务器运行一会后客户端就无法加入了，就只能是原先就在服务器里的人，无法再有新的客户端加入
 
 Wheat Cloud Sleep software, which is meaningless. All you need to do is just open the software and lie down to sleep.
 
