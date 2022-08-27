@@ -45,12 +45,15 @@ void WheatTCPServer::Run()
 
 	while(1) {
 		fd_set fdTemp = fd;
-		/*
+		
 		timeval tm;
-		tm.tv_sec = 0;
+		tm.tv_sec = 10;
 		tm.tv_usec = 0;
-		*/
-		int selectRes = select(0, &fdTemp, NULL, NULL, NULL);
+		
+		int selectRes = select(fdMax, &fdTemp, NULL, NULL, &tm);
+		
+		// printf("selectRes = %d\n", selectRes);
+		// printf("FD_ISSET = %d\n", FD_ISSET(m_socket, &fdTemp));
 		
 		if(selectRes > 0) {
 			if(FD_ISSET(m_socket, &fdTemp)) {
@@ -109,7 +112,7 @@ void WheatTCPServer::Run()
 					} else {
 						// SendMessageToFdSet(fd, fdMax, buf, sizeof(buf));
 
-						printf("Client %d : %s\n", i, buf);
+						// printf("Client %d : %s\n", i, buf);
 
 						WheatCommand command = m_pCommandProgrammer->Parse(buf);
 						
@@ -127,7 +130,7 @@ void WheatTCPServer::Run()
 
 							case WheatCommandType::name:
 								m_bedManager.m_sleepers[whoSleeperId].name = command.strParam;
-
+								printf("Client %d : %s\n", i, buf);
 								wheatChatRecorder.Record(m_bedManager.m_sleepers[whoSleeperId].IPADDRESS, m_bedManager.m_sleepers[whoSleeperId].name);
 
 								break;
@@ -161,6 +164,7 @@ void WheatTCPServer::Run()
 								break;
 
 							case WheatCommandType::chat:
+								printf("Client %d : %s\n", i, buf);
 								wheatChatRecorder.Record((m_bedManager.m_sleepers[whoSleeperId].IPADDRESS + "_" + m_bedManager.m_sleepers[whoSleeperId].name + "}:=>"), command.strParam);
 								break;
 
@@ -238,21 +242,52 @@ void WheatTCPServer::SendMultiCommand(SOCKET destSocket, std::vector<int> & slee
 	std::string strSleeperId = "";
 	std::string strMessage = "";
 	size_t bufSendSize = 0;
-	char * bufSend = new char[20000];
-
+	size_t bufCatenateOffset = 0;
+	size_t strLen = 0;
+	char * bufSend = nullptr; // = new char[20000];
+	char * bufTemp;
+	
 	for(int i = 0; i < commands.size(); i++) {
 		strSleeperId = std::to_string(sleeperIds[i]);
 		strMessage = m_pCommandProgrammer->MakeMessage(commands[i]);
+		strLen = strSleeperId.length() + 1 + strMessage.length() + 1;
 
-		BufferCatenate(bufSend, bufSendSize, strSleeperId.c_str(), strSleeperId.length(), strMessage.c_str(), strMessage.length());
+		bufCatenateOffset = bufSendSize;
 
-		bufSendSize += strSleeperId.length() + 1 + strMessage.length() + 1;
+		bufSendSize += strLen;
+
+		// bufTemp 用来存储前面此次这一段消息（strSleeperId 和 strMessage）
+		bufTemp = new char[strLen];
+
+		// BufferCatenate(bufSend, bufCatenateOffset, strSleeperId.c_str(), strSleeperId.length(), strMessage.c_str(), strMessage.length());
+		BufferCatenate(bufTemp, 0, strSleeperId.c_str(), strSleeperId.length(), strMessage.c_str(), strMessage.length());
+
+		// 将bufSend存起来
+		char * bufSave = new char[bufCatenateOffset];
+		memcpy(bufSave, bufSend, bufCatenateOffset);
+		
+		// 删除旧的bufSend，并整个新的
+		if(bufSend != nullptr)
+			delete [] bufSend;
+		bufSend = new char[bufSendSize];
+
+		// 把提前存储的旧的 bufSend 拷贝过来
+		memcpy(bufSend, bufSave, bufCatenateOffset);
+
+		// 把前面拼合而成的 bufTemp 拷贝过来
+		memcpy(bufSend + bufCatenateOffset, bufTemp, strLen);
+
+		// 清理 bufTemp 和 bufSave
+		delete [] bufSave;
+		delete [] bufTemp;
 	}
 
-	send(destSocket, bufSend, int(bufSendSize), 0);
+	if(bufSend != nullptr) {
+		send(destSocket, bufSend, int(bufSendSize), 0);
 
-	delete [] bufSend;
-	bufSend = nullptr;
+		delete [] bufSend;
+		bufSend = nullptr;
+	}
 }
 
 void WheatTCPServer::BufferCatenate(char* destBuf, const char* buf1, size_t buf1Size, const char* buf2, size_t buf2Size)
