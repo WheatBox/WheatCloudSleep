@@ -31,7 +31,7 @@ mouseYPrevious = mouse_y;
 
 
 if(keyboard_check_pressed(vk_space) && mouseCameraMoveLock == false && instance_exists(obj_client)) {
-	if(instance_exists(obj_client.sleepers[mySleeperId])) {
+	if(obj_client.MyCanUseSleeperId(mySleeperId)) {
 		findingPlayer = true;
 		findingPlayerCurveX = 0;
 		findingPlayerStartX = cameraCenterX;
@@ -40,7 +40,7 @@ if(keyboard_check_pressed(vk_space) && mouseCameraMoveLock == false && instance_
 }
 
 if(findingPlayer && instance_exists(obj_client)) {
-	if(instance_exists(obj_client.sleepers[mySleeperId])) {
+	if(obj_client.MyCanUseSleeperId(mySleeperId)) {
 		findingPlayerCurveX += 0.01;
 		cameraCenterX = MyCameraLinear(findingPlayerCurveX, findingPlayerStartX, obj_client.sleepers[mySleeperId].x);
 		cameraCenterY = MyCameraLinear(findingPlayerCurveX, findingPlayerStartY, obj_client.sleepers[mySleeperId].y - 44);
