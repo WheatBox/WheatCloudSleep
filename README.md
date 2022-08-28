@@ -1,8 +1,8 @@
 # WheatCloudSleep
 
-Wait!! BUG!!! I'm tring to fix!
+正在开发投票踢人功能 I'm developing the "vote-to-kick" system
 
-有BUG！！！正在修了！正在修了！目前最大的BUG就是服务器运行一会后客户端就无法加入了，就只能是原先就在服务器里的人，无法再有新的客户端加入
+## 十分感谢 B1aNB1aN 和 ymx-mshk 的帮助！！Very Thanks for B1aNB1aN And ymx-mshk!!
 
 Wheat Cloud Sleep software, which is meaningless. All you need to do is just open the software and lie down to sleep.
 
