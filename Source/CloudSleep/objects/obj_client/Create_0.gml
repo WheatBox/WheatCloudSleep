@@ -26,7 +26,7 @@ MyGetSleeperIdMax = function() {
 
 MyCanUseSleeperId = function(sleeperId) {
 	var sleeperIdMax = MyGetSleeperIdMax();
-	if(sleeperIdMax < sleeperId) {
+	if(sleeperIdMax < sleeperId || sleeperId < 0) {
 		return false;
 	}
 	if(!instance_exists(sleepers[sleeperId])) {

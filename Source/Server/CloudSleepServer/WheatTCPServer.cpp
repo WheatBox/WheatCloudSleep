@@ -47,6 +47,7 @@ void WheatTCPServer::Run()
 	// 该线程负责检测投票结果
 	std::thread([&]() {
 		while(true) {
+			Sleep(10);
 			if(m_voteKick.IsVoting()) {
 				// printf("VotingTime %d\n", m_voteKick.GetPastTime());
 				// 判断是否过去了十秒或者更多
