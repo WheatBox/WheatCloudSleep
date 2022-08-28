@@ -26,6 +26,7 @@ if(map[? "type"] == network_type_data) {
 				if(!MyCanUseSleeperId(mySleeperId)) {
 					sleepers[mySleeperId] = CreateSleeper(NewSleeperPosX, NewSleeperPosY);
 					sleepers[mySleeperId].isMe = true;
+					sleepers[mySleeperId].sleeperId = mySleeperId;
 					
 					SendPos(sleepers[mySleeperId].x, sleepers[mySleeperId].y);
 				}
@@ -37,6 +38,7 @@ if(map[? "type"] == network_type_data) {
 					}
 				}
 				sleepers[real(params[0])] = CreateSleeper(NewSleeperPosX, NewSleeperPosY);
+				sleepers[real(params[0])].sleeperId = real(params[0]);
 				break;
 			case CommandType.name:
 				if(!MyCanUseSleeperId(mesSleeperId)) break;
@@ -82,6 +84,25 @@ if(map[? "type"] == network_type_data) {
 				if(mesSleeperId == mySleeperId) break;
 				
 				sleepers[mesSleeperId].MySetPos(real(params[0]), real(params[1]));
+				break;
+				
+			case CommandType.kick:
+				if(!MyCanUseSleeperId(mesSleeperId)) break;
+				OnVote = true;
+				CreateKickShowVotes(real(params[0]));
+				break;
+			case CommandType.agree:
+			case CommandType.refuse:
+				if(instance_exists(obj_kickShowVotes)) {
+					obj_kickShowVotes.agreesNum = real(params[0]);
+					obj_kickShowVotes.refusesNum = real(params[1]);
+				}
+				break;
+			case CommandType.kickover:
+				OnVote = false;
+				if(instance_exists(obj_kickShowVotes)) {
+					instance_destroy(obj_kickShowVotes);
+				}
 				break;
 		}
 	}

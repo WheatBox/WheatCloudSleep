@@ -86,3 +86,15 @@ function SendPos(_x, _y) {
 	sendMessageQueue.push_back(CommandMakeMessage(CommandType.pos, [round(_x), round(_y)]));
 }
 
+function SendKick(sleeperId) {
+	sendMessageQueue.push_back(CommandMakeMessage(CommandType.kick, [sleeperId]));
+}
+
+function SendAgree() {
+	sendMessageQueue.push_back(CommandMakeMessage(CommandType.agree));
+}
+
+function SendRefuse() {
+	sendMessageQueue.push_back(CommandMakeMessage(CommandType.refuse));
+}
+

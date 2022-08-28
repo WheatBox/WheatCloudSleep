@@ -43,7 +43,7 @@ if(findingPlayer && instance_exists(obj_client)) {
 	if(instance_exists(obj_client.sleepers[mySleeperId])) {
 		findingPlayerCurveX += 0.01;
 		cameraCenterX = MyCameraLinear(findingPlayerCurveX, findingPlayerStartX, obj_client.sleepers[mySleeperId].x);
-		cameraCenterY = MyCameraLinear(findingPlayerCurveX, findingPlayerStartY, obj_client.sleepers[mySleeperId].bbox_top + (obj_client.sleepers[mySleeperId].bbox_bottom - obj_client.sleepers[mySleeperId].bbox_top) * -1.8);
+		cameraCenterY = MyCameraLinear(findingPlayerCurveX, findingPlayerStartY, obj_client.sleepers[mySleeperId].y - 44);
 	}
 }
 

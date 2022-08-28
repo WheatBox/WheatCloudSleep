@@ -4,6 +4,7 @@
 
 #include "WheatCommand.h"
 #include "WheatBedManager.h"
+#include "WheatVote.h"
 
 #include <winsock.h>
 
@@ -22,6 +23,8 @@ public:
 
 private:
 
+	WheatVote m_voteKick;
+
 	// 发送指令
 	// destSocket				目标客户端的 Socket
 	// sleeperIdWhoMakeThisCommand	填写产生这条指令的睡客的 睡客Id
@@ -37,6 +40,9 @@ private:
 
 	void SendBufferToFdSet(fd_set inputFdSet, int fdMax, const char * str);
 	void SendBufferToFdSet(fd_set inputFdSet, int fdMax, const char * str, size_t len, SOCKET skipSocket = -1);
+
+	// 断开连接某一客户端
+	void CloseClient(SOCKET sock, fd_set * fdSet, int fdSetMax);
 
 
 	WSADATA m_WSAData;

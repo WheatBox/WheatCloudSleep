@@ -2,6 +2,15 @@
 
 randomize();
 
+function DrawTextSetLU() {
+	draw_set_halign(fa_left);
+	draw_set_valign(fa_top);
+}
+
+function DrawTextSetMid() {
+	draw_set_halign(fa_center);
+	draw_set_valign(fa_middle);
+}
 
 function DrawChat(_x, _y, _chatText) {
 	draw_set_color(c_black);
@@ -15,11 +24,9 @@ function DrawChat(_x, _y, _chatText) {
 	
 	draw_set_alpha(1.0);
 	
-	draw_set_halign(fa_center);
-	draw_set_valign(fa_middle);
+	DrawTextSetMid();
 	draw_text(_x, _y, _chatText);
-	draw_set_halign(fa_left);
-	draw_set_valign(fa_top);
+	DrawTextSetLU();
 	
 	draw_set_color(c_white);
 }

@@ -131,6 +131,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <AdditionalOptions>/utf-8</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -146,6 +147,7 @@
     <ClCompile Include="WheatChatRecorder.cpp" />
     <ClCompile Include="WheatCommand.cpp" />
     <ClCompile Include="WheatTCPServer.cpp" />
+    <ClCompile Include="WheatVote.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ProjectCommon.h" />
@@ -153,6 +155,7 @@
     <ClInclude Include="WheatChatRecorder.h" />
     <ClInclude Include="WheatCommand.h" />
     <ClInclude Include="WheatTCPServer.h" />
+    <ClInclude Include="WheatVote.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

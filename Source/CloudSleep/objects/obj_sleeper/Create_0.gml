@@ -1,4 +1,4 @@
-mask_index = spr_SleeperHitbox;
+// mask_index = spr_SleeperHitbox;
 
 timeI = irandom_range(-180, 180);
 moveTimeI = 0;
@@ -91,4 +91,6 @@ willSleep = false;
 sleepingBedId = -1;
 xBeforeSleep = x;
 yBeforeSleep = y;
+
+sleeperId = -1;
 

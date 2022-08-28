@@ -16,6 +16,11 @@ enum CommandType {
 	move,
 	pos,
 	
+	kick,
+	agree,
+	refuse,
+	kickover,
+	
 };
 
 function GetCommandTypeFromString(buf) {
@@ -44,6 +49,15 @@ function GetCommandTypeFromString(buf) {
 			return CommandType.move;
 		case "pos":
 			return CommandType.pos;
+			
+		case "kick":
+			return CommandType.kick;
+		case "agree":
+			return CommandType.agree;
+		case "refuse":
+			return CommandType.refuse;
+		case "kickover":
+			return CommandType.kickover;
 	}
 	
 	return CommandType.unknown;
@@ -153,6 +167,39 @@ function CommandParse(stringWhichNeedsToParse) {
 			}
 			result[1][1] = real(_strTrans);
 			break;
+			
+		case CommandType.kick:
+			result[1][0] = real(strTemp);
+			break;
+		case CommandType.agree:
+		case CommandType.refuse:
+		// 从上面复制来的，先这样吧，有空再封装
+			result[1] = [0, 0];
+			if(string_length(string_digits(strTemp)) < 1) {
+				result[0] = CommandType.unknown;
+				break;
+			}
+			var _strTrans = "";
+			for(var j = 0; j < string_length(strTemp); j++) {
+				if(string_char_at(strTemp, j) == ",") {
+					_strTrans = string_digits(string_copy(strTemp, 0, j - 1));
+					if(string_length(string_digits(_strTrans)) < 1) {
+						result[0] = CommandType.unknown;
+						break;
+					}
+					result[1][0] = real(_strTrans);
+					break;
+				}
+			}
+			_strTrans = string_digits(string_copy(strTemp, j + 1, string_length(strTemp) - j));
+			if(string_length(string_digits(_strTrans)) < 1) {
+				result[0] = CommandType.unknown;
+				break;
+			}
+			result[1][1] = real(_strTrans);
+			break;
+		case CommandType.kickover:
+			break;
 	}
 	
 	return result;
@@ -197,6 +244,21 @@ function CommandMakeMessage(_CommandType, params = undefined) {
 			break;
 		case CommandType.pos:
 			res += "pos$" + string(params[0]) + "," + string(params[1]);
+			break;
+			
+		case CommandType.kick:
+			res += "kick$" + string(params[0]);
+			break;
+			
+		case CommandType.agree:
+			res += "agree$";
+			break;
+			
+		case CommandType.refuse:
+			res += "refuse$";
+			break;
+			
+		case CommandType.kickover:
 			break;
 	}
 	

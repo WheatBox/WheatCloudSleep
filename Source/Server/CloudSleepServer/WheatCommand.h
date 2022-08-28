@@ -21,7 +21,12 @@ enum class WheatCommandType {
 	chat,
 
 	move,
-	pos
+	pos,
+
+	kick,
+	agree,
+	refuse,
+	kickover
 };
 
 class WheatCommand {
@@ -31,7 +36,7 @@ public:
 
 	WheatCommandType type = WheatCommandType::unknown;
 	std::string strParam = "";
-	int nParam[2] = {0};
+	int nParam[2] = { 0, 0 };
 };
 
 // 指令程序员，负责本公司的服务端的指令解析与生成工作

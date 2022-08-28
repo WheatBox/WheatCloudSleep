@@ -53,6 +53,16 @@ WheatCommand WheatCommandProgrammer::Parse(const char* buf)
 			resultCommand.nParam[1] = atoi(vecPosCutTemp[1].c_str());
 		}
 		break;
+
+		case WheatCommandType::kick:
+			resultCommand.nParam[0] = atoi(vecCuttedBuf[1].c_str());
+			break;
+		case WheatCommandType::agree:
+			break;
+		case WheatCommandType::refuse:
+			break;
+		case WheatCommandType::kickover:
+			break;
 	}
 
 	return resultCommand;
@@ -96,6 +106,19 @@ std::string WheatCommandProgrammer::MakeMessage(const WheatCommand& command)
 			break;
 		case WheatCommandType::pos:
 			res = res + "pos$" + std::to_string(command.nParam[0]) + "," + std::to_string(command.nParam[1]);
+			break;
+
+		case WheatCommandType::kick:
+			res = res + "kick$" + std::to_string(command.nParam[0]);
+			break;
+		case WheatCommandType::agree:
+			res = res + "agree$" + std::to_string(command.nParam[0]) + "," + std::to_string(command.nParam[1]);
+			break;
+		case WheatCommandType::refuse:
+			res = res + "refuse$" + std::to_string(command.nParam[0]) + "," + std::to_string(command.nParam[1]);
+			break;
+		case WheatCommandType::kickover:
+			res += "kickover$";
 			break;
 	}
 
@@ -167,6 +190,15 @@ WheatCommandType WheatCommandProgrammer::GetCommandTypeFromString(const char* sz
 		return WheatCommandType::move;
 	if(strcmp(sz, "pos") == 0)
 		return WheatCommandType::pos;
+
+	if(strcmp(sz, "kick") == 0)
+		return WheatCommandType::kick;
+	if(strcmp(sz, "agree") == 0)
+		return WheatCommandType::agree;
+	if(strcmp(sz, "refuse") == 0)
+		return WheatCommandType::refuse;
+	if(strcmp(sz, "kickover") == 0)
+		return WheatCommandType::kickover;
 	
 	return WheatCommandType::unknown;
 }

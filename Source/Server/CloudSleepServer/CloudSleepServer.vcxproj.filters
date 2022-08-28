@@ -13,6 +13,7 @@
     <ClCompile Include="WheatCommand.cpp" />
     <ClCompile Include="ProjectCommon.cpp" />
     <ClCompile Include="WheatChatRecorder.cpp" />
+    <ClCompile Include="WheatVote.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="WheatTCPServer.h" />
@@ -20,5 +21,6 @@
     <ClInclude Include="ProjectCommon.h" />
     <ClInclude Include="WheatCommand.h" />
     <ClInclude Include="WheatChatRecorder.h" />
+    <ClInclude Include="WheatVote.h" />
   </ItemGroup>
 </Project>

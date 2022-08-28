@@ -6,8 +6,6 @@
 #include "WheatTCPServer.h"
 #include "WheatCommand.h"
 
-#include "WheatChatRecorder.h"
-
 #define MYPORT 11451
 
 int main() {

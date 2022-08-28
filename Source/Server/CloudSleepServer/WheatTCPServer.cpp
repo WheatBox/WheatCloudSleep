@@ -4,6 +4,7 @@
 #include "WheatChatRecorder.h"
 
 #include <iostream>
+#include <thread>
 
 #define WHEATTCP_BUFFERSIZE 256
 
@@ -42,6 +43,34 @@ void WheatTCPServer::Run()
 	FD_SET(m_socket, &fd);
 
 	int fdMax = static_cast<int>(m_socket);
+
+	// 该线程负责检测投票结果
+	std::thread([&]() {
+		while(true) {
+			if(m_voteKick.IsVoting()) {
+				// printf("VotingTime %d\n", m_voteKick.GetPastTime());
+				// 判断是否过去了十秒或者更多
+				if(m_voteKick.GetPastTime() >= 10) {
+					int voteAgreeTemp, voteRefuseTemp;
+					m_voteKick.GetVoteAnswer(&voteAgreeTemp, &voteRefuseTemp);
+
+					// 同意的人数是反对的人数的两倍或更多
+					if(voteAgreeTemp >= voteRefuseTemp * 2 && voteAgreeTemp + voteRefuseTemp > 1) {
+						// 就断开该睡客的连接
+						CloseClient(m_bedManager.m_sleepers[m_voteKick.m_voteKickSleeperId].sock, &fd, fdMax);
+					
+						printf("Kicked %lld.\n", m_bedManager.m_sleepers[m_voteKick.m_voteKickSleeperId].sock);
+					}
+
+					SendCommandToFdSet(fd, fdMax, m_voteKick.m_voteKickSleeperId, WheatCommand(WheatCommandType::kickover, "", 0, 0));
+
+					m_voteKick.SetIsVoting(false);
+
+					printf("Vote Over.\n");
+				}
+			}
+		}
+	}).detach();
 
 	while(1) {
 		fd_set fdTemp = fd;
@@ -94,28 +123,19 @@ void WheatTCPServer::Run()
 				if(i == m_socket) {
 					continue;
 				}
+
 				if(FD_ISSET(i, &fdTemp)) {
 					char buf[WHEATTCP_BUFFERSIZE];
 					memset(buf, 0, WHEATTCP_BUFFERSIZE);
 					int recvRes = recv(i, buf, sizeof(buf) - 1, 0);
 					if(recvRes == SOCKET_ERROR || recvRes == 0) {
-						closesocket(i);
-						FD_CLR(i, &fd);
-
-						printf("Client %d Left.\n", i);
-
-						int leaveSleeperId = m_bedManager.FindSleeperId(i);
-
-						if(leaveSleeperId < 0 || leaveSleeperId >= m_bedManager.m_sleepers.size()) {
-							printf("%d I Don't Know Who Left! SKIP!\n", leaveSleeperId);
-						} else {
-							SendCommandToFdSet(fd, fdMax, leaveSleeperId, WheatCommand(WheatCommandType::leave, "", leaveSleeperId, 0));
-						}
-						m_bedManager.CancelSleeper(leaveSleeperId);
+						CloseClient(i, &fd, fdMax);
 					} else {
 						// SendMessageToFdSet(fd, fdMax, buf, sizeof(buf));
 
-						// printf("Client %d : %s\n", i, buf);
+#ifdef  _DEBUG
+						printf("Client %d : %s\n", i, buf);
+#endif //  _DEBUG
 
 						WheatCommand command = m_pCommandProgrammer->Parse(buf);
 						
@@ -125,8 +145,11 @@ void WheatTCPServer::Run()
 							command.type = WheatCommandType::unknown;
 						}
 
+#pragma region Commands Double Check
+
 						switch(command.type) {
 							case WheatCommandType::unknown:
+								printf("Client %d : %s\n", i, buf);
 								printf("%d Unknown Command! SKIP!\n", i);
 								continue;
 								break;
@@ -143,23 +166,33 @@ void WheatTCPServer::Run()
 
 							case WheatCommandType::sleep:
 							{
+								// 判断睡客有没有在睡觉，有，就跳过
+								Sleeper * whoSleep = m_bedManager.GetSleeper(m_bedManager.FindSleeperId(i));
+								if(whoSleep->sleepingBedId != -1) {
+									printf("Sleeper %d Is Sleeping!\n", whoSleep->sleepingBedId);
+									continue;
+								}
+
+								// 越界的 床位id
 								if(command.nParam[0] >= BED_NUM || command.nParam[0] < 0) {
 									printf("Wrong Bed Id!! %d\n", command.nParam[0]);
 									continue;
 								}
 
+								// 判断床位是否为空
 								Bed * pBedTemp = m_bedManager.GetBed(command.nParam[0]);
 								if(!pBedTemp->Empty()) {
 									printf("Bed Is Not Empty. %d Can Not Sleep.\n", i);
 									continue;
 								} else {
 									printf("%d Sleep On Bed Which Is BedSleepId = %d\n", i, command.nParam[0]);
-									pBedTemp->Set(false, m_bedManager.GetSleeper(m_bedManager.FindSleeperId(i)));
+									pBedTemp->Set(false, whoSleep);
 									m_bedManager.m_sleepers[whoSleeperId].sleepingBedId = command.nParam[0];
 								}
 							}
 							break;
 							case WheatCommandType::getup:
+								// 是否有在睡觉，有，才继续执行
 								if(m_bedManager.m_sleepers[whoSleeperId].sleepingBedId != -1) {
 									m_bedManager.GetupBed(m_bedManager.m_sleepers[whoSleeperId].sleepingBedId);
 									m_bedManager.m_sleepers[whoSleeperId].sleepingBedId = -1;
@@ -178,7 +211,37 @@ void WheatTCPServer::Run()
 							case WheatCommandType::pos:
 								m_bedManager.m_sleepers[whoSleeperId].posLastData = Vec2<int>(command.nParam[0], command.nParam[1]);
 								break;
+
+							case WheatCommandType::kick:
+								if(m_voteKick.IsVoting()) {
+									continue;
+									break;
+								}
+								
+								m_voteKick.Init(static_cast<int>(m_bedManager.m_sleepers.size()), command.nParam[0]);
+								m_voteKick.SetIsVoting(true);
+
+								break;
+							case WheatCommandType::agree:
+								if(m_voteKick.AddAgree(whoSleeperId) == false) {
+									continue;
+									break;
+								}
+								m_voteKick.GetVoteAnswer(&command.nParam[0], &command.nParam[1]);
+								break;
+							case WheatCommandType::refuse:
+								if(m_voteKick.AddRefuse(whoSleeperId) == false) {
+									continue;
+									break;
+								}
+								m_voteKick.GetVoteAnswer(&command.nParam[0], &command.nParam[1]);
+								break;
+							case WheatCommandType::kickover:
+								continue;
+								break;
 						}
+
+#pragma endregion
 
 						// m_pCommandProgrammer->PrintWheatCommand(command);
 
@@ -319,6 +382,27 @@ void WheatTCPServer::SendBufferToFdSet(fd_set inputFdSet, int fdMax, const char 
 			send(i, str, int(len), 0);
 		}
 	}
+}
+
+void WheatTCPServer::CloseClient(SOCKET sock, fd_set * fdSet, int fdSetMax)
+{
+	if(FD_ISSET(sock, fdSet) == false) {
+		return;
+	}
+
+	closesocket(sock);
+	FD_CLR(sock, fdSet);
+
+	printf("Client %lld Left.\n", sock);
+
+	int leaveSleeperId = m_bedManager.FindSleeperId(sock);
+
+	if(leaveSleeperId < 0 || leaveSleeperId >= m_bedManager.m_sleepers.size()) {
+		printf("%d I Don't Know Who Left! SKIP!\n", leaveSleeperId);
+	} else {
+		SendCommandToFdSet(*fdSet, fdSetMax, leaveSleeperId, WheatCommand(WheatCommandType::leave, "", leaveSleeperId, 0));
+	}
+	m_bedManager.CancelSleeper(leaveSleeperId);
 }
 
 bool WheatTCPServer::WSAStart() {

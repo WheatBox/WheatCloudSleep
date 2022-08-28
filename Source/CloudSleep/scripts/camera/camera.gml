@@ -18,3 +18,15 @@ function CameraScale() {
 	return CameraWidth() / 1280;
 }
 
+function CameraLock() {
+	if(instance_exists(obj_camera)) {
+		obj_camera.mouseCameraMoveLock = true;
+	}
+}
+
+function CameraUnlock() {
+	if(instance_exists(obj_camera)) {
+		obj_camera.mouseCameraMoveLock = false;
+	}
+}
+
