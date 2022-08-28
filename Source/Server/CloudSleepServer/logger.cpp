@@ -83,15 +83,14 @@ void SimpleLogger::Log(const char* src_code_file, int log_line, LogLevel log_lev
 
     va_list arg_list;
     va_start(arg_list, format);
-    int content_size = vsnprintf(buffer + prefix_size, 1024 - prefix_size - 1, format, arg_list);
+    int content_size = vsnprintf(buffer + prefix_size, 1024 - prefix_size, format, arg_list);
     va_end(arg_list);
 
     auto size = prefix_size + content_size;
-    buffer[size++] = '\n';
-
     if (m_mode | LOG_CONSOLE)
     {
         fwrite(buffer, size, 1, stdout);
+        fwrite("\n", 1, 1, stdout);
     }
     
     if (m_mode | LOG_FILE)
@@ -100,10 +99,15 @@ void SimpleLogger::Log(const char* src_code_file, int log_line, LogLevel log_lev
         {
             OpenFile();
         }
-        fwrite(buffer, size, 1, m_file);
-        //todo 是否用单独的线程打印日志
-        fflush(m_file);
-        m_cur_file_size += size;
+
+        if (m_file)
+        {
+            fwrite(buffer, size, 1, m_file);
+            fwrite("\n", 1, 1, m_file);
+            //todo 鏄惁鐢ㄥ崟鐙殑绾跨▼鎵撳嵃鏃ュ織
+            fflush(m_file);
+            m_cur_file_size += size;
+        }
     }
 }
 

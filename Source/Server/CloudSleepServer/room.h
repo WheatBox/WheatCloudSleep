@@ -4,15 +4,18 @@
 #include <map>
 #include <string_view>
 #include "sleeper.h"
+#include "vote_counter.h"
+#include "logger.h"
 
 namespace wheat
 {
 
-constexpr size_t DEFAULT_MAX_BED_NUM = 256;
+constexpr size_t DEFAULT_MAX_BED_NUM = 256;//é»˜è®¤æœ€å¤§åºŠä½256
+constexpr int DEFAULT_VOTE_WAIT_TIME = 10; //é»˜è®¤æŠ•ç¥¨æ—¶é—´10ç§’
 class Sleeper;
 
-/* ·¿¼ä£¬Sleeper¿ÉÒÔ¼ÓÈë·¿¼ä£¬Í¬Ò»¸ö·¿¼äÄÚµÄSleeperÄÜ»¥Ïà¿´µ½¶Ô·½
- * ¸ºÔğ¹ÜÀísleeper(¼ÓÈëÀë¿ª)¡¢¹ÜÀí´²Î»(Ë¯¾õ/Æğ´²)¡¢ÒÔ¼°ÏûÏ¢µÄ·Ö·¢ 
+/* æˆ¿é—´ï¼ŒSleeperå¯ä»¥åŠ å…¥æˆ¿é—´ï¼ŒåŒä¸€ä¸ªæˆ¿é—´å†…çš„Sleeperèƒ½äº’ç›¸çœ‹åˆ°å¯¹æ–¹
+ * è´Ÿè´£ç®¡ç†sleeper(åŠ å…¥ç¦»å¼€)ã€ç®¡ç†åºŠä½(ç¡è§‰/èµ·åºŠ)ã€ä»¥åŠæ¶ˆæ¯çš„åˆ†å‘ 
  */
 class Room
 {
@@ -27,14 +30,51 @@ public:
 
     void GetUp(SleeperId id);
 
+    template <typename Executor>
+    bool VoteKickStart(Executor executor, SleeperId id)
+    {
+        if (m_is_voting)
+        {
+            LOG_WARN("%s, another vote is being", __func__);
+            return false;
+        }
+        else
+        {
+            LOG_INFO("%s, sleeper_id:%lld", __func__, id);
+            m_is_voting = true;
+            asio::co_spawn(
+                executor,
+                [this, id, executor]() -> asio::awaitable<void>
+                {
+                    asio::steady_timer timer(executor, std::chrono::seconds(DEFAULT_VOTE_WAIT_TIME));
+                    co_await timer.async_wait(asio::use_awaitable);
+                    VoteKickOver(id);
+                },
+                asio::detached
+            );
+            return true;
+        }
+    }
+
+    void Agree(SleeperId id);
+
+    void Refuse(SleeperId id);
+
     void Deliver(SleeperId src_id, std::string_view msg);
 
 private:
     void DeliverToAll(const std::string& msg);
 
+    void SendVoteState();
+
+    void VoteKickOver(SleeperId id);
+
 private:
     std::map<SleeperId, std::shared_ptr<Sleeper>> m_sleepers;
     std::array<SleeperId, DEFAULT_MAX_BED_NUM> m_beds;
+
+    bool m_is_voting = false;
+    VoteCounter<SleeperId> m_vote_counter;
 };
 
 

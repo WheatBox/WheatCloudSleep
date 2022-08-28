@@ -90,6 +90,18 @@ WheatCommand ParseCommand(std::string_view msg)
     {
         return CmdPos{ make_pos(args) };
     }
+    else if (command == "kick")
+    {
+        return CmdVoteKickStart{ std::stoull(std::string(args)) };
+    }
+    else if (command == "agree")
+    {
+        return CmdVoteAgree{ std::stoull(std::string(args)) };
+    }
+    else if (command == "refuse")
+    {
+        return CmdVoteRefuse{ std::stoull(std::string(args)) };
+    }
     else
     {
         throw std::runtime_error("invalid msg:" + std::string(msg));
@@ -108,7 +120,11 @@ std::string PackCommand(const WheatCommand& cmd)
         [](CmdGetup arg) { return std::string("getup$") /* + arg.bed_id*/; },
         [](const CmdChat& arg) { return "chat$" + arg.msg; },
         [](CmdMove arg) { return "move$" + std::to_string(arg.pos.x) + ',' + std::to_string(arg.pos.y); },
-        [](CmdPos arg) { return "pos" + std::to_string(arg.pos.x) + ',' + std::to_string(arg.pos.y); }
+        [](CmdPos arg) { return "pos$" + std::to_string(arg.pos.x) + ',' + std::to_string(arg.pos.y); },
+        [](CmdVoteKickStart arg) { return "kick$" + std::to_string(arg.kick_id); },
+        [](CmdVoteState arg) { return "agree$" + std::to_string(arg.argee) + ',' + std::to_string(arg.refuse); },
+        [](CmdVoteKickOver) { return std::string("kickover$"); },
+        [](auto&&) { return std::string(); }
     }, cmd);
 }
 

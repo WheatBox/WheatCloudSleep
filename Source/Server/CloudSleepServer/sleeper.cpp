@@ -18,7 +18,7 @@ Sleeper::Sleeper(Room& room, socket sock)
         m_sock.remote_endpoint().address().to_string().c_str());
 }
 
-//¼ÓÈë·¿¼ä£¬Æô¶¯Ò»¸öÊÕÏûÏ¢µÄĞ­³Ì£¬Ò»¸ö·¢ÏûÏ¢µÄĞ­³Ì
+//åŠ å…¥æˆ¿é—´ï¼Œå¯åŠ¨ä¸€ä¸ªæ”¶æ¶ˆæ¯çš„åç¨‹ï¼Œä¸€ä¸ªå‘æ¶ˆæ¯çš„åç¨‹
 void Sleeper::Start()
 {
     m_room.Join(m_id, shared_from_this());
@@ -62,7 +62,7 @@ asio::awaitable<void> Sleeper::Reader()
 {
     try
     {
-        //Ñ­»·¶ÁÈ¡Êı¾İ
+        //å¾ªç¯è¯»å–æ•°æ®
         while (true)
         {
             std::string buffer;
@@ -74,15 +74,15 @@ asio::awaitable<void> Sleeper::Reader()
                 std::string_view msg(buffer.data(), n);
                 LOG_DEBUG("%s, sleeper_id:%lld, on commad:%s", __func__, m_id, msg.data());
 
-                bool is_success = true;
-                //´¦Àí²»Í¬ÀàĞÍµÄÃüÁî
+                //éƒ¨åˆ†æ¶ˆæ¯ä¸éœ€è¦(æˆ–è€…å¤„ç†å¤±è´¥æ—¶ä¸éœ€è¦)è½¬å‘
+                bool forward = true;
                 std::visit(
                 overloaded{
-                    [this, &is_success](CmdSleep cmd) { 
+                    [this, &forward](CmdSleep cmd) {
                         if (m_room.Sleep(m_id, cmd.bed_id))
                             m_bed_id = cmd.bed_id;
                         else
-                            is_success = false;
+                            forward = false;
                     },
                     [this](CmdGetup cmd) { m_room.GetUp(m_id); },
                     [this](CmdName cmd) { 
@@ -98,11 +98,14 @@ asio::awaitable<void> Sleeper::Reader()
                     },
                     [this](CmdPos cmd) { m_pos = cmd.pos; },
                     [this](CmdMove cmd) { m_pos = cmd.pos; },
+                    [this](CmdVoteKickStart cmd) { m_room.VoteKickStart(m_sock.get_executor(), cmd.kick_id); },
+                    [this, &forward](CmdVoteAgree cmd) { m_room.Agree(cmd.id); forward = false; },
+                    [this, &forward](CmdVoteRefuse cmd) { m_room.Refuse(cmd.id); forward = false; },
                     [](auto&&) { }
                 }, 
                 ParseCommand(msg));
 
-                if (is_success)
+                if (forward)
                     m_room.Deliver(m_id, msg);
             }
             catch (const std::exception& e)
@@ -128,7 +131,7 @@ asio::awaitable<void> Sleeper::Writer()
         {
             if (m_write_msgs.empty())
             {
-                //ÔÚ¶¨Ê±Æ÷´¦µÈ´ı£¬Ö±µ½·¢ËÍÏûÏ¢¶ÓÁĞÓĞÊı¾İ
+                //åœ¨å®šæ—¶å™¨å¤„ç­‰å¾…ï¼Œç›´åˆ°å‘é€æ¶ˆæ¯é˜Ÿåˆ—æœ‰æ•°æ®
                 asio::error_code ec;
                 co_await m_timer.async_wait(asio::redirect_error(asio::use_awaitable, ec));
             }

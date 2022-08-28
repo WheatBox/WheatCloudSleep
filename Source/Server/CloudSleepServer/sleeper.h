@@ -9,12 +9,12 @@
 namespace wheat
 {
 
-//产生全局唯一的sleeper_id
+//浜х敓鍏ㄥ眬鍞竴鐨剆leeper_id
 SleeperId MakeSleeperId();
 class Room;
 
 
-/* Sleeper，基本用户的概念
+/* Sleeper锛屽熀鏈敤鎴风殑姒傚康
  */
 class Sleeper
     : public std::enable_shared_from_this<Sleeper>
@@ -25,17 +25,17 @@ public:
 
     void Start();
 
-    //下发消息给端
+    void Stop();
+
+    //涓嬪彂娑堟伅缁欑
     void Deliver(std::string msg);
 
-    //自身的基本信息，sleeper加入房间后，房间获取并下发送所有其他sleeper的信息给ta
+    //鑷韩鐨勫熀鏈俊鎭紝sleeper鍔犲叆鎴块棿鍚庯紝鎴块棿鑾峰彇骞朵笅鍙戦�佹墍鏈夊叾浠杝leeper鐨勪俊鎭粰ta
     std::string MakeSelfInfo() const;
 private:
     asio::awaitable<void> Reader();
 
     asio::awaitable<void> Writer();
-
-    void Stop();
 private:
     Room& m_room;
     SleeperId m_id;
@@ -45,7 +45,7 @@ private:
     int m_bed_id = -1;
     Pos m_pos = INVALID_POS;
 
-    asio::steady_timer m_timer;   //此定时器用于发送消息队列的同步，asio常用做法
+    asio::steady_timer m_timer;   //姝ゅ畾鏃跺櫒鐢ㄤ簬鍙戦�佹秷鎭槦鍒楃殑鍚屾锛宎sio甯哥敤鍋氭硶
     std::deque<std::string> m_write_msgs;
 };
 

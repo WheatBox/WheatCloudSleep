@@ -72,11 +72,38 @@ struct CmdPos
     Pos pos;
 };
 
-//用于std::visit访问varaint，参见https://zh.cppreference.com/w/cpp/utility/variant/visit
+struct CmdVoteKickStart
+{
+    SleeperId kick_id;
+};
+
+struct CmdVoteAgree
+{
+    SleeperId id;
+};
+
+struct CmdVoteRefuse
+{
+    SleeperId id;
+};
+
+struct CmdVoteState
+{
+    size_t argee;
+    size_t refuse;
+};
+
+struct CmdVoteKickOver
+{
+
+};
+
+//鐢ㄤ簬std::visit璁块棶varaint锛屽弬瑙乭ttps://zh.cppreference.com/w/cpp/utility/variant/visit
 template<class... Ts> struct overloaded : Ts... { using Ts::operator()...; };
 template<class... Ts> overloaded(Ts...)->overloaded<Ts...>;
 
-using WheatCommand = std::variant<CmdYourid, CmdSleeper, CmdName, CmdType, CmdLeave, CmdSleep, CmdGetup, CmdChat, CmdMove, CmdPos>;
+using WheatCommand = std::variant<CmdYourid, CmdSleeper, CmdName, CmdType, CmdLeave, CmdSleep, CmdGetup, 
+    CmdChat, CmdMove, CmdPos, CmdVoteKickStart, CmdVoteAgree, CmdVoteRefuse, CmdVoteState, CmdVoteKickOver>;
 
 WheatCommand ParseCommand(std::string_view msg);
 
