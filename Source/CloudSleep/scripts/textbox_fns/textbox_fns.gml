@@ -23,23 +23,6 @@ function textbox_create(x, y, w, h, n, p, m, t, f) {
 
 	var i = instance_create_depth(0, 0, depth - 1, textbox);
 	with (i) {
-		
-		// 我不知道为什么不放在这里就会报错
-		draw = {
-			su : noone,				// surface
-			re : false,				// refresh surface
-			dc : 30,				// display cursor
-			ft : noone,				// font
-			co : c_black,			// font color
-			sx : 32,				// x start
-			sy : 32,				// y start
-			dw : 160,				// draw width
-			dh : 38,				// draw height
-			ox : 0,					// x offset
-			ry : 0,					// y resive
-			lh : 22					// line height
-		}
-		
 		draw.sx = x;					// x
 		draw.sy = y;					// y
 		draw.dw = w;					// width
