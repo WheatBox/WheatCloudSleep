@@ -1,0 +1,3 @@
+[submodule "Source/Server/CloudSleepServer/third/asio"]
+	path = Source/Server/CloudSleepServer/third/asio
+	url = https://github.com/chriskohlhoff/asio.git
