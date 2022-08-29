@@ -131,7 +131,7 @@ void Room::VoteKickOver(SleeperId id)
         }
     }
 
-    DeliverToAll(PackCommand(CmdVoteKickOver{}));
+    DeliverToAll(PackCommandWithId(id, CmdVoteKickOver{}));
 }
 
 
