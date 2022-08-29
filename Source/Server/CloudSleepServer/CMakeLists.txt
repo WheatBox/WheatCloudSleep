@@ -1,5 +1,13 @@
 # Thanks to tusik(https://github.com/tusik)
 #
+# How to build?
+# 1. go into directory where CMakeLists.txt placed
+# 2. mkdir build && cd build
+# 3. cmake ..
+# 4. cmake --build . --config Debug --target install
+#    or cmake --build . --config Release --target install
+# 5. binary output will be built in "install" directory
+#
 
 cmake_minimum_required (VERSION 3.15)
 

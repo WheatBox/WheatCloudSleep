@@ -3,7 +3,10 @@
 #include "room.h"
 #include "logger.h"
 
-constexpr uint16_t PORT = 11451;
+#include <iostream>
+
+constexpr std::uint16_t PORT = 11451;
+constexpr std::uint16_t MAX_PORT = 65535;
 
 asio::awaitable<void> Listener(asio::ip::tcp::acceptor acceptor)
 {
@@ -17,8 +20,42 @@ asio::awaitable<void> Listener(asio::ip::tcp::acceptor acceptor)
     }
 }
 
-int main()
+void PrintUsage()
 {
+    std::cout << "Usage: CloudSleepServer ({port}|-h)\n";
+}
+
+int main(int argc, char* argv[])
+{
+    std::uint16_t server_port = PORT;
+
+    if (argc > 1)
+    {
+        if (std::strcmp("-h", argv[1]) == 0)
+        {
+            PrintUsage();
+            return 0;
+        }
+
+        try
+        {
+            unsigned long new_port = std::stoul(argv[1]);
+            if (new_port > MAX_PORT)
+            {
+                throw std::exception();
+            }
+
+            server_port = static_cast<std::uint16_t>(new_port);
+        }
+        catch (const std::exception&)
+        {
+            std::cout << "Error: wrong argument\n";
+            PrintUsage();
+            return 1;
+        }
+
+    }
+
     util::g_logger.SetLogMode(LOG_CONSOLE | LOG_FILE);
     util::g_logger.SetLogToFile("sleep_server");
 
@@ -27,7 +64,7 @@ int main()
         asio::io_context io_context(1);
         asio::co_spawn(
             io_context,
-            Listener(asio::ip::tcp::acceptor(io_context, { asio::ip::tcp::v4(), PORT })),
+            Listener(asio::ip::tcp::acceptor(io_context, { asio::ip::tcp::v4(), server_port })),
             asio::detached);
 
         asio::signal_set signals(io_context, SIGINT, SIGTERM);
