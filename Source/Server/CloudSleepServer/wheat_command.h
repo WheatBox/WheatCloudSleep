@@ -46,7 +46,7 @@ struct CmdSleep
 
 struct CmdGetup
 {
-    //int bed_id;
+    //int bed_id; 
 };
 
 struct CmdChat
@@ -79,12 +79,12 @@ struct CmdVoteKickStart
 
 struct CmdVoteAgree
 {
-    SleeperId id;
+    // SleeperId id; 
 };
 
 struct CmdVoteRefuse
 {
-    SleeperId id;
+    // SleeperId id; 
 };
 
 struct CmdVoteState
@@ -98,7 +98,7 @@ struct CmdVoteKickOver
 
 };
 
-//用于std::visit访问varaint，参见https://zh.cppreference.com/w/cpp/utility/variant/visit
+//用于std::visit访问varaint，参见https://zh.cppreference.com/w/cpp/utility/variant/visit 
 template<class... Ts> struct overloaded : Ts... { using Ts::operator()...; };
 template<class... Ts> overloaded(Ts...)->overloaded<Ts...>;
 

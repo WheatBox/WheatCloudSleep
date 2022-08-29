@@ -96,11 +96,13 @@ WheatCommand ParseCommand(std::string_view msg)
     }
     else if (command == "agree")
     {
-        return CmdVoteAgree{ std::stoull(std::string(args)) };
+        // return CmdVoteAgree{ std::stoull(std::string(args)) }; 
+        return CmdVoteAgree{  };
     }
     else if (command == "refuse")
     {
-        return CmdVoteRefuse{ std::stoull(std::string(args)) };
+        // return CmdVoteRefuse{ std::stoull(std::string(args)) }; 
+        return CmdVoteRefuse{  };
     }
     else
     {

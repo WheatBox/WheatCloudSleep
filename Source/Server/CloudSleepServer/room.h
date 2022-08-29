@@ -10,11 +10,11 @@
 namespace wheat
 {
 
-constexpr size_t DEFAULT_MAX_BED_NUM = 256;//默认最大床位256
-constexpr int DEFAULT_VOTE_WAIT_TIME = 10; //默认投票时间10秒
+constexpr size_t DEFAULT_MAX_BED_NUM = 256;//默认最大床位256 
+constexpr int DEFAULT_VOTE_WAIT_TIME = 10; //默认投票时间10秒 
 class Sleeper;
 
-/* 房间，Sleeper可以加入房间，同一个房间内的Sleeper能互相看到对方
+/* 房间，Sleeper可以加入房间，同一个房间内的Sleeper能互相看到对方 
  * 负责管理sleeper(加入离开)、管理床位(睡觉/起床)、以及消息的分发 
  */
 class Room
@@ -49,6 +49,8 @@ public:
                     asio::steady_timer timer(executor, std::chrono::seconds(DEFAULT_VOTE_WAIT_TIME));
                     co_await timer.async_wait(asio::use_awaitable);
                     VoteKickOver(id);
+
+                    m_vote_counter.Clear();
                 },
                 asio::detached
             );

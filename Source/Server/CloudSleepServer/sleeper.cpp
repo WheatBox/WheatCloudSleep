@@ -18,7 +18,7 @@ Sleeper::Sleeper(Room& room, socket sock)
         m_sock.remote_endpoint().address().to_string().c_str());
 }
 
-//加入房间，启动一个收消息的协程，一个发消息的协程
+//加入房间，启动一个收消息的协程，一个发消息的协程 
 void Sleeper::Start()
 {
     m_room.Join(m_id, shared_from_this());
@@ -74,7 +74,7 @@ asio::awaitable<void> Sleeper::Reader()
                 std::string_view msg(buffer.data(), n);
                 LOG_DEBUG("%s, sleeper_id:%lld, on commad:%s", __func__, m_id, msg.data());
 
-                //部分消息不需要(或者处理失败时不需要)转发
+                //部分消息不需要(或者处理失败时不需要)转发 
                 bool forward = true;
                 std::visit(
                 overloaded{
@@ -99,8 +99,8 @@ asio::awaitable<void> Sleeper::Reader()
                     [this](CmdPos cmd) { m_pos = cmd.pos; },
                     [this](CmdMove cmd) { m_pos = cmd.pos; },
                     [this](CmdVoteKickStart cmd) { m_room.VoteKickStart(m_sock.get_executor(), cmd.kick_id); },
-                    [this, &forward](CmdVoteAgree cmd) { m_room.Agree(cmd.id); forward = false; },
-                    [this, &forward](CmdVoteRefuse cmd) { m_room.Refuse(cmd.id); forward = false; },
+                    [this, &forward](CmdVoteAgree cmd) { m_room.Agree(m_id); forward = false; },
+                    [this, &forward](CmdVoteRefuse cmd) { m_room.Refuse(m_id); forward = false; },
                     [](auto&&) { }
                 }, 
                 ParseCommand(msg));
@@ -131,7 +131,7 @@ asio::awaitable<void> Sleeper::Writer()
         {
             if (m_write_msgs.empty())
             {
-                //在定时器处等待，直到发送消息队列有数据
+                //在定时器处等待，直到发送消息队列有数据 
                 asio::error_code ec;
                 co_await m_timer.async_wait(asio::redirect_error(asio::use_awaitable, ec));
             }
