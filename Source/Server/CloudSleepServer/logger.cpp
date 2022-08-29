@@ -104,7 +104,7 @@ void SimpleLogger::Log(const char* src_code_file, int log_line, LogLevel log_lev
         {
             fwrite(buffer, size, 1, m_file);
             fwrite("\n", 1, 1, m_file);
-            //todo 是否用单独的线程打印日志
+            //todo 是否用单独的线程打印日志 
             fflush(m_file);
             m_cur_file_size += size;
         }
