@@ -17,19 +17,23 @@ function CreateKickWhoBox(sleeperId) {
 	ins.name = obj_client.sleepers[sleeperId].name;
 }
 
-function CreateKickShowVotes(sleeperId) {
+function CreateKickShowVotes(whoVoteSleeperId, kickSleeperId) {
 	if(!OnVote) {
 		return;
 	}
 	if(instance_exists(obj_client) == false) {
 		return;
 	}
-	if(obj_client.MyCanUseSleeperId(sleeperId) == false) {
+	if(obj_client.MyCanUseSleeperId(whoVoteSleeperId) == false) {
+		return;
+	}
+	if(obj_client.MyCanUseSleeperId(kickSleeperId) == false) {
 		return;
 	}
 	
 	var ins = instance_create_depth(0, 0, -10000, obj_kickShowVotes);
-	ins.sleeperId = sleeperId;
-	ins.kickName = obj_client.sleepers[sleeperId].name;
+	ins.sleeperId = kickSleeperId;
+	ins.whoVoteName = obj_client.sleepers[whoVoteSleeperId].name;
+	ins.kickName = obj_client.sleepers[kickSleeperId].name;
 }
 

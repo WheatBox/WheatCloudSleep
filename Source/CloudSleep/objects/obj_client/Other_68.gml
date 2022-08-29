@@ -103,9 +103,9 @@ if(map[? "type"] == network_type_data) {
 				break;
 				
 			case CommandType.kick:
-				if(!MyCanUseSleeperId(mesSleeperId)) break;
+				if(!MyCanUseSleeperId(mesSleeperId) || !MyCanUseSleeperId(real(params[0]))) break;
 				OnVote = true;
-				CreateKickShowVotes(real(params[0]));
+				CreateKickShowVotes(mesSleeperId, real(params[0]));
 				break;
 			case CommandType.agree:
 			case CommandType.refuse:

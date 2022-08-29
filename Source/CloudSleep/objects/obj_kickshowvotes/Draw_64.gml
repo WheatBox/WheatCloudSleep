@@ -1,4 +1,4 @@
-var str = "投票决定是否踢出 @" + kickName;
+var str = "[@" + whoVoteName + "] 发起投票是否踢出 [@" + kickName + "]";
 str += "\n按下F1 同意踢出，当前同意人数：" + string(agreesNum);
 str += "\n按下F2 反对踢出，当前反对人数：" + string(refusesNum);
 
