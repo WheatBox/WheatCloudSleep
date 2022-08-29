@@ -91,7 +91,7 @@ void Room::Refuse(SleeperId id)
 {
     if (m_is_voting)
     {
-        LOG_INFO("sleeper:%lld vote resuse", id);
+        LOG_INFO("sleeper:%lld vote refuse", id);
         if (m_vote_counter.Refuse(id))
             SendVoteState();
     }
@@ -113,7 +113,7 @@ void Room::DeliverToAll(const std::string& msg)
 void Room::SendVoteState()
 {
     auto [agree, refuse] = m_vote_counter.GetVotes();
-    DeliverToAll(PackCommand(CmdVoteState{ agree, refuse }));
+    DeliverToAll(PackCommandWithId(0, CmdVoteState{ agree, refuse }));
 }
 
 void Room::VoteKickOver(SleeperId id)
@@ -121,7 +121,7 @@ void Room::VoteKickOver(SleeperId id)
     m_is_voting = false;
     auto [agree, refuse] = m_vote_counter.GetVotes();
     LOG_INFO("%s, %llu agree and %llu refuse", __func__, agree, refuse);
-    if (agree >= 2 * refuse && agree >= 1)
+    if (agree >= 2 * refuse && agree > 1)
     {
         auto iter = m_sleepers.find(id);
         if (iter != m_sleepers.end())
@@ -131,7 +131,7 @@ void Room::VoteKickOver(SleeperId id)
         }
     }
 
-    DeliverToAll(PackCommand(CmdVoteKickOver{}));
+    DeliverToAll(PackCommandWithId(id, CmdVoteKickOver{}));
 }
 
 

@@ -6,8 +6,24 @@ if(map[? "type"] == network_type_data) {
 	
 	while(buffer_tell(buf) < buffer_get_size(buf)) {
 		var mesSleeperIdMax = MyGetSleeperIdMax();
-		var mesSleeperId = real(buffer_read(buf, buffer_string));
-		show_debug_message("bufA = " + string(mesSleeperId));
+		var mesSleeperIdStr = buffer_read(buf, buffer_string);
+		show_debug_message("bufA = " + mesSleeperIdStr);
+		
+		var bufAisNum = true;
+		var bufALen = string_length(mesSleeperIdStr) + 1;
+		for(var iCheckBufA = 0; iCheckBufA < bufALen; iCheckBufA++) {
+			var bufAcharAt = string_char_at(mesSleeperIdStr, iCheckBufA);
+			if(ord(bufAcharAt) < 48 || ord(bufAcharAt) > 57) {
+				show_debug_message("bufA is not a num. continue;");
+				bufAisNum = false;
+				break;
+			}
+		}
+		if(bufAisNum == false) {
+			continue;
+		}
+		
+		var mesSleeperId = real(mesSleeperIdStr);
 		
 		var mes = buffer_read(buf, buffer_string);
 		show_debug_message("bufB = " + mes);

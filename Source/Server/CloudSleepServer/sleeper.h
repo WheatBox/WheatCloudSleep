@@ -30,7 +30,7 @@ public:
     //下发消息给端
     void Deliver(std::string msg);
 
-    //自身的基本信息，sleeper加入房间后，房间获取并下发送所有其他sleeper的信息给ta
+    //自身的基本信息，sleeper加入房间后，房间获取并下发送所有其他sleeper的信息给ta 
     std::string MakeSelfInfo() const;
 private:
     asio::awaitable<void> Reader();
@@ -45,7 +45,7 @@ private:
     int m_bed_id = -1;
     Pos m_pos = INVALID_POS;
 
-    asio::steady_timer m_timer;   //此定时器用于发送消息队列的同步，asio常用做法
+    asio::steady_timer m_timer;   //此定时器用于发送消息队列的同步，asio常用做法 
     std::deque<std::string> m_write_msgs;
 };
 
