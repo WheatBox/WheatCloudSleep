@@ -12,20 +12,14 @@ public:
     template <typename U>
     bool Agree(U&& u)
     {
-        auto it = m_who_refuse.find(std::forward<U>(u));
-        if(it != m_who_refuse.end()) {
-            m_who_refuse.erase(it);
-        }
+        m_who_refuse.erase(u);
         return m_who_agree.emplace(std::forward<U>(u)).second;
     }
 
     template <typename U>
     bool Refuse(U && u)
     {
-        auto it = m_who_agree.find(std::forward<U>(u));
-        if(it != m_who_agree.end()) {
-            m_who_agree.erase(it);
-        }
+        m_who_agree.erase(u);
         return m_who_refuse.emplace(std::forward<U>(u)).second;
     }
 

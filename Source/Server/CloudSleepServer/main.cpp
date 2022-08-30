@@ -2,7 +2,7 @@
 #include "sleeper.h"
 #include "room.h"
 #include "logger.h"
-
+#include "black_list.h"
 #include <iostream>
 
 constexpr std::uint16_t PORT = 11451;
@@ -10,7 +10,7 @@ constexpr std::uint16_t MAX_PORT = 65535;
 
 asio::awaitable<void> Listener(asio::ip::tcp::acceptor acceptor)
 {
-    wheat::Room room;
+    wheat::Room room(acceptor.get_executor());
     for (;;)
     {
         std::make_shared<wheat::Sleeper>(
@@ -62,6 +62,8 @@ int main(int argc, char* argv[])
     try
     {
         asio::io_context io_context(1);
+        wheat::blacklist::BlackList::Instance().Init(io_context.get_executor());
+
         asio::co_spawn(
             io_context,
             Listener(asio::ip::tcp::acceptor(io_context, { asio::ip::tcp::v4(), server_port })),

@@ -1,43 +1,67 @@
 #pragma once
 
-#include <set>
+#include <map>
 #include <string>
 #include <chrono>
+#include <asio.hpp>
 
 namespace wheat
 {
-	namespace blacklist
+namespace blacklist
+{
+
+using Minutes = std::chrono::minutes;
+
+//默认黑名单时长10min，最大黑名单时长1天，观察期时长翻倍 
+constexpr Minutes DEFAULT_BLOCK_PERIOD{ 10 };
+constexpr Minutes MAX_BLOCK_PERIOD{ 24 * 60 };
+constexpr Minutes DEFAULT_WATCH_PERIOD{ 2 * DEFAULT_BLOCK_PERIOD };
+constexpr Minutes MAX_WATCH_PERIOD{ 2 * MAX_BLOCK_PERIOD };
+
+class BlackList
+{
+public:
+	//黑名单应该是整个服务器共享的，所以这里设计成单例 
+	static BlackList& Instance();
+
+	void Init(asio::any_io_executor executor);
+
+	/* 把ip加入黑名单，黑名单初始时长为time，规则如下：
+	 * 在黑名单时期内，IsIpBlocked(ip)返回true，具体怎么处理看上层操作(现在是不允许加入房间)
+	 * 如果ip不在观察期，则黑名单等待时长为time，到期之后从黑名单移除，并加入观察列表(时长是黑名单等待时长的两倍)，到期之后从观察列表里移除
+	 * 如果ip已经处于观察期，则本次黑名单等待时长为max(本次黑名单时长,上一次黑名单等待时长的两倍)
+	 */
+	void AddIpToBlockList(
+		const std::string& ip,
+		const Minutes& time = DEFAULT_BLOCK_PERIOD
+	);
+
+	bool IsIpBlocked(const std::string& ip) const
 	{
-
-		class BlackList
-		{
-		public:
-			BlackList() = default;
-			~BlackList() = default;
-
-			void AddIpToBlockList(
-				const std::string& ip, 
-				const std::chrono::minutes& time
-			);
-			bool IsIpBlocked(const std::string& ip);
-			bool IsIpWatched(const std::string& ip);
-
-		private:
-			struct BlockIpContext
-			{
-				std::string ip;
-				std::chrono::minutes blocking_period;
-				std::chrono::time_point<std::chrono::steady_clock> block_start_time;
-
-				bool operator<(const BlockIpContext& r)
-				{
-					return ip < r.ip;
-				}
-			};
-
-			std::set<BlockIpContext> black_list_;
-			std::set<BlockIpContext> watch_list_;
-
-		};
+		return m_black_list.contains(ip);
 	}
+
+	bool IsIpWatched(const std::string& ip) const
+	{
+		return m_watch_list.contains(ip);
+	}
+
+private:
+	asio::awaitable<void> AddIpToBlockListAsync(std::string ip, Minutes time);
+
+	struct WatchIpContext
+	{
+		asio::steady_timer* previous_timer;
+		Minutes privios_block_time;
+	};
+
+	explicit BlackList() = default;
+
+private:
+	asio::any_io_executor m_executor;
+	std::map<std::string, asio::steady_timer*> m_black_list;
+	std::map<std::string, WatchIpContext> m_watch_list;
+};
+
+}
 } // namespace wheat

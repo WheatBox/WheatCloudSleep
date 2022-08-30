@@ -5,7 +5,6 @@
 #include <string_view>
 #include "sleeper.h"
 #include "vote_counter.h"
-#include "logger.h"
 
 namespace wheat
 {
@@ -17,12 +16,13 @@ class Sleeper;
 /* 房间，Sleeper可以加入房间，同一个房间内的Sleeper能互相看到对方 
  * 负责管理sleeper(加入离开)、管理床位(睡觉/起床)、以及消息的分发 
  */
+
 class Room
 {
 public:
-    Room() { for (auto& id : m_beds) id = INVALID_SLEEPER_ID; };
+    explicit Room(asio::any_io_executor executor);
 
-    void Join(SleeperId id, std::shared_ptr<Sleeper> sleeper);
+    bool Join(SleeperId id, std::shared_ptr<Sleeper> sleeper);
 
     void Leave(SleeperId id);
 
@@ -30,33 +30,7 @@ public:
 
     void GetUp(SleeperId id);
 
-    template <typename Executor>
-    bool VoteKickStart(Executor executor, SleeperId id)
-    {
-        if (m_is_voting)
-        {
-            LOG_WARN("%s, another vote is being", __func__);
-            return false;
-        }
-        else
-        {
-            LOG_INFO("%s, sleeper_id:%lld", __func__, id);
-            m_is_voting = true;
-            asio::co_spawn(
-                executor,
-                [this, id, executor]() -> asio::awaitable<void>
-                {
-                    asio::steady_timer timer(executor, std::chrono::seconds(DEFAULT_VOTE_WAIT_TIME));
-                    co_await timer.async_wait(asio::use_awaitable);
-                    VoteKickOver(id);
-
-                    m_vote_counter.Clear();
-                },
-                asio::detached
-            );
-            return true;
-        }
-    }
+    bool VoteKickStart(SleeperId id);
 
     void Agree(SleeperId id);
 
@@ -72,11 +46,13 @@ private:
     void VoteKickOver(SleeperId id);
 
 private:
+    asio::any_io_executor m_executor;
     std::map<SleeperId, std::shared_ptr<Sleeper>> m_sleepers;
     std::array<SleeperId, DEFAULT_MAX_BED_NUM> m_beds;
 
     bool m_is_voting = false;
     VoteCounter<SleeperId> m_vote_counter;
+
 };
 
 

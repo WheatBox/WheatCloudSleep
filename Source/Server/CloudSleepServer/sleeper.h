@@ -27,6 +27,8 @@ public:
 
     void Stop();
 
+    std::string GetIp() const;
+
     //下发消息给端
     void Deliver(std::string msg);
 

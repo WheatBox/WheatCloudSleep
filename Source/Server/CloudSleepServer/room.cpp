@@ -2,27 +2,46 @@
 #include "wheat_command.h"
 #include <algorithm>
 #include "logger.h"
+#include "black_list.h"
 
 namespace wheat
 {
 
-void Room::Join(SleeperId id, std::shared_ptr<Sleeper> sleeper)
+Room::Room(asio::any_io_executor executor)
+    : m_executor(std::move(executor))
+{ 
+    for (auto& id : m_beds) id = INVALID_SLEEPER_ID;
+}
+
+bool Room::Join(SleeperId id, std::shared_ptr<Sleeper> sleeper)
 {
     if (m_sleepers.contains(id))
     {
         LOG_WARN("%s, sleeper:%lld already join", __func__, id);
+        return false;
     }
     else
     {
-        LOG_INFO("%s, sleeper:%lld join", __func__, id);
-
-        sleeper->Deliver(PackCommandWithId(id, CmdYourid{ id }));
-        DeliverToAll(PackCommandWithId(id, CmdSleeper{ id }));
-        for (const auto& [_, old_sleeper] : m_sleepers)
+        auto ip = sleeper->GetIp();
+        // 在黑名单里不允许加入 
+        if (blacklist::BlackList::Instance().IsIpBlocked(ip))
         {
-            sleeper->Deliver(old_sleeper->MakeSelfInfo());
+            LOG_WARN("%s, sleeper:%lld is in blacklist, can't join, ip:%s", __func__, id, ip.c_str());
+            return false;
         }
-        m_sleepers.emplace(id, std::move(sleeper));
+        else
+        {
+
+            LOG_INFO("%s, sleeper:%lld join", __func__, id);
+            sleeper->Deliver(PackCommandWithId(id, CmdYourid{ id }));
+            DeliverToAll(PackCommandWithId(id, CmdSleeper{ id }));
+            for (const auto& [_, old_sleeper] : m_sleepers)
+            {
+                sleeper->Deliver(old_sleeper->MakeSelfInfo());
+            }
+            m_sleepers.emplace(id, std::move(sleeper));
+            return true;
+        }
     }
 }
 
@@ -77,6 +96,31 @@ void Room::GetUp(SleeperId id)
     }
 }
 
+bool Room::VoteKickStart(SleeperId id)
+{
+    if (m_is_voting)
+    {
+        LOG_WARN("%s, another vote is being", __func__);
+        return false;
+    }
+    else
+    {
+        LOG_INFO("%s, sleeper_id:%lld", __func__, id);
+        m_is_voting = true;
+        asio::co_spawn(
+            m_executor,
+            [this, id]() -> asio::awaitable<void>
+            {
+                asio::steady_timer timer(m_executor, std::chrono::seconds(DEFAULT_VOTE_WAIT_TIME));
+                co_await timer.async_wait(asio::use_awaitable);
+                VoteKickOver(id);
+            },
+            asio::detached
+                );
+        return true;
+    }
+}
+
 void Room::Agree(SleeperId id)
 {
     if (m_is_voting)
@@ -127,11 +171,14 @@ void Room::VoteKickOver(SleeperId id)
         if (iter != m_sleepers.end())
         {
             LOG_INFO("%s, kick sleeper:%lld", __func__, id);
+            //踢出之后加入黑名单 
+            blacklist::BlackList::Instance().AddIpToBlockList(iter->second->GetIp());
             iter->second->Stop();
         }
     }
 
     DeliverToAll(PackCommandWithId(id, CmdVoteKickOver{}));
+    m_vote_counter.Clear();
 }
 
 

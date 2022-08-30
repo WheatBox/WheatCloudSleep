@@ -14,22 +14,34 @@ Sleeper::Sleeper(Room& room, socket sock)
     , m_timer(m_sock.get_executor())
 {
     m_timer.expires_at(std::chrono::steady_clock::time_point::max());
-    LOG_INFO("%s, sleeper_id:%lld, remote_ip:%d", __func__, m_id, 
-        m_sock.remote_endpoint().address().to_string().c_str());
+    LOG_INFO("%s, sleeper_id:%lld, remote_ip:%s", __func__, m_id, GetIp().c_str());
 }
 
 //加入房间，启动一个收消息的协程，一个发消息的协程 
 void Sleeper::Start()
 {
-    m_room.Join(m_id, shared_from_this());
+    if (!m_room.Join(m_id, shared_from_this()))
+    {
+        LOG_INFO("%s, Join failed, so disconnect socket, sleeper_id:%lld, ip:%s", 
+            __func__, m_id, GetIp().c_str());
+        m_sock.close();
+        m_timer.cancel();
+    }
+    else
+    {
+        asio::co_spawn(m_sock.get_executor(),
+            [self = shared_from_this()]{ return self->Reader(); },
+            asio::detached);
 
-    asio::co_spawn(m_sock.get_executor(),
-        [self = shared_from_this()]{ return self->Reader(); },
-        asio::detached);
+        asio::co_spawn(m_sock.get_executor(),
+            [self = shared_from_this()]{ return self->Writer(); },
+            asio::detached);
+    }
+}
 
-    asio::co_spawn(m_sock.get_executor(),
-        [self = shared_from_this()]{ return self->Writer(); },
-        asio::detached);
+std::string Sleeper::GetIp() const
+{
+    return m_sock.remote_endpoint().address().to_v4().to_string();
 }
 
 void Sleeper::Deliver(std::string msg)
@@ -67,7 +79,7 @@ asio::awaitable<void> Sleeper::Reader()
         {
             std::string buffer;
             auto n = co_await asio::async_read_until(m_sock,
-                asio::dynamic_buffer(buffer, 1024), '\0', asio::use_awaitable);
+                asio::dynamic_buffer(buffer, 4096), '\0', asio::use_awaitable);
 
             try
             {
@@ -98,7 +110,7 @@ asio::awaitable<void> Sleeper::Reader()
                     },
                     [this](CmdPos cmd) { m_pos = cmd.pos; },
                     [this](CmdMove cmd) { m_pos = cmd.pos; },
-                    [this](CmdVoteKickStart cmd) { m_room.VoteKickStart(m_sock.get_executor(), cmd.kick_id); },
+                    [this](CmdVoteKickStart cmd) { m_room.VoteKickStart(cmd.kick_id); },
                     [this, &forward](CmdVoteAgree cmd) { m_room.Agree(m_id); forward = false; },
                     [this, &forward](CmdVoteRefuse cmd) { m_room.Refuse(m_id); forward = false; },
                     [](auto&&) { }
@@ -117,8 +129,8 @@ asio::awaitable<void> Sleeper::Reader()
     catch (const std::exception& e)
     {
         Stop();
-        LOG_INFO("%s, asio read failed, err:%s, sleeper_id:%lld, remote_ip:%s", __func__, 
-            e.what(), m_id, m_sock.remote_endpoint().address().to_string().c_str());
+        LOG_INFO("%s, asio read failed, err:%s, sleeper_id:%lld, remote_ip:%s", 
+            __func__, e.what(), m_id, GetIp().c_str());
     }
 }
 
@@ -146,8 +158,8 @@ asio::awaitable<void> Sleeper::Writer()
     catch (const std::exception& e)
     {
         Stop();
-        LOG_WARN("%s, asio write failed, err:%s, sleeper_id:%lld, remote_ip:%s", __func__, 
-            e.what(), m_id, m_sock.remote_endpoint().address().to_string().c_str());
+        LOG_WARN("%s, asio write failed, err:%s, sleeper_id:%lld, remote_ip:%s", 
+            __func__, e.what(), m_id, GetIp().c_str());
     }
 }
 
