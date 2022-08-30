@@ -7,11 +7,12 @@
 namespace wheat
 {
 
-Sleeper::Sleeper(Room& room, socket sock)
+Sleeper::Sleeper(Room& room, socket sock, std::vector<std::shared_ptr<detect_rule::RuleBase>>&& rules)
     : m_room(room)
     , m_id(MakeSleeperId())
     , m_sock(std::move(sock))
     , m_timer(m_sock.get_executor())
+    , rules_(rules)
 {
     m_timer.expires_at(std::chrono::steady_clock::time_point::max());
     LOG_INFO("%s, sleeper_id:%lld, remote_ip:%s", __func__, m_id, GetIp().c_str());
@@ -80,6 +81,21 @@ asio::awaitable<void> Sleeper::Reader()
             std::string buffer;
             auto n = co_await asio::async_read_until(m_sock,
                 asio::dynamic_buffer(buffer, 4096), '\0', asio::use_awaitable);
+
+            detect_rule::RuleDetectData rule_data;
+            std::memset(&rule_data, 0, sizeof(rule_data));
+
+            rule_data.data_size = n;
+
+            for (auto& rule : rules_)
+            {
+                if (!rule->Detect(rule_data))
+                {
+                    // rule is triggered,
+                    // punish this sleeper
+                    // maybe close the socket or ban ip
+                }
+            }
 
             try
             {
