@@ -1,17 +1,9 @@
-#include <iostream>
-#include <vector>
-#include <memory>
-
-#include <asio.hpp>
-
+#include "asio.hpp"
 #include "sleeper.h"
 #include "room.h"
 #include "logger.h"
 #include "black_list.h"
-
-// rules
-#include "freq_detect_rule.h"
-#include "traffic_detect_rule.h"
+#include <iostream>
 
 constexpr std::uint16_t PORT = 11451;
 constexpr std::uint16_t MAX_PORT = 65535;
@@ -19,18 +11,11 @@ constexpr std::uint16_t MAX_PORT = 65535;
 asio::awaitable<void> Listener(asio::ip::tcp::acceptor acceptor)
 {
     wheat::Room room(acceptor.get_executor());
-    std::shared_ptr global_traffic_rule = std::make_shared<wheat::detect_rule::TrafficDetectRule>();
     for (;;)
     {
-        std::vector<std::shared_ptr<wheat::detect_rule::RuleBase>> rules;
-        rules.push_back(global_traffic_rule);
-        std::shared_ptr<wheat::detect_rule::FrequenceDetectRule> freq_rule = std::make_shared<wheat::detect_rule::FrequenceDetectRule>();
-        rules.push_back(std::move(freq_rule));
-
         std::make_shared<wheat::Sleeper>(
             room,
-            co_await acceptor.async_accept(asio::use_awaitable),
-            std::move(rules)
+            co_await acceptor.async_accept(asio::use_awaitable)
             )->Start();
     }
 }

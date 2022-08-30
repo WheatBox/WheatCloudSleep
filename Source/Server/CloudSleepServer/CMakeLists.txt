@@ -27,11 +27,22 @@ endif()
 set (CMAKE_CXX_STANDARD 20)
 set (CMAKE_CXX_STANDARD_REQUIRED ON)
 
-file (GLOB HEADER_FILES *.h)
+set (HEADER_FILES
+    "logger.h"
+    "room.h"
+    "sleeper.h"
+    "wheat_command.h"
+)
 
-file (GLOB CPP_FILES *.cpp)
+set (CPP_FILES
+    "logger.cpp"
+    "room.cpp"
+    "sleeper.cpp"
+    "wheat_command.cpp"
+)
 
 add_executable (${EXE_NAME}
+    "main.cpp"
     ${CPP_FILES}
     ${HEADER_FILES}
 )
