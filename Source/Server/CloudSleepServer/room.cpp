@@ -23,7 +23,7 @@ bool Room::Join(SleeperId id, std::shared_ptr<Sleeper> sleeper)
     else
     {
         auto ip = sleeper->GetIp();
-        // ÔÚºÚÃûµ¥Àï²»ÔÊÐí¼ÓÈë 
+        // åœ¨é»‘åå•é‡Œä¸å…è®¸åŠ å…¥ 
         if (blacklist::BlackList::Instance().IsIpBlocked(ip))
         {
             LOG_WARN("%s, sleeper:%lld is in blacklist, can't join, ip:%s", __func__, id, ip.c_str());
@@ -92,7 +92,7 @@ void Room::GetUp(SleeperId id)
     }
     else
     {
-        LOG_WARN("%s, sleeper:%lld not sleep", __func__, id);
+        //LOG_WARN("%s, sleeper:%lld not sleep", __func__, id);
     }
 }
 
@@ -171,7 +171,7 @@ void Room::VoteKickOver(SleeperId id)
         if (iter != m_sleepers.end())
         {
             LOG_INFO("%s, kick sleeper:%lld", __func__, id);
-            //Ìß³öÖ®ºó¼ÓÈëºÚÃûµ¥ 
+            //è¸¢å‡ºä¹‹åŽåŠ å…¥é»‘åå• 
             blacklist::BlackList::Instance().AddIpToBlockList(iter->second->GetIp());
             iter->second->Stop();
         }

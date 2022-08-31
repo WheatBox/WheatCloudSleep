@@ -33,10 +33,9 @@ void BlackList::AddIpToBlockList(
 asio::awaitable<void> BlackList::AddIpToBlockListAsync(std::string ip, Minutes time)
 {
 	auto block_time = std::min(time, MAX_BLOCK_PERIOD);
-	//现在的实现不可能出现，可以用assert代替 
 	if (m_black_list.contains(ip))
 	{
-		LOG_ERROR("%s, ip:%s is in black list", __func__, ip.c_str());
+		LOG_INFO("%s, ip:%s is in black list", __func__, ip.c_str());
 		co_return;
 	}
 

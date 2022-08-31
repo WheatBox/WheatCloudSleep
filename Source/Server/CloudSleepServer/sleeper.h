@@ -42,6 +42,8 @@ private:
     Room& m_room;
     SleeperId m_id;
     socket m_sock;
+    asio::ip::address_v4 m_ip;
+    bool m_is_stoped = false;
     std::string m_name = "_";
     SleeperSex m_sex = SleeperSex::BOY;
     int m_bed_id = -1;

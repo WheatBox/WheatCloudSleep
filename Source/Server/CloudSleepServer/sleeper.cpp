@@ -3,6 +3,9 @@
 #include "wheat_command.h"
 #include <atomic>
 #include "logger.h"
+#include "violation_detector.h"
+#include "traffic_recorder.h"
+#include "black_list.h"
 
 namespace wheat
 {
@@ -11,21 +14,35 @@ Sleeper::Sleeper(Room& room, socket sock)
     : m_room(room)
     , m_id(MakeSleeperId())
     , m_sock(std::move(sock))
+    , m_ip(m_sock.remote_endpoint().address().to_v4())
     , m_timer(m_sock.get_executor())
 {
     m_timer.expires_at(std::chrono::steady_clock::time_point::max());
-    LOG_INFO("%s, sleeper_id:%lld, remote_ip:%s", __func__, m_id, GetIp().c_str());
+    LOG_INFO("new sleeper, sleeper_id:%lld, remote_ip:%s", m_id, GetIp().c_str());
 }
 
 //加入房间，启动一个收消息的协程，一个发消息的协程 
 void Sleeper::Start()
 {
+    //记录连接、开始观察 
+    IPTrafficRecorder::Instance().OnConnection(m_ip);
+    ViolationDetector::Instance().AddObserver("ip", GetIp(),
+        [this](std::string reason)
+        {
+            auto ip_str = GetIp();
+            LOG_WARN("OnViolation, sleeper_id:%lld, ip:%s, reason:%s",
+                m_id, ip_str.c_str(), reason.c_str());
+            //加入黑名单 
+            blacklist::BlackList::Instance().AddIpToBlockList(ip_str);
+
+            Stop();
+        });
+
     if (!m_room.Join(m_id, shared_from_this()))
     {
         LOG_INFO("%s, Join failed, so disconnect socket, sleeper_id:%lld, ip:%s", 
             __func__, m_id, GetIp().c_str());
-        m_sock.close();
-        m_timer.cancel();
+        Stop();
     }
     else
     {
@@ -41,7 +58,7 @@ void Sleeper::Start()
 
 std::string Sleeper::GetIp() const
 {
-    return m_sock.remote_endpoint().address().to_v4().to_string();
+    return m_ip.to_string();
 }
 
 void Sleeper::Deliver(std::string msg)
@@ -80,6 +97,7 @@ asio::awaitable<void> Sleeper::Reader()
             std::string buffer;
             auto n = co_await asio::async_read_until(m_sock,
                 asio::dynamic_buffer(buffer, 4096), '\0', asio::use_awaitable);
+            IPTrafficRecorder::Instance().OnData(m_ip, n * 8);
 
             try
             {
@@ -129,7 +147,7 @@ asio::awaitable<void> Sleeper::Reader()
     catch (const std::exception& e)
     {
         Stop();
-        LOG_INFO("%s, asio read failed, err:%s, sleeper_id:%lld, remote_ip:%s", 
+        LOG_INFO("%s exception, asio read failed, err:%s, sleeper_id:%lld, remote_ip:%s", 
             __func__, e.what(), m_id, GetIp().c_str());
     }
 }
@@ -158,21 +176,27 @@ asio::awaitable<void> Sleeper::Writer()
     catch (const std::exception& e)
     {
         Stop();
-        LOG_WARN("%s, asio write failed, err:%s, sleeper_id:%lld, remote_ip:%s", 
+        LOG_WARN("%s exception, asio write failed, err:%s, sleeper_id:%lld, remote_ip:%s", 
             __func__, e.what(), m_id, GetIp().c_str());
     }
 }
 
 void Sleeper::Stop()
 {
+    if (m_is_stoped)
+        return;
+    m_is_stoped = true;
+    LOG_INFO("%s, sleeper_id:%lld, ip:%s", __func__, m_id, GetIp().c_str());
     m_room.Leave(m_id);
     m_sock.close();
     m_timer.cancel();
+    //记录连接断开
+    IPTrafficRecorder::Instance().OnConnectionClose(m_ip);
 }
 
 SleeperId MakeSleeperId()
 {
-    static std::atomic<SleeperId> global_sleeper_id{ 0 };
+    static std::atomic<SleeperId> global_sleeper_id{ 10000 };
     return global_sleeper_id++;
 }
 
