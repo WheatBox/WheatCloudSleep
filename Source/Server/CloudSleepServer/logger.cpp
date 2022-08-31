@@ -2,6 +2,8 @@
 #include "logger.h"
 #include <chrono>
 #include <stdarg.h>
+#include <asio.hpp>
+#include <mutex>
 
 #ifdef _WIN32
 #include <Windows.h>
@@ -11,6 +13,12 @@
 
 namespace util
 {
+
+asio::io_context& GetIoContext()
+{
+    static asio::io_context g_logger_ioc(1);
+    return g_logger_ioc;
+}
 
 #ifdef _WIN32
 std::pair<std::tm*, long int> GetTimeStamp()
@@ -69,10 +77,32 @@ const char* LogLevelToStr(LogLevel log_level)
     }
 }
 
+SimpleLogger::SimpleLogger()
+{
+    static std::once_flag logger_ioc_init_flag;
+    std::call_once(
+        logger_ioc_init_flag,
+        []()
+        {
+            //启动一个永远不会退出的协程，避免日志打印线程run结束 
+            asio::co_spawn(
+                GetIoContext().get_executor(),
+                []() -> asio::awaitable<void> {
+                    asio::steady_timer timer(GetIoContext(), std::chrono::steady_clock::time_point::max());
+                    co_await timer.async_wait(asio::use_awaitable);
+                },
+                asio::detached
+            );
+            
+            //todo 太丑了 
+            std::thread([]() { GetIoContext().run(); }).detach();
+        }
+    );
+}
+
 void SimpleLogger::SetLogToFile(const char* file_name)
 {
     m_file_prefix = file_name;
-    OpenFile();
 }
 
 void SimpleLogger::Log(const char* src_code_file, int log_line, LogLevel log_level, const char* format, ...)
@@ -83,32 +113,38 @@ void SimpleLogger::Log(const char* src_code_file, int log_line, LogLevel log_lev
 
     va_list arg_list;
     va_start(arg_list, format);
-    int content_size = vsnprintf(buffer + prefix_size, 1024 - prefix_size, format, arg_list);
+    int content_size = vsnprintf(buffer + prefix_size, 1024 - prefix_size - 1, format, arg_list);
     va_end(arg_list);
 
     auto size = prefix_size + content_size;
-    if (m_mode | LOG_CONSOLE)
+
+    bool log_to_console = m_mode | LOG_CONSOLE;
+    bool log_to_file = m_mode | LOG_FILE;
+    asio::dispatch(GetIoContext(),
+        [this, log_to_console, log_to_file, log_content = std::string(buffer, size)]()
     {
-        fwrite(buffer, size, 1, stdout);
-        fwrite("\n", 1, 1, stdout);
-    }
-    
-    if (m_mode | LOG_FILE)
-    {
-        if (m_cur_file_size >= m_chunk_size)
+        if (log_to_console)
         {
-            OpenFile();
+            fwrite(log_content.c_str(), log_content.size(), 1, stdout);
+            fwrite("\n", 1, 1, stdout);
         }
 
-        if (m_file)
+        if (log_to_file)
         {
-            fwrite(buffer, size, 1, m_file);
-            fwrite("\n", 1, 1, m_file);
-            //todo 是否用单独的线程打印日志 
-            fflush(m_file);
-            m_cur_file_size += size;
+            if (m_cur_file_size >= m_chunk_size)
+            {
+                OpenFile();
+            }
+
+            if (m_file)
+            {
+                fwrite(log_content.c_str(), log_content.size(), 1, m_file);
+                fwrite("\n", 1, 1, m_file);
+                fflush(m_file);
+                m_cur_file_size += log_content.size();
+            }
         }
-    }
+    });
 }
 
 void SimpleLogger::OpenFile()

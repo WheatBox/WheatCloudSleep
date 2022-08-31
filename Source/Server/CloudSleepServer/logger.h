@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string>
 #include <string_view>
+#include <atomic>
 
 constexpr const char* GetFileName(std::string_view system_file_name)
 {
@@ -51,6 +52,8 @@ constexpr inline size_t DEFAULT_CHUNK_SIZE = 10 * 1024 * 1024;
 class SimpleLogger
 {
 public:
+    SimpleLogger();
+
     void SetLogMode(int mode) { m_mode = mode; };
 
     void SetLogToFile(const char* file_name);
@@ -71,8 +74,8 @@ private:
     std::string m_file_prefix;
     FILE* m_file = nullptr;
     int m_mode = LOG_CONSOLE;
-    size_t m_chunk_size = DEFAULT_CHUNK_SIZE;
-    size_t m_cur_file_size = 0;
+    std::atomic_uint64_t m_chunk_size = DEFAULT_CHUNK_SIZE;
+    std::atomic_uint64_t m_cur_file_size = 0;
 };
 
 inline SimpleLogger g_logger;
