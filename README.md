@@ -1,6 +1,6 @@
 # WheatCloudSleep
 
-master分支已启用（因为服务器代码太烂），新的开发进度请切换到其它分支进行查看
+master分支已弃用（因为服务器代码太烂），新的开发进度请切换到其它分支进行查看
 
 master is soooooo sh*t. So we abandoned it. Now we are using other branches.
 
