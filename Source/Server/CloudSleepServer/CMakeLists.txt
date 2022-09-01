@@ -1,12 +1,18 @@
 # Thanks to tusik(https://github.com/tusik)
 #
 # How to build?
-# 1. go into directory where CMakeLists.txt placed
-# 2. mkdir build && cd build
-# 3. cmake ..
-# 4. cmake --build . --config Debug --target install
-#    or cmake --build . --config Release --target install
-# 5. binary output will be built in "install" directory
+# - on windows
+#   1. go into the directory where CMakeLists.txt placed
+#   3. cmake -S . -B server-build
+#   4. cmake --build server-build --config Debug --target install
+#      or cmake --build server-build --config Release --target install
+#   5. binary output will be built in "server-build/install" directory
+# - on linux
+#   1. go into the directory where CMakeLists.txt placed
+#   2. cmake -S . -B server-build/ -D CMAKE_BUILD_TYPE=Debug
+#      or cmake -S . -B server-build/ -D CMAKE_BUILD_TYPE=Release
+#   3. cmake --build server-build/
+#   4. binary output will be built in "server-build/install" directory
 #
 
 cmake_minimum_required (VERSION 3.15)
@@ -24,25 +30,13 @@ if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
   set(CMAKE_INSTALL_PREFIX "${INSTALL_DIR}" CACHE PATH "..." FORCE)
 endif()
 
-set (CMAKE_CXX_STANDARD 20)
-set (CMAKE_CXX_STANDARD_REQUIRED ON)
+# Add all header files
+file (GLOB HEADER_FILES *.h)
 
-set (HEADER_FILES
-    "logger.h"
-    "room.h"
-    "sleeper.h"
-    "wheat_command.h"
-)
-
-set (CPP_FILES
-    "logger.cpp"
-    "room.cpp"
-    "sleeper.cpp"
-    "wheat_command.cpp"
-)
+# Add all source files
+file (GLOB CPP_FILES *.cpp)
 
 add_executable (${EXE_NAME}
-    "main.cpp"
     ${CPP_FILES}
     ${HEADER_FILES}
 )
@@ -51,9 +45,22 @@ target_include_directories (${EXE_NAME}
     PUBLIC ${ASIO_DIR}
 )
 
-if (MSVC)
+target_compile_features (${EXE_NAME}
+    PUBLIC cxx_std_20
+)
+
+if (MSVC) # static link MultiThreaded lib
     set_property(TARGET ${EXE_NAME} PROPERTY
         MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+endif()
+
+if (UNIX) # Building on unix-like system, link pthread for asio.
+    target_link_libraries(${EXE_NAME}
+        pthread
+    )
+    target_compile_options(${EXE_NAME}
+        PUBLIC "-Wall"
+    )
 endif()
 
 install (TARGETS ${EXE_NAME}

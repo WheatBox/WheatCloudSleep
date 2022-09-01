@@ -5,6 +5,8 @@
 #include "violation_detector.h"
 #include "logger.h"
 
+#include <cmath>
+
 namespace wheat
 {
 
