@@ -11,7 +11,7 @@ namespace wheat
 {
 
 void UploadTrafficInfo(std::chrono::milliseconds ms, IPAddress addr, 
-    size_t conn_count, size_t package_count, size_t bits);
+    uint64_t conn_count, uint64_t package_count, uint64_t bits);
 
 IPTrafficRecorder& IPTrafficRecorder::Instance()
 {
@@ -70,7 +70,7 @@ void IPTrafficRecorder::OnConnectionClose(IPAddress addr)
     }
 }
 
-void IPTrafficRecorder::OnData(IPAddress addr, size_t bits)
+void IPTrafficRecorder::OnData(IPAddress addr, uint64_t bits)
 {
     auto iter = m_ip_traffic_info.find(addr);
     if (iter == m_ip_traffic_info.end())
@@ -137,15 +137,15 @@ void IPTrafficRecorder::TrafficInfo::Reset()
 }
 
 void UploadTrafficInfo(std::chrono::milliseconds ms, IPAddress addr, 
-    size_t conn_count, size_t package_count, size_t bits)
+    uint64_t conn_count, uint64_t package_count, uint64_t bits)
 {
     //计算每秒包的数据量以及字节数 
     auto sec_count = std::chrono::duration_cast<std::chrono::duration<double>>(ms).count();
-    size_t pps = std::ceil((double)package_count / sec_count);
-    size_t bps = std::ceil((double)bits / sec_count);
+    uint64_t pps = std::ceil((double)package_count / sec_count);
+    uint64_t bps = std::ceil((double)bits / sec_count);
 
     char buffer[256];
-    snprintf(buffer, 255, "conn=%llu,pps=%llu,bps=%llu", conn_count, pps, bps);
+    snprintf(buffer, 255, "conn=%zu,pps=%zu,bps=%zu", conn_count, pps, bps);
     ViolationDetector::Instance().UpdateInfo("ip", addr.to_string(), buffer);
 }
 

@@ -92,7 +92,7 @@ std::string PackCommand(const WheatCommand& cmd)
         [](CmdType arg) { return "type$" + std::to_string(static_cast<int>(arg.sex)); },
         [](CmdLeave arg) { return "leave$" + std::to_string(arg.id); },
         [](CmdSleep arg) { return "sleep$" + std::to_string(arg.bed_id); },
-        [](CmdGetup arg) { return std::string("getup$") /* + arg.bed_id*/; },
+        [](CmdGetup) { return std::string("getup$") /* + arg.bed_id*/; },
         [](const CmdChat& arg) { return "chat$" + arg.msg; },
         [](CmdMove arg) { return "move$" + std::to_string(arg.pos.x) + ',' + std::to_string(arg.pos.y); },
         [](CmdPos arg) { return "pos$" + std::to_string(arg.pos.x) + ',' + std::to_string(arg.pos.y); },

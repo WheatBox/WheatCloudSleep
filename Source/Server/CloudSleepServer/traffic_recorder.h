@@ -29,7 +29,7 @@ public:
     //连接关闭时调用  
     void OnConnectionClose(IPAddress addr);
     //ip有数据过来时调用 
-    void OnData(IPAddress addr, size_t bits);
+    void OnData(IPAddress addr, uint64_t bits);
 private:
     struct TrafficInfo
     {
@@ -39,9 +39,9 @@ private:
         void Reset();
 
         asio::steady_timer timer;
-        size_t connection_count = 0;
-        size_t package_count = 0;
-        size_t bits = 0;
+        uint64_t connection_count = 0;
+        uint64_t package_count = 0;
+        uint64_t bits = 0;
         bool is_changed = false;
     };
 

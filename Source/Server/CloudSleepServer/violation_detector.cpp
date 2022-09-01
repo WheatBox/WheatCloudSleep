@@ -1,6 +1,7 @@
 #include "violation_detector.h"
 #include "wheat_common.h"
 #include <charconv>
+#include <cstdlib>
 
 namespace wheat
 {
@@ -16,10 +17,21 @@ ParseLoadInfo(std::string_view str)
         auto pos = load.find("=");
         if (pos != std::string::npos && pos > 0 && pos != load.size() - 1)
         {
+
+            /* 不少编译器要到很高版本才支持from_chars的浮点数版本，先用strtod代替 
             double val;
             auto start = load.data() + pos + 1;
             auto end = load.data() + load.size();
             if (std::from_chars(start, end, val).ec == std::errc())
+            {
+                result.emplace(std::string(load.data(), pos), val);
+            }
+            */
+
+            auto start = load.data() + pos + 1;
+            char* str;
+            double val = strtod(start, &str);
+            if (!(val == 0.0 && str == start))
             {
                 result.emplace(std::string(load.data(), pos), val);
             }

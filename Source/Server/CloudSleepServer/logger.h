@@ -47,7 +47,7 @@ enum class LogLevel
 #define LOG_CONSOLE 1
 #define LOG_FILE    2
 
-constexpr inline size_t DEFAULT_CHUNK_SIZE = 10 * 1024 * 1024;
+constexpr inline uint64_t DEFAULT_CHUNK_SIZE = 10 * 1024 * 1024;
 
 class SimpleLogger
 {
@@ -60,7 +60,7 @@ public:
 
     void SetLogLevel(LogLevel log_level) { m_log_level = log_level; }
 
-    void SetChunkSize(size_t chunk_size) { m_chunk_size = chunk_size; }
+    void SetChunkSize(uint64_t chunk_size) { m_chunk_size = chunk_size; }
 
     void Log(const char* src_code_file, int log_line, LogLevel log_level, const char* format, ...);
 

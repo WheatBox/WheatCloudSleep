@@ -9,7 +9,7 @@
 namespace wheat
 {
 
-constexpr size_t DEFAULT_MAX_BED_NUM = 256;//默认最大床位256 
+constexpr int DEFAULT_MAX_BED_NUM = 256;//默认最大床位256 
 constexpr int DEFAULT_VOTE_WAIT_TIME = 10; //默认投票时间10秒 
 class Sleeper;
 

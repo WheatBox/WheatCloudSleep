@@ -5,8 +5,8 @@
 
 namespace wheat
 {
-using SleeperId = size_t;
-constexpr inline SleeperId INVALID_SLEEPER_ID = (size_t)-1;
+using SleeperId = uint64_t;
+constexpr inline SleeperId INVALID_SLEEPER_ID = (uint64_t)-1;
 
 struct CmdYourid
 {

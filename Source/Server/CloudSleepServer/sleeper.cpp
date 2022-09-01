@@ -92,9 +92,9 @@ asio::awaitable<void> Sleeper::Reader()
     try
     {
         //循环读取数据
+        std::string buffer;
         while (true)
         {
-            std::string buffer;
             auto n = co_await asio::async_read_until(m_sock,
                 asio::dynamic_buffer(buffer, 4096), '\0', asio::use_awaitable);
             IPTrafficRecorder::Instance().OnData(m_ip, n * 8);
@@ -114,7 +114,7 @@ asio::awaitable<void> Sleeper::Reader()
                         else
                             forward = false;
                     },
-                    [this](CmdGetup cmd) { m_room.GetUp(m_id); },
+                    [this](CmdGetup) { m_room.GetUp(m_id); },
                     [this](CmdName cmd) { 
                         m_name = std::move(cmd.name); 
                         LOG_INFO("sleeper:%lld's name is:%s", m_id, m_name.c_str());
@@ -129,8 +129,8 @@ asio::awaitable<void> Sleeper::Reader()
                     [this](CmdPos cmd) { m_pos = cmd.pos; },
                     [this](CmdMove cmd) { m_pos = cmd.pos; },
                     [this](CmdVoteKickStart cmd) { m_room.VoteKickStart(cmd.kick_id); },
-                    [this, &forward](CmdVoteAgree cmd) { m_room.Agree(m_id); forward = false; },
-                    [this, &forward](CmdVoteRefuse cmd) { m_room.Refuse(m_id); forward = false; },
+                    [this, &forward](CmdVoteAgree) { m_room.Agree(m_id); forward = false; },
+                    [this, &forward](CmdVoteRefuse) { m_room.Refuse(m_id); forward = false; },
                     [](auto&&) { }
                 }, 
                 ParseCommand(msg));
@@ -142,6 +142,8 @@ asio::awaitable<void> Sleeper::Reader()
             {
                 LOG_WARN("%s, ParseCommand failed, err:%s, sleeper_id:%lld", __func__, e.what(), m_id);
             }
+
+            buffer.erase(0, n);
         }
     }
     catch (const std::exception& e)
