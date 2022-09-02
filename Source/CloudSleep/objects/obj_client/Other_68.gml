@@ -25,6 +25,10 @@ if(map[? "type"] == network_type_data) {
 		
 		var mesSleeperId = real(mesSleeperIdStr);
 		
+		if(buffer_tell(buf) < buffer_get_size(buf) == false) {
+			continue;
+		}
+		
 		var mes = buffer_read(buf, buffer_string);
 		show_debug_message("bufB = " + mes);
 	

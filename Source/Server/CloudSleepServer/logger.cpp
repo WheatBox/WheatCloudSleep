@@ -131,7 +131,7 @@ void SimpleLogger::Log(const char* src_code_file, int log_line, LogLevel log_lev
 
         if (log_to_file)
         {
-            if (m_cur_file_size >= m_chunk_size)
+            if (!m_file || m_cur_file_size >= m_chunk_size)
             {
                 OpenFile();
             }

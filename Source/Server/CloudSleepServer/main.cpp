@@ -29,6 +29,8 @@ void PrintUsage()
 
 int main(int argc, char* argv[])
 {
+    system("chcp 65001");
+
     std::uint16_t server_port = PORT;
 
     if (argc > 1)
