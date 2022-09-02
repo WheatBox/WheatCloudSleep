@@ -35,6 +35,20 @@ MyCanUseSleeperId = function(sleeperId) {
 	return true;
 }
 
+vecChatHistory = new vector(); 
+vecChatHistorySizeMax = 15;
+
+MyChatHistoryAdd = function(sleeperId, str) {
+	if(MyCanUseSleeperId(sleeperId) == false) {
+		return;
+	}
+	vecChatHistory.push_back("[@" + string(sleepers[sleeperId].name) + "]: " + string(str));
+	
+	if(vecChatHistory.size() > vecChatHistorySizeMax) {
+		array_delete(vecChatHistory.Container, 0, 1);
+	}
+}
+
 myTextBox = noone;
 
 textboxPlaceHolders = [

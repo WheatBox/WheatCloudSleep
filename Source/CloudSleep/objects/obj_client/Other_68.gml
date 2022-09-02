@@ -92,6 +92,8 @@ if(map[? "type"] == network_type_data) {
 				if(!MyCanUseSleeperId(mesSleeperId)) break;
 				
 				sleepers[mesSleeperId].MyChat(params);
+				
+				MyChatHistoryAdd(mesSleeperId, params);
 				break;
 			
 			case CommandType.move:
