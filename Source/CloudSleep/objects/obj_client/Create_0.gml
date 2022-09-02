@@ -37,6 +37,7 @@ MyCanUseSleeperId = function(sleeperId) {
 
 vecChatHistory = new vector(); 
 vecChatHistorySizeMax = 15;
+chatHistoryOn = false;
 
 MyChatHistoryAdd = function(sleeperId, str) {
 	if(MyCanUseSleeperId(sleeperId) == false) {
