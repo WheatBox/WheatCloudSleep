@@ -45,6 +45,8 @@ void IPTrafficRecorder::OnConnection(IPAddress addr)
     auto& traffic_info = *iter->second;
     traffic_info.connection_count++;
     traffic_info.is_changed = true;
+    LOG_INFO("%s, ip:%s, conn:%zu", __func__, 
+        addr.to_string().c_str(), traffic_info.connection_count);
 
     if (start_record)
         StartRecord(addr, iter->second);
@@ -60,12 +62,17 @@ void IPTrafficRecorder::OnConnectionClose(IPAddress addr)
         traffic_info.is_changed = true;
 
         //连接数归零之后，除了要在本地移除ip之外，还需要移除违规检测器里的id 
+        auto str_addr = addr.to_string();
         if (traffic_info.connection_count == 0)
         {
-            auto str_addr = addr.to_string();
             LOG_INFO("%s, stop record, ip:%s", __func__, str_addr.c_str());
             ViolationDetector::Instance().RemoveId("ip", str_addr);
             m_ip_traffic_info.erase(iter);
+        }
+        else
+        {
+            LOG_INFO("%s, ip:%s, conn:%zu", __func__, 
+                str_addr.c_str(), traffic_info.connection_count);
         }
     }
 }
@@ -146,7 +153,9 @@ void UploadTrafficInfo(std::chrono::milliseconds ms, IPAddress addr,
 
     char buffer[256];
     snprintf(buffer, 255, "conn=%zu,pps=%zu,bps=%zu", conn_count, pps, bps);
-    ViolationDetector::Instance().UpdateInfo("ip", addr.to_string(), buffer);
+    auto str_addr = addr.to_string();
+    LOG_DEBUG("%s, ip:%s, info:%s", __func__, str_addr.c_str(), buffer);
+    ViolationDetector::Instance().UpdateInfo("ip", str_addr, buffer);
 }
 
 
