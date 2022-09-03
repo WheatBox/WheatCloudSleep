@@ -87,7 +87,7 @@ void Room::GetUp(SleeperId id)
     auto iter = std::find(m_beds.begin(), m_beds.end(), id);
     if (iter != m_beds.end())
     {
-        LOG_INFO("%s, sleeper:%lld getup on bed:%d", __func__, id, *iter);
+        LOG_INFO("%s, sleeper:%lld getup on bed:%d", __func__, id, iter - m_beds.begin() + 1);
         *iter = INVALID_SLEEPER_ID;
     }
     else

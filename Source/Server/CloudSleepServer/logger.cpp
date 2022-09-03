@@ -149,6 +149,9 @@ void SimpleLogger::Log(const char* src_code_file, int log_line, LogLevel log_lev
 
 void SimpleLogger::OpenFile()
 {
+    if (m_file)
+        fclose(m_file);
+
     auto [tm, msec] = GetTimeStamp();
     char file_name[256] = {};
     snprintf(file_name, 256, "%s-%04d-%02d-%02d-%02d-%02d-%02d.log", m_file_prefix.c_str(), 

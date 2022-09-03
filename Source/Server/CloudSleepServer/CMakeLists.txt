@@ -60,6 +60,11 @@ if (UNIX) # Building on unix-like system, link pthread for asio.
     )
     target_compile_options(${EXE_NAME}
         PUBLIC "-Wall"
+        PUBLIC "-Wextra"
+        PUBLIC "-Werror"
+        PUBLIC "-g"
+        #PUBLIC "-static-libstdc++"
+        #PUBLIC "-static-libgcc"
     )
 endif()
 
