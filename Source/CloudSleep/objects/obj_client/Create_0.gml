@@ -36,6 +36,7 @@ MyCanUseSleeperId = function(sleeperId) {
 }
 
 vecChatHistory = new vector(); 
+vecChatHistorySleeperId = new vector();
 vecChatHistorySizeMax = 15;
 chatHistoryOn = false;
 
@@ -44,9 +45,11 @@ MyChatHistoryAdd = function(sleeperId, str) {
 		return;
 	}
 	vecChatHistory.push_back("[@" + string(sleepers[sleeperId].name) + "]: " + string(str));
+	vecChatHistorySleeperId.push_back(sleeperId);
 	
 	if(vecChatHistory.size() > vecChatHistorySizeMax) {
 		array_delete(vecChatHistory.Container, 0, 1);
+		array_delete(vecChatHistorySleeperId.Container, 0, 1);
 	}
 }
 

@@ -1,3 +1,5 @@
+depth = -11451;
+
 cameraCenterX = NewSleeperPosX;
 cameraCenterY = NewSleeperPosY;
 

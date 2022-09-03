@@ -7,6 +7,9 @@ enum SleeperType {
 	Boy
 };
 
+globalvar gShowSleeperId;
+gShowSleeperId = false;
+
 globalvar myName, myType, mySleeperId;
 myName = "";
 myType = SleeperType.Boy;

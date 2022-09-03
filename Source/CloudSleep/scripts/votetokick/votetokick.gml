@@ -35,5 +35,7 @@ function CreateKickShowVotes(whoVoteSleeperId, kickSleeperId) {
 	ins.sleeperId = kickSleeperId;
 	ins.whoVoteName = obj_client.sleepers[whoVoteSleeperId].name;
 	ins.kickName = obj_client.sleepers[kickSleeperId].name;
+	ins.whoVoteSleeperId = whoVoteSleeperId;
+	ins.kickSleeperId = kickSleeperId;
 }
 

@@ -3,6 +3,14 @@ if(canControlDelayTime > 0) {
 	exit;
 }
 
+if(gMouseOnGUI == false) {
+	mouseCameraMoveLock = false;
+} else {
+	mouseCameraMoveLock = true;
+	
+	gMouseOnGUI = false;
+}
+
 var cameraW = camera_get_view_width(view_camera[0]);
 var cameraH = camera_get_view_height(view_camera[0]);
 if(mouse_wheel_up()) {
@@ -16,7 +24,7 @@ cameraH = camera_get_view_height(view_camera[0]);
 
 mouseXPrevious ??= mouse_x;
 mouseYPrevious ??= mouse_y;
-
+show_debug_message([gMouseOnGUI, mouseCameraMoveLock]);
 if(mouse_check_button(mb_left) && mouseCameraMoveLock == false) {
 	cameraCenterX -= mouse_x - mouseXPrevious;
 	cameraCenterY -= mouse_y - mouseYPrevious;

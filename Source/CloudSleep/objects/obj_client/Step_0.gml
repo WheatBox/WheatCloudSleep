@@ -44,18 +44,24 @@ if(keyboard_check_pressed(vk_enter)) {
 		textbox_set_font(myTextBox, fontRegular, c_black, 28, 0);
 		
 		myTextBox.curt.fo = true;
-		
+		/*
 		if(instance_exists(obj_camera)) {
 			obj_camera.mouseCameraMoveLock = true;
-		}
+		}*/
 	} else {
 		SendChat(textbox_return(myTextBox));
 		
 		instance_destroy(myTextBox);
 		myTextBox = noone;
-		if(instance_exists(obj_camera)) {
+		/*if(instance_exists(obj_camera)) {
 			obj_camera.mouseCameraMoveLock = false;
-		}
+		}*/
+	}
+}
+
+if(myTextBox != noone) {
+	if(GUI_MouseGuiOnMe(12, 720 - 48, 12 + 950, 720 - 48 + 28)) {
+		gMouseOnGUI = true;
 	}
 }
 
