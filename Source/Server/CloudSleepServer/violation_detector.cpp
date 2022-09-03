@@ -65,53 +65,54 @@ void ViolationDetector::UpdateInfo(std::string_view type, std::string_view id, s
         return;
 
     auto type_iter = m_types.find(type);
-    if (type_iter != m_types.end())
-    {
-        auto& id_list = type_iter->second.type_all_ids;
-        auto id_iter = id_list.find(id);
-        if (id_iter == id_list.end())
-        {
-            return;
-        }
-        const auto& id_info = id_iter->second;
-        const auto& threshold_list = id_info.threshold_list.empty() ? 
-            type_iter->second.threshold_list : id_info.threshold_list;
+    if (type_iter == m_types.end())
+        return;
 
-        //map是有序的，可以按顺序比较，不用find，时间复杂度O(m+n) 
-        auto iter1 = cur_load_list.begin();
-        auto iter2 = threshold_list.begin();
-        while (iter1 != cur_load_list.end() && iter2 != threshold_list.end())
+    auto& id_list = type_iter->second.type_all_ids;
+    auto id_iter = id_list.find(id);
+    if (id_iter == id_list.end())
+        return;
+
+    auto& id_info = id_iter->second;
+    const auto& threshold_list = id_info.threshold_list.empty() ? 
+        type_iter->second.threshold_list : id_info.threshold_list;
+
+    std::vector<OnViolation> on_violations;
+    char reason[256];
+    //map是有序的，可以按顺序比较，不用find，时间复杂度O(m+n) 
+    auto iter1 = cur_load_list.begin();
+    auto iter2 = threshold_list.begin();
+    while (iter1 != cur_load_list.end() && iter2 != threshold_list.end())
+    {
+        auto cmp_result = iter1->first <=> iter2->first;
+        if (cmp_result < 0)
         {
-            auto cmp_result = iter1->first <=> iter2->first;
-            if (cmp_result < 0)
+            ++iter1;
+        }
+        else if (cmp_result > 0)
+        {
+            ++iter2;
+        }
+        else
+        {
+            //超过阈值，调用on_violation 
+            if (iter1->second > iter2->second)
             {
-                ++iter1;
-            }
-            else if (cmp_result > 0)
-            {
-                ++iter2;
+                snprintf(reason, 256, "type:%s. id:%s, cond %s value:%lf more than threshold:%lf",
+                    type.data(), id.data(), iter1->first.c_str(), iter1->second, iter2->second);
+                on_violations.swap(id_info.on_violations);
+                break;
             }
             else
             {
-                //超过阈值，调用on_violation 
-                if (iter1->second > iter2->second)
-                {
-                    char buffer[256];
-                    snprintf(buffer, 256, "cond %s value:%lf more than threshold:%lf",
-                        iter1->first.c_str(), iter1->second, iter2->second);
-                    for (const auto& on_violation : id_info.on_violations)
-                        on_violation(buffer);
-
-                    return;
-                }
-                else
-                {
-                    ++iter1;
-                    ++iter2;
-                }
+                ++iter1;
+                ++iter2;
             }
         }
     }
+
+    for (const auto& on_violation : on_violations)
+        on_violation(reason);
 }
 
 void ViolationDetector::AddObserver(const std::string& type, const std::string& id, OnViolation on_violation)
