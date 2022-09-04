@@ -13,11 +13,11 @@
 namespace wheat::common
 {
 
-//接收文件更新通知的类，需实现此接口
+//接收文件更新通知的类，需实现此接口 
 struct IFileUpdateNotify
 {
     //
-    //文件更新通知
+    //文件更新通知 
     //
     virtual void OnFileUpdate(const char* file_path) = 0;
 };
@@ -54,9 +54,9 @@ private:
     struct MoniteFileInfo
     {
 #ifdef _WIN32
-        WIN32_FILE_ATTRIBUTE_DATA fileAttr{ 0 };               //文件属性
+        WIN32_FILE_ATTRIBUTE_DATA fileAttr{ 0 };               //文件属性 
 #endif
-        std::set<IFileUpdateNotify*> notifies;                 //通知对象集合
+        std::set<IFileUpdateNotify*> notifies;                 //通知对象集合 
     };
 
     struct MonitePathInfo

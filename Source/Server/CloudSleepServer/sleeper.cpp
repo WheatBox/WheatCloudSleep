@@ -28,8 +28,11 @@ void Sleeper::Start()
     //记录连接、开始观察 
     IPTrafficRecorder::Instance().OnConnection(m_ip);
     ViolationDetector::Instance().AddObserver("ip", GetIp(),
-        [this](std::string reason)
+        [this, weak_ref = weak_from_this()](std::string reason)
         {
+		    auto ref = weak_ref.lock();
+			if (!ref) return;
+
             auto ip_str = GetIp();
             LOG_WARN("OnViolation, sleeper_id:%lld, ip:%s, reason:%s",
                 m_id, ip_str.c_str(), reason.c_str());

@@ -23,6 +23,7 @@ set (EXE_NAME "CloudSleepServer")
 project (${PROJECT_NAME})
 
 set (ASIO_DIR "third/asio/asio/include")
+set (JSON_DIR "third/nlohmann/include")
 set (INSTALL_DIR "install")
 
 # Override default install dir
@@ -43,6 +44,7 @@ add_executable (${EXE_NAME}
 
 target_include_directories (${EXE_NAME}
     PUBLIC ${ASIO_DIR}
+	PUBLIC ${JSON_DIR}
 )
 
 target_compile_features (${EXE_NAME}

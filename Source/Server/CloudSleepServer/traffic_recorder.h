@@ -51,7 +51,7 @@ private:
 
 private:
     asio::any_io_executor m_executor;
-    std::chrono::milliseconds m_upload_interval;
+    std::chrono::milliseconds m_upload_interval{ 1000 };
     std::map<IPAddress, std::shared_ptr<TrafficInfo>> m_ip_traffic_info;
 };
 
