@@ -1,0 +1,11 @@
+[
+    {
+        "type":"ip",
+        "config":"conn=5,pps=100,bps=81920"
+    },
+    {
+        "type":"ip",
+        "id":"127.0.0.1",
+        "config":"conn=1000,pps=100000,bps=819200000"
+    }
+]
