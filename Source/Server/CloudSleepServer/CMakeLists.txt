@@ -59,12 +59,15 @@ if (UNIX) # Building on unix-like system, link pthread for asio.
         pthread
     )
     target_compile_options(${EXE_NAME}
+        PUBLIC "-fcoroutines"
         PUBLIC "-Wall"
         PUBLIC "-Wextra"
         PUBLIC "-Werror"
         PUBLIC "-g"
-        #PUBLIC "-static-libstdc++"
-        #PUBLIC "-static-libgcc"
+    )
+    target_link_options(${EXE_NAME}
+		#PUBLIC "-static-libstdc++"
+		#PUBLIC "-static-libgcc"
     )
 endif()
 
