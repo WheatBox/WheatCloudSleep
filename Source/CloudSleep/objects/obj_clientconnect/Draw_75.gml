@@ -8,3 +8,5 @@ for(var i = 0; i < dotsNum; i++) {
 }
 draw_text(320, 320, "正在连接服务器" + strDots);
 
+gMouseOnGUI = true;
+

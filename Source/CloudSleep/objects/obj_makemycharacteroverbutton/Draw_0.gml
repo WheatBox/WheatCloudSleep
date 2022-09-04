@@ -8,7 +8,8 @@ if(keyboard_check_pressed(vk_enter) || (mouse_check_button_pressed(mb_left) && m
 		if(string_length(myName) < 2) {
 			show_message("名称太短！");
 		} else {
-			room_goto(rm_connect);
+			// room_goto(rm_connect);
+			room_goto(rm_bedroom);
 		}
 	}
 }
