@@ -24,7 +24,7 @@ cameraH = camera_get_view_height(view_camera[0]);
 
 mouseXPrevious ??= mouse_x;
 mouseYPrevious ??= mouse_y;
-show_debug_message([gMouseOnGUI, mouseCameraMoveLock]);
+// show_debug_message([gMouseOnGUI, mouseCameraMoveLock]);
 if(mouse_check_button(mb_left) && mouseCameraMoveLock == false) {
 	cameraCenterX -= mouse_x - mouseXPrevious;
 	cameraCenterY -= mouse_y - mouseYPrevious;

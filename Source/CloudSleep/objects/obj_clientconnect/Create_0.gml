@@ -1,3 +1,5 @@
+depth = -12345;
+
 var serverAddressData = ReadAddress("ServerAddress.txt");
 if(serverAddressData == -1) {
 	show_message("无法正常打开或读取文件 ServerAddress.txt\n请确认文件中的信息格式为xxx.xxx.xxx.xxx:yyyyy\n(x为服务器IP，y为服务器端口)");

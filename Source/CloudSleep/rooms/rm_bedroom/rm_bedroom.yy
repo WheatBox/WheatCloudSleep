@@ -14,6 +14,7 @@
   ],
   "layers": [
     {"instances":[
+        {"properties":[],"isDnd":false,"objectId":{"name":"obj_clientConnect","path":"objects/obj_clientConnect/obj_clientConnect.yy",},"inheritCode":false,"hasCreationCode":false,"colour":4294967295,"rotation":0.0,"scaleX":1.0,"scaleY":1.0,"imageIndex":0,"imageSpeed":1.0,"inheritedItemId":null,"frozen":false,"ignore":false,"inheritItemSettings":false,"x":-96.0,"y":-96.0,"resourceVersion":"1.0","name":"inst_698B8274","tags":[],"resourceType":"GMRInstance",},
         {"properties":[],"isDnd":false,"objectId":{"name":"obj_client","path":"objects/obj_client/obj_client.yy",},"inheritCode":false,"hasCreationCode":false,"colour":4294967295,"rotation":0.0,"scaleX":1.0,"scaleY":1.0,"imageIndex":0,"imageSpeed":1.0,"inheritedItemId":null,"frozen":false,"ignore":false,"inheritItemSettings":false,"x":-32.0,"y":-32.0,"resourceVersion":"1.0","name":"inst_4EA9FF6","tags":[],"resourceType":"GMRInstance",},
         {"properties":[],"isDnd":false,"objectId":{"name":"obj_camera","path":"objects/obj_camera/obj_camera.yy",},"inheritCode":false,"hasCreationCode":false,"colour":4294967295,"rotation":0.0,"scaleX":1.0,"scaleY":1.0,"imageIndex":0,"imageSpeed":1.0,"inheritedItemId":null,"frozen":false,"ignore":false,"inheritItemSettings":false,"x":0.0,"y":-32.0,"resourceVersion":"1.0","name":"inst_789A1EDA","tags":[],"resourceType":"GMRInstance",},
         {"properties":[],"isDnd":false,"objectId":{"name":"obj_buttonShowSleeperId","path":"objects/obj_buttonShowSleeperId/obj_buttonShowSleeperId.yy",},"inheritCode":false,"hasCreationCode":false,"colour":4294967295,"rotation":0.0,"scaleX":1.0,"scaleY":1.0,"imageIndex":0,"imageSpeed":1.0,"inheritedItemId":null,"frozen":false,"ignore":false,"inheritItemSettings":false,"x":-64.0,"y":-64.0,"resourceVersion":"1.0","name":"inst_4CD0CED3","tags":[],"resourceType":"GMRInstance",},
@@ -30,6 +31,7 @@
     {"name":"inst_4EA9FF6","path":"rooms/rm_bedroom/rm_bedroom.yy",},
     {"name":"inst_789A1EDA","path":"rooms/rm_bedroom/rm_bedroom.yy",},
     {"name":"inst_4CD0CED3","path":"rooms/rm_bedroom/rm_bedroom.yy",},
+    {"name":"inst_698B8274","path":"rooms/rm_bedroom/rm_bedroom.yy",},
   ],
   "inheritCreationOrder": false,
   "sequenceId": null,
