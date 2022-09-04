@@ -6,6 +6,7 @@
 #include "violation_detector.h"
 #include "traffic_recorder.h"
 #include "black_list.h"
+#include "permission_mgr.h"
 
 namespace wheat
 {
@@ -46,6 +47,8 @@ void Sleeper::Start()
     }
     else
     {
+        //todo 到时候需要根据客户端传过来的字段确定是否有管理员权限 
+        m_is_administrator = PermissionMgr::Instance().IsAdministrator("");
         asio::co_spawn(m_sock.get_executor(),
             [self = shared_from_this()]{ return self->Reader(); },
             asio::detached);
@@ -128,7 +131,16 @@ asio::awaitable<void> Sleeper::Reader()
                     },
                     [this](CmdPos cmd) { m_pos = cmd.pos; },
                     [this](CmdMove cmd) { m_pos = cmd.pos; },
-                    [this](CmdVoteKickStart cmd) { m_room.VoteKickStart(cmd.kick_id); },
+                    [this](CmdVoteKickStart cmd) { 
+                        if (m_is_administrator)
+                        {
+                            m_room.VoteKickStart(cmd.kick_id);
+                        }
+                        else
+                        {
+                            LOG_ERROR("OnVoteKickStart, sleeper:%lld has no permisson", m_id);
+                        }
+                    },
                     [this, &forward](CmdVoteAgree) { m_room.Agree(m_id); forward = false; },
                     [this, &forward](CmdVoteRefuse) { m_room.Refuse(m_id); forward = false; },
                     [](auto&&) { }

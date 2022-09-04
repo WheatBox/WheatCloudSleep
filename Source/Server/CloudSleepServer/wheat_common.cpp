@@ -1,6 +1,6 @@
 #include "wheat_common.h"
 
-namespace wheat
+namespace wheat::common
 {
 
 std::vector<std::string_view> 
@@ -29,5 +29,33 @@ Split(std::string_view str, std::string_view delimiter, bool allow_empty)
     return vec;
 }
 
+
+std::filesystem::path 
+GetFileParentPath(std::filesystem::path file_path)
+{
+    try
+    {
+        return std::filesystem::weakly_canonical(std::filesystem::path(file_path)).parent_path();
+    }
+    catch (...)
+    {
+        return std::filesystem::path();
+    }
+}
+
+std::filesystem::path
+GetFileCanonicalPath(std::filesystem::path file_path)
+{
+    if (file_path.empty()) return "";
+
+    try
+    {
+        return std::filesystem::weakly_canonical(file_path);
+    }
+    catch (...)
+    {
+        return std::filesystem::path();
+    }
+}
 
 }

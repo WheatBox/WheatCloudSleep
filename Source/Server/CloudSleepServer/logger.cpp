@@ -20,9 +20,10 @@ asio::io_context& GetIoContext()
     return g_logger_ioc;
 }
 
-#ifdef _WIN32
+
 std::pair<std::tm*, long int> GetTimeStamp()
 {
+#ifdef _WIN32
     static std::tm tm;
     SYSTEMTIME wtm;
     GetLocalTime(&wtm);
@@ -35,18 +36,17 @@ std::pair<std::tm*, long int> GetTimeStamp()
     tm.tm_sec = wtm.wSecond;
 
     return std::make_pair(&tm, wtm.wMilliseconds);
-}
-
 #else
-std::pair<std::tm*, long int> GetTimeStamp()
-{
-    struct timeval tv;
-    gettimeofday(&tv, NULL);
+    std::pair<std::tm*, long int> GetTimeStamp()
+    {
+        struct timeval tv;
+        gettimeofday(&tv, NULL);
 
-    return std::make_pair(std::localtime(&tv.tv_sec), tv.tv_usec / 1000);
-}
+        return std::make_pair(std::localtime(&tv.tv_sec), tv.tv_usec / 1000);
+    }
 
 #endif // _WIN32
+}
 
 char* GetTimeStampStr()
 {

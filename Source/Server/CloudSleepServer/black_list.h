@@ -12,19 +12,13 @@ namespace blacklist
 
 using Minutes = std::chrono::minutes;
 
-//默认黑名单时长10min，最大黑名单时长1天，观察期时长翻倍 
-constexpr Minutes DEFAULT_BLOCK_PERIOD{ 10 };
-constexpr Minutes MAX_BLOCK_PERIOD{ 24 * 60 };
-constexpr Minutes DEFAULT_WATCH_PERIOD{ 2 * DEFAULT_BLOCK_PERIOD };
-constexpr Minutes MAX_WATCH_PERIOD{ 2 * MAX_BLOCK_PERIOD };
-
 class BlackList
 {
 public:
 	//黑名单应该是整个服务器共享的，所以这里设计成单例 
 	static BlackList& Instance();
 
-	void Init(asio::any_io_executor executor);
+	void SetExecutor(asio::any_io_executor executor);
 
 	/* 把ip加入黑名单，黑名单初始时长为time，规则如下：
 	 * 在黑名单时期内，IsIpBlocked(ip)返回true，具体怎么处理看上层操作(现在是不允许加入房间)
@@ -33,8 +27,10 @@ public:
 	 */
 	void AddIpToBlockList(
 		const std::string& ip,
-		const Minutes& time = DEFAULT_BLOCK_PERIOD
+		const Minutes& time
 	);
+
+	void AddIpToBlockList(const std::string& ip);
 
 	bool IsIpBlocked(const std::string& ip) const
 	{

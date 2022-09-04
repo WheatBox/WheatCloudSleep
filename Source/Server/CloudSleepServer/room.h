@@ -1,5 +1,5 @@
 #pragma once
-#include <array>
+#include <vector>
 #include <memory>
 #include <map>
 #include <string_view>
@@ -9,8 +9,6 @@
 namespace wheat
 {
 
-constexpr int DEFAULT_MAX_BED_NUM = 256;//默认最大床位256 
-constexpr int DEFAULT_VOTE_WAIT_TIME = 10; //默认投票时间10秒 
 class Sleeper;
 
 /* 房间，Sleeper可以加入房间，同一个房间内的Sleeper能互相看到对方 
@@ -43,12 +41,12 @@ private:
 
     void SendVoteState();
 
-    void VoteKickOver(SleeperId id);
+    void VoteKickOver(SleeperId id, const std::string& ip);
 
 private:
     asio::any_io_executor m_executor;
     std::map<SleeperId, std::shared_ptr<Sleeper>> m_sleepers;
-    std::array<SleeperId, DEFAULT_MAX_BED_NUM> m_beds;
+    std::vector<SleeperId> m_beds;
 
     bool m_is_voting = false;
     VoteCounter<SleeperId> m_vote_counter;

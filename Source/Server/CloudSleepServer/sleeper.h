@@ -42,6 +42,7 @@ private:
     Room& m_room;
     SleeperId m_id;
     socket m_sock;
+    bool m_is_administrator = false;
     asio::ip::address_v4 m_ip;
     bool m_is_stoped = false;
     std::string m_name = "_";

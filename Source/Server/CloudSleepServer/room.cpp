@@ -3,6 +3,7 @@
 #include <algorithm>
 #include "logger.h"
 #include "black_list.h"
+#include "config.h"
 
 namespace wheat
 {
@@ -10,7 +11,7 @@ namespace wheat
 Room::Room(asio::any_io_executor executor)
     : m_executor(std::move(executor))
 { 
-    for (auto& id : m_beds) id = INVALID_SLEEPER_ID;
+    m_beds.resize(Config::Instance().max_bed_num, INVALID_SLEEPER_ID);
 }
 
 bool Room::Join(SleeperId id, std::shared_ptr<Sleeper> sleeper)
@@ -63,7 +64,7 @@ void Room::Leave(SleeperId id)
 
 bool Room::Sleep(SleeperId id, int bed_num)
 {
-    if (bed_num >= 0 && bed_num < DEFAULT_MAX_BED_NUM)
+    if (bed_num >= 0 && bed_num < m_beds.size())
     {
         auto& pre_sleeper_id = m_beds[bed_num];
         if (pre_sleeper_id == INVALID_SLEEPER_ID)
@@ -106,14 +107,20 @@ bool Room::VoteKickStart(SleeperId id)
     else
     {
         LOG_INFO("%s, sleeper_id:%lld", __func__, id);
+        auto iter = m_sleepers.find(id);
+        if (iter == m_sleepers.end())
+        {
+            LOG_INFO("%s, sleeper:%lld not in room", __func__, id);
+            return false;
+        }
         m_is_voting = true;
         asio::co_spawn(
             m_executor,
-            [this, id]() -> asio::awaitable<void>
+            [this, id, ip = iter->second->GetIp()]()->asio::awaitable<void>
             {
-                asio::steady_timer timer(m_executor, std::chrono::seconds(DEFAULT_VOTE_WAIT_TIME));
+                asio::steady_timer timer(m_executor, std::chrono::seconds(Config::Instance().vote_wait_period_s));
                 co_await timer.async_wait(asio::use_awaitable);
-                VoteKickOver(id);
+                VoteKickOver(id, ip);
             },
             asio::detached
                 );
@@ -160,7 +167,7 @@ void Room::SendVoteState()
     DeliverToAll(PackCommandWithId(0, CmdVoteState{ agree, refuse }));
 }
 
-void Room::VoteKickOver(SleeperId id)
+void Room::VoteKickOver(SleeperId id, const std::string& ip)
 {
     m_is_voting = false;
     auto [agree, refuse] = m_vote_counter.GetVotes();
@@ -171,10 +178,10 @@ void Room::VoteKickOver(SleeperId id)
         if (iter != m_sleepers.end())
         {
             LOG_INFO("%s, kick sleeper:%lld", __func__, id);
-            //踢出之后加入黑名单 
-            blacklist::BlackList::Instance().AddIpToBlockList(iter->second->GetIp());
             iter->second->Stop();
         }
+        //不管sleeper还在不在都加入黑名单 
+        blacklist::BlackList::Instance().AddIpToBlockList(ip);
     }
 
     DeliverToAll(PackCommandWithId(id, CmdVoteKickOver{}));

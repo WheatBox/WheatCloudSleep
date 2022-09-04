@@ -13,7 +13,7 @@ WheatCommand ParseCommand(std::string_view msg)
     }
     msg = msg.substr(0, msg.size() - 1);
 
-    auto sub_strs = Split(msg, "$", true);
+    auto sub_strs = common::Split(msg, "$", true);
     if (sub_strs.size() != 2)
     {
         throw std::runtime_error("invalid msg:" + std::string(msg));

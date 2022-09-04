@@ -1,5 +1,6 @@
 #include "black_list.h"
 #include "logger.h"
+#include "config.h"
 
 namespace wheat
 {
@@ -12,7 +13,7 @@ BlackList& BlackList::Instance()
 	return g_black_list;
 }
 
-void BlackList::Init(asio::any_io_executor executor)
+void BlackList::SetExecutor(asio::any_io_executor executor)
 {
 	m_executor = std::move(executor);
 }
@@ -30,9 +31,14 @@ void BlackList::AddIpToBlockList(
 		asio::detached);
 }
 
+void BlackList::AddIpToBlockList(const std::string& ip)
+{
+	AddIpToBlockList(ip, Minutes(Config::Instance().block_period_m));
+}
+
 asio::awaitable<void> BlackList::AddIpToBlockListAsync(std::string ip, Minutes time)
 {
-	auto block_time = std::min(time, MAX_BLOCK_PERIOD);
+	auto block_time = std::min(time, Minutes(Config::Instance().max_block_period_m));
 	if (m_black_list.contains(ip))
 	{
 		LOG_INFO("%s, ip:%s is in black list", __func__, ip.c_str());
@@ -44,7 +50,7 @@ asio::awaitable<void> BlackList::AddIpToBlockListAsync(std::string ip, Minutes t
 	{
 		const auto& watch_context = iter->second;
 		block_time = std::max(block_time, watch_context.privios_block_time * 2);
-		block_time = std::min(block_time, MAX_BLOCK_PERIOD);
+		block_time = std::min(block_time, Minutes(Config::Instance().max_block_period_m));
 		LOG_INFO("%s, ip:%s is in watch list, block minutes:%d", __func__, ip.c_str(), block_time.count());
 	}
 	else
@@ -58,7 +64,7 @@ asio::awaitable<void> BlackList::AddIpToBlockListAsync(std::string ip, Minutes t
 	co_await block_timer.async_wait(asio::use_awaitable);
 	m_black_list.erase(ip);
 
-	auto watch_time = std::min(block_time * 2, MAX_WATCH_PERIOD);
+	auto watch_time = std::min(block_time * 2, Minutes(Config::Instance().max_watch_period_m));
 	LOG_INFO("%s, ip:%s block time over, start watch, watch minutes:%d", __func__, ip.c_str(), watch_time.count());
 
 	try

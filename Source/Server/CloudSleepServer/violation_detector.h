@@ -17,10 +17,12 @@ public:
     //也是单例 
     static ViolationDetector& Instance();
 public:
-    //设置对于整个类型规则的阈值 
-    void SetTypeDetectorRule(const std::string& type, std::string_view threshold);
-    //设置对于类型的某个id的阈值 
-    void SetIdDetectorRule(const std::string& type, const std::string& id, std::string_view threshold);
+    //新增对于整个类型规则的阈值(存在则替换) 
+    void AddTypeDetectorRule(const std::string& type, std::string_view threshold);
+    void RemoveTypeDetectorRule(const std::string& type);
+    //新增对于类型的某个id的阈值(存在则替换) 
+    void AddIdDetectorRule(const std::string& type, const std::string& id, std::string_view threshold);
+    void RemoveIdDetectorRule(const std::string& type, const std::string& id);
     //更新某个类型某个id的当前信息 
     void UpdateInfo(std::string_view type, std::string_view id, std::string_view cur_info);
     //添加对于某个类型某个id的观察者，触发违规时会调用传入的on_violation 

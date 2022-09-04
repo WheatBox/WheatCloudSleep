@@ -11,7 +11,7 @@ std::map<std::string, double>
 ParseLoadInfo(std::string_view str)
 {
     std::map<std::string, double> result;
-    auto load_vec = Split(str, ",");
+    auto load_vec = common::Split(str, ",");
     for (auto load : load_vec)
     {
         auto pos = load.find("=");
@@ -48,14 +48,53 @@ ViolationDetector& ViolationDetector::Instance()
     return g_detector;
 }
 
-void ViolationDetector::SetTypeDetectorRule(const std::string& type, std::string_view threshold)
+void ViolationDetector::AddTypeDetectorRule(const std::string& type, std::string_view threshold)
 {
     m_types[type].threshold_list = ParseLoadInfo(threshold);
 }
 
-void ViolationDetector::SetIdDetectorRule(const std::string& type, const std::string& id, std::string_view threshold)
+void ViolationDetector::RemoveTypeDetectorRule(const std::string& type)
+{
+    auto iter_type = m_types.find(type);
+    if (iter_type != m_types.end())
+    {
+        auto& type_obj = iter_type->second;
+        if (type_obj.type_all_ids.empty())
+        {
+            m_types.erase(iter_type);
+        }
+        else
+        {
+            type_obj.threshold_list.clear();
+        }
+    }
+}
+
+void ViolationDetector::AddIdDetectorRule(const std::string& type, const std::string& id, std::string_view threshold)
 {
     m_types[type].type_all_ids[id].threshold_list = ParseLoadInfo(threshold);
+}
+
+void ViolationDetector::RemoveIdDetectorRule(const std::string& type, const std::string& id)
+{
+    auto iter_type = m_types.find(type);
+    if (iter_type != m_types.end())
+    {
+        auto& ids = iter_type->second.type_all_ids;
+        auto iter_id = ids.find(id);
+        if (iter_id != ids.end())
+        {
+            auto& id_obj = iter_id->second;
+            if (id_obj.on_violations.empty())
+            {
+                ids.erase(iter_id);
+            }
+            else
+            {
+                id_obj.threshold_list.clear();
+            }
+        }
+    }
 }
 
 void ViolationDetector::UpdateInfo(std::string_view type, std::string_view id, std::string_view cur_info)
@@ -78,7 +117,7 @@ void ViolationDetector::UpdateInfo(std::string_view type, std::string_view id, s
         type_iter->second.threshold_list : id_info.threshold_list;
 
     std::vector<OnViolation> on_violations;
-    char reason[256];
+    char reason[256] = {};
     //map是有序的，可以按顺序比较，不用find，时间复杂度O(m+n) 
     auto iter1 = cur_load_list.begin();
     auto iter2 = threshold_list.begin();
