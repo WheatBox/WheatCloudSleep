@@ -1,5 +1,9 @@
 draw_set_color(#B3CCB6);
-draw_set_alpha(0.5);
+if(IsNight()) {
+	draw_set_alpha(0.3);
+} else {
+	draw_set_alpha(0.5);
+}
 
 draw_rectangle(0, 0, display_get_gui_width(), display_get_gui_height(), false);
 
