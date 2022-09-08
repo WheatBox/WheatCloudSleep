@@ -35,7 +35,7 @@ function IsNight() {
 	static nightBeginHour = 22, nightBeginMinute = 30;
 	static nightEndHour = 6;
 	
-	show_debug_message([current_hour, current_minute])
+	// show_debug_message([current_hour, current_minute]);
 	
 	if((current_hour > nightBeginHour || (current_hour == nightBeginHour && current_minute >= nightBeginMinute)) || current_hour <= nightEndHour) {
 		return true;

@@ -59,6 +59,11 @@ if(keyboard_check_pressed(vk_enter)) {
 	}
 }
 
+if(keyboard_check_pressed(vk_escape)) {
+	instance_destroy(myTextBox);
+	myTextBox = noone;
+}
+
 if(myTextBox != noone) {
 	if(GUI_MouseGuiOnMe(12, 720 - 48, 12 + 950, 720 - 48 + 28)) {
 		gMouseOnGUI = true;
