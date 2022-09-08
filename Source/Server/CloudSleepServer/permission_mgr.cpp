@@ -13,8 +13,12 @@ void PermissionMgr::SetPermissionFile(std::filesystem::path path)
 {
     std::unique_lock lk(m_mutex);
 
-    if (path == m_permission_file)
+    if (path == m_permission_file && !m_permission_file.empty())
+    {
+        lk.unlock();
+        ParsePermissionFile();
         return;
+    }
 
     if (!m_permission_file.empty())
     {

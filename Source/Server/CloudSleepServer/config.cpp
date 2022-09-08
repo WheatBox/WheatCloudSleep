@@ -159,8 +159,11 @@ void ViolationRules::SetExecutor(asio::any_io_executor executor)
 
 void ViolationRules::SetConfigFile(std::filesystem::path path)
 {
-    if (path == m_config_file_path)
+    if (path == m_config_file_path && !m_config_file_path.empty())
+    {
+        ParseConfig(m_config_file_path);
         return;
+    }
 
     if (!m_config_file_path.empty())
     {
