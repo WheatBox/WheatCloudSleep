@@ -66,6 +66,13 @@ bool Room::Sleep(SleeperId id, int bed_num)
 {
     if (bed_num >= 0 && bed_num < m_beds.size())
     {
+        // 对于自改客户端的重复发送 sleep$ 的防范
+        int sleeperSleepingBedId = m_sleepers[id]->GetBedId();
+        if(sleeperSleepingBedId != -1) {
+            LOG_ERROR("%s, sleeper:%lld is sleeping on bed %d now, can not sleep again", __func__, id, sleeperSleepingBedId);
+            return false;
+        }
+
         auto& pre_sleeper_id = m_beds[bed_num];
         if (pre_sleeper_id == INVALID_SLEEPER_ID)
         {
@@ -90,6 +97,9 @@ void Room::GetUp(SleeperId id)
     {
         LOG_INFO("%s, sleeper:%lld getup on bed:%d", __func__, id, iter - m_beds.begin() + 1);
         *iter = INVALID_SLEEPER_ID;
+
+        // 起床时候重置该睡客记录的当前正在睡着的床位id
+        m_sleepers[id]->ClearBedId();
     }
     else
     {

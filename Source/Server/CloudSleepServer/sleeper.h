@@ -34,6 +34,10 @@ public:
 
     //自身的基本信息，sleeper加入房间后，房间获取并下发送所有其他sleeper的信息给ta 
     std::string MakeSelfInfo() const;
+
+    inline int GetBedId() { return m_bed_id; }
+    inline void ClearBedId() { m_bed_id = -1; }
+
 private:
     asio::awaitable<void> Reader();
 
