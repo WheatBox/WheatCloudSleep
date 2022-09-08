@@ -126,7 +126,8 @@ asio::awaitable<void> Sleeper::Reader()
                         LOG_INFO("sleeper:%lld's name is:%s", m_id, m_name.c_str());
                     },
                     [this](CmdType cmd) { 
-                        m_sex = std::move(cmd.sex); 
+                        // m_sex = std::move(cmd.sex); 
+                        m_sex = cmd.sex;
                         LOG_INFO("sleeper:%lld's sex is:%d", m_id, m_sex);
                     },
                     [this](CmdChat cmd) { 

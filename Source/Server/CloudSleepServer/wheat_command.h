@@ -23,11 +23,12 @@ struct CmdName
     std::string name;
 };
 
-enum class SleeperSex
+/*enum class SleeperSex
 {
     BOY,
     GIRL
-};
+};*/
+typedef int SleeperSex;
 
 struct CmdType
 {

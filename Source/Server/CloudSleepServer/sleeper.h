@@ -50,7 +50,8 @@ private:
     asio::ip::address_v4 m_ip;
     bool m_is_stoped = false;
     std::string m_name = "_";
-    SleeperSex m_sex = SleeperSex::BOY;
+    // SleeperSex m_sex = SleeperSex::BOY;
+    SleeperSex m_sex = 0;
     int m_bed_id = -1;
     Pos m_pos = INVALID_POS;
 
