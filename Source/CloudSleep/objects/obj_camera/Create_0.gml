@@ -25,3 +25,6 @@ MyCameraLinear = function(curveX, a, b) {
 	return a + (b - a) * curveY;
 }
 
+windowWidth = 1280;
+windowHeight = 720;
+

@@ -37,13 +37,24 @@ MyCanUseSleeperId = function(sleeperId) {
 
 vecChatHistory = new vector(); 
 vecChatHistorySleeperId = new vector();
-vecChatHistorySizeMax = 15;
+vecChatHistorySizeMax = 100;
 chatHistoryOn = false;
+surfChatHistory = undefined;
+chatHistoryMaximumWidth = 0;
+chatHistoryShowSizeMax = 15;
+chatHistoryScrollY = 0;
+chatHistoryScrollYSpeed = 50;
+chatHistoryStringSingleLineHeight = string_height("乐");
 
 MyChatHistoryAdd = function(sleeperId, str) {
-	if(MyCanUseSleeperId(sleeperId) == false) {
+	if(MyCanUseSleeperId(sleeperId) == false || MyCanUseSleeperId(mySleeperId) == false) {
 		return;
 	}
+	
+	if(point_distance(sleepers[mySleeperId].x, sleepers[mySleeperId].y, sleepers[sleeperId].x, sleepers[sleeperId].y) > ChatHistoryRecordMaxDistance) {
+		return;
+	}
+	
 	vecChatHistory.push_back("[@" + string(sleepers[sleeperId].name) + "]: " + string(str));
 	vecChatHistorySleeperId.push_back(sleeperId);
 	
@@ -51,6 +62,43 @@ MyChatHistoryAdd = function(sleeperId, str) {
 		array_delete(vecChatHistory.Container, 0, 1);
 		array_delete(vecChatHistorySleeperId.Container, 0, 1);
 	}
+	
+	chatHistoryMaximumWidth = string_width(vecChatHistory.back());
+	for(var i = 1; i < min(chatHistoryShowSizeMax, vecChatHistory.size()); i++) {
+		chatHistoryMaximumWidth = max(string_width(vecChatHistory.Container[vecChatHistory.size() - i - 1]), chatHistoryMaximumWidth);
+	}
+	
+	MyChatHistorySurfRefresh();
+}
+
+MyChatHistorySurfInit = function() {
+	surfChatHistory = surface_create(display_get_width(), vecChatHistorySizeMax * chatHistoryStringSingleLineHeight);
+}
+MyChatHistorySurfInit();
+
+MyChatHistorySurfRefresh = function() {
+	if(surface_exists(surfChatHistory) == false) {
+		MyChatHistorySurfInit();
+	}
+	
+	var chatHistoryLen = vecChatHistory.size();
+	var strChatHistory = "";
+	for(var i = 0; i < chatHistoryLen; i++) {
+		if(gShowSleeperId) {
+			strChatHistory += string(vecChatHistorySleeperId.Container[i]);
+		}
+		strChatHistory += vecChatHistory.Container[i] + "\n";
+	}
+	
+	surface_set_target(surfChatHistory);
+	
+	draw_clear_alpha(c_black, 0.0);
+	
+	draw_set_color(c_white);
+	draw_set_alpha(1);
+	draw_text(0, 0, strChatHistory);
+	
+	surface_reset_target();
 }
 
 myTextBox = noone;

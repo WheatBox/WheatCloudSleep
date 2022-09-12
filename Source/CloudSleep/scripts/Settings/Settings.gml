@@ -1,0 +1,1 @@
+#macro ChatHistoryRecordMaxDistance 3200

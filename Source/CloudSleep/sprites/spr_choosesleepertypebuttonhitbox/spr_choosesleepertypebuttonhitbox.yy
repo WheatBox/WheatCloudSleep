@@ -1,4 +1,7 @@
 {
+  "resourceType": "GMSprite",
+  "resourceVersion": "1.0",
+  "name": "spr_chooseSleeperTypeButtonHitbox",
   "bboxMode": 1,
   "collisionKind": 1,
   "type": 0,
@@ -24,12 +27,12 @@
   "gridX": 0,
   "gridY": 0,
   "frames": [
-    {"compositeImage":{"FrameId":{"name":"b84cf8fd-6171-4898-a281-e248152744c9","path":"sprites/spr_chooseSleeperTypeButtonHitbox/spr_chooseSleeperTypeButtonHitbox.yy",},"LayerId":null,"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},"images":[
-        {"FrameId":{"name":"b84cf8fd-6171-4898-a281-e248152744c9","path":"sprites/spr_chooseSleeperTypeButtonHitbox/spr_chooseSleeperTypeButtonHitbox.yy",},"LayerId":{"name":"32178cbf-d687-41ba-a794-b5daf6758350","path":"sprites/spr_chooseSleeperTypeButtonHitbox/spr_chooseSleeperTypeButtonHitbox.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},
-      ],"parent":{"name":"spr_chooseSleeperTypeButtonHitbox","path":"sprites/spr_chooseSleeperTypeButtonHitbox/spr_chooseSleeperTypeButtonHitbox.yy",},"resourceVersion":"1.0","name":"b84cf8fd-6171-4898-a281-e248152744c9","tags":[],"resourceType":"GMSpriteFrame",},
+    {"resourceType":"GMSpriteFrame","resourceVersion":"1.1","name":"b84cf8fd-6171-4898-a281-e248152744c9",},
   ],
   "sequence": {
-    "spriteId": {"name":"spr_chooseSleeperTypeButtonHitbox","path":"sprites/spr_chooseSleeperTypeButtonHitbox/spr_chooseSleeperTypeButtonHitbox.yy",},
+    "resourceType": "GMSequence",
+    "resourceVersion": "1.4",
+    "name": "spr_chooseSleeperTypeButtonHitbox",
     "timeUnits": 1,
     "playback": 1,
     "playbackSpeed": 30.0,
@@ -37,12 +40,12 @@
     "autoRecord": true,
     "volume": 1.0,
     "length": 1.0,
-    "events": {"Keyframes":[],"resourceVersion":"1.0","resourceType":"KeyframeStore`1","elementType":"MessageEventKeyframe",},
-    "moments": {"Keyframes":[],"resourceVersion":"1.0","resourceType":"KeyframeStore`1","elementType":"MomentsEventKeyframe",},
+    "events": {"Keyframes":[],"resourceVersion":"1.0","resourceType":"KeyframeStore<MessageEventKeyframe>",},
+    "moments": {"Keyframes":[],"resourceVersion":"1.0","resourceType":"KeyframeStore<MomentsEventKeyframe>",},
     "tracks": [
-      {"name":"frames","spriteId":null,"keyframes":{"Keyframes":[
-            {"id":"89df3c4c-874c-4740-97dc-a573cc4b446c","Key":0.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"b84cf8fd-6171-4898-a281-e248152744c9","path":"sprites/spr_chooseSleeperTypeButtonHitbox/spr_chooseSleeperTypeButtonHitbox.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe`1","elementType":"SpriteFrameKeyframe",},
-          ],"resourceVersion":"1.0","resourceType":"KeyframeStore`1","elementType":"SpriteFrameKeyframe",},"trackColour":0,"inheritsTrackColour":true,"builtinName":0,"traits":0,"interpolation":1,"tracks":[],"events":[],"isCreationTrack":false,"resourceVersion":"1.0","tags":[],"resourceType":"GMSpriteFramesTrack","modifiers":[],},
+      {"resourceType":"GMSpriteFramesTrack","resourceVersion":"1.0","name":"frames","spriteId":null,"keyframes":{"Keyframes":[
+            {"id":"89df3c4c-874c-4740-97dc-a573cc4b446c","Key":0.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"b84cf8fd-6171-4898-a281-e248152744c9","path":"sprites/spr_chooseSleeperTypeButtonHitbox/spr_chooseSleeperTypeButtonHitbox.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe<SpriteFrameKeyframe>",},
+          ],"resourceVersion":"1.0","resourceType":"KeyframeStore<SpriteFrameKeyframe>",},"trackColour":0,"inheritsTrackColour":true,"builtinName":0,"traits":0,"interpolation":1,"tracks":[],"events":[],"isCreationTrack":false,"modifiers":[],},
     ],
     "visibleRange": null,
     "lockOrigin": false,
@@ -58,22 +61,13 @@
     "yorigin": 176,
     "eventToFunction": {},
     "eventStubScript": null,
-    "parent": {"name":"spr_chooseSleeperTypeButtonHitbox","path":"sprites/spr_chooseSleeperTypeButtonHitbox/spr_chooseSleeperTypeButtonHitbox.yy",},
-    "resourceVersion": "1.4",
-    "name": "spr_chooseSleeperTypeButtonHitbox",
-    "tags": [],
-    "resourceType": "GMSequence",
   },
   "layers": [
-    {"visible":true,"isLocked":false,"blendMode":0,"opacity":100.0,"displayName":"default","resourceVersion":"1.0","name":"32178cbf-d687-41ba-a794-b5daf6758350","tags":[],"resourceType":"GMImageLayer",},
+    {"resourceType":"GMImageLayer","resourceVersion":"1.0","name":"32178cbf-d687-41ba-a794-b5daf6758350","visible":true,"isLocked":false,"blendMode":0,"opacity":100.0,"displayName":"default",},
   ],
   "nineSlice": null,
   "parent": {
     "name": "Sprites",
     "path": "folders/Sprites.yy",
   },
-  "resourceVersion": "1.0",
-  "name": "spr_chooseSleeperTypeButtonHitbox",
-  "tags": [],
-  "resourceType": "GMSprite",
 }

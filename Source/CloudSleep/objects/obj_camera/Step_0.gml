@@ -7,15 +7,13 @@ if(gMouseOnGUI == false) {
 	mouseCameraMoveLock = false;
 } else {
 	mouseCameraMoveLock = true;
-	
-	gMouseOnGUI = false;
 }
 
 var cameraW = camera_get_view_width(view_camera[0]);
 var cameraH = camera_get_view_height(view_camera[0]);
-if(mouse_wheel_up()) {
+if(gMouseOnGUI == false && mouse_wheel_up() && CameraScale(0, true) > 0.1 && CameraScale(1, true) > 0.1) {
 	camera_set_view_size(view_camera[0], cameraW * scaleMulitply, cameraH * scaleMulitply);
-} else if(mouse_wheel_down()) {
+} else if(gMouseOnGUI == false && mouse_wheel_down() && CameraScale(0, true) < 3 && CameraScale(1, true) < 3) {
 	camera_set_view_size(view_camera[0], cameraW / scaleMulitply, cameraH / scaleMulitply);
 }
 
@@ -38,7 +36,7 @@ mouseXPrevious = mouse_x;
 mouseYPrevious = mouse_y;
 
 
-if(keyboard_check_pressed(vk_space) && mouseCameraMoveLock == false && instance_exists(obj_client)) {
+if(keyboard_check_pressed(vk_space) && findingPlayer == false && mouseCameraMoveLock == false && instance_exists(obj_client)) {
 	if(obj_client.MyCanUseSleeperId(mySleeperId)) {
 		findingPlayer = true;
 		findingPlayerCurveX = 0;
@@ -46,6 +44,7 @@ if(keyboard_check_pressed(vk_space) && mouseCameraMoveLock == false && instance_
 		findingPlayerStartY = cameraCenterY;
 	}
 }
+
 
 if(findingPlayer && instance_exists(obj_client)) {
 	if(obj_client.MyCanUseSleeperId(mySleeperId)) {
@@ -55,3 +54,6 @@ if(findingPlayer && instance_exists(obj_client)) {
 	}
 }
 
+
+
+gMouseOnGUI = false;
