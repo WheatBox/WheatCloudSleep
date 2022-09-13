@@ -2,7 +2,7 @@ if(IsNight()) {
 	draw_set_color(#000000);
 	draw_set_alpha(0.7);
 	
-	draw_rectangle(0, 0, display_get_gui_width(), display_get_gui_height(), false);
+	draw_rectangle(0, 0, GuiWidth(), GuiHeight(), false);
 }
 
 if(surface_exists(surfChatHistory) == false) {
@@ -20,9 +20,13 @@ if(myTextBox != noone) {
 		var strChatHistory = "按下 Tab 键开启聊天记录面板";
 	}
 	
-	var _offy = 720 - 48 - 6;
+	var _offy = GuiHeight() - 48 - 6;
 	
-	chatHistoryMaximumWidth = max(string_width(strChatHistory), chatHistoryMaximumWidth);
+	if(gShowSleeperId) {
+		
+	} else {
+		chatHistoryMaximumWidth = max(string_width(strChatHistory + string(vecChatHistorySleeperId.Container[i])), chatHistoryMaximumWidth);
+	}
 	
 	var _strSingleLineHeight = chatHistoryStringSingleLineHeight;
 	var _strHeight = min(vecChatHistory.size(), chatHistoryShowSizeMax) * _strSingleLineHeight;

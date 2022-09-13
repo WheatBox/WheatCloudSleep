@@ -42,7 +42,7 @@ if(keyboard_check_pressed(vk_enter)) {
 	
 	if(myTextBox == noone) {
 		var _placeHolder = textboxPlaceHolders[irandom_range(0, array_length(textboxPlaceHolders) - 1)];
-		myTextBox = textbox_create(12, 720 - 48, 950, 28, "", _placeHolder, 128, fontRegular, function() {});
+		myTextBox = textbox_create(12, GuiHeight() - 48, 950, 28, "", _placeHolder, 128, fontRegular, function() {});
 		textbox_set_font(myTextBox, fontRegular, c_black, 28, 0);
 		
 		myTextBox.curt.fo = true;
@@ -70,7 +70,9 @@ if(keyboard_check_pressed(vk_escape)) {
 }
 
 if(myTextBox != noone) {
-	if(GUI_MouseGuiOnMe(12, 720 - 48, 12 + 950, 720 - 48 + 28)) {
+	textbox_set_position(myTextBox, 12, GuiHeight() - 48, false);
+	
+	if(GUI_MouseGuiOnMe(12, GuiHeight() - 48, 12 + 950, GuiHeight() - 48 + 28)) {
 		gMouseOnGUI = true;
 	}
 }

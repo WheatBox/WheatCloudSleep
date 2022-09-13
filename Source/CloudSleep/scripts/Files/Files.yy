@@ -1,7 +1,7 @@
 {
   "resourceType": "GMScript",
   "resourceVersion": "1.0",
-  "name": "GUI",
+  "name": "Files",
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
