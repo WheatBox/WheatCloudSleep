@@ -3,6 +3,13 @@ serverIP = "";
 serverPort = -1;
 socket = undefined;
 
+globalvar PackGuid, PackMainClient, PackMainClientHowToGet, PackArrCompatibleClients, PackIpPort;
+PackGuid = "";
+PackMainClient = "";
+PackMainClientHowToGet = "";
+PackArrCompatibleClients = [""];
+PackIpPort = "";
+
 globalvar sendMessageQueue;
 sendMessageQueue = new vector();
 

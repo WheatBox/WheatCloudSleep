@@ -12,7 +12,8 @@
 
 #macro FILEJSON_scene "\\contents\\scene.json"
 
-#macro WORKFILEPATH_default ".\\packages\\" + PackName + "\\"
+#macro PACKAGESFILEPATH "F:\\packages\\"
+#macro WORKFILEPATH_default PACKAGESFILEPATH + PackName + "\\"
 
 // #macro WORKFILEPATH ".\\packages\\" + PackName + "\\"
 // #macro WORKFILEPATH "F:\\CSETemp\\packages\\" + PackName + "\\"
@@ -114,94 +115,96 @@ function FileNameGetPicture(_caption_ImportToWhere = "") {
 	return get_open_filename_ext("图片(*.png, *.jpg, *.jpeg)|*.png;*.jpg;*.jpeg", "", working_directory, "导入图片" + ((_caption_ImportToWhere != "") ? (" 到 " + _caption_ImportToWhere) : ""));
 }
 
-function LoadCloudPack() {
-	var ChildFunc_LoadSprites = function(filePath, fileJson, _gSpriteStruct, _gStructStr, _gSceneStructArr) {
-		var _changed = false;
+
+function LoadCloudPack_ChildFunc_LoadSprites(filePath, fileJson, _gSpriteStruct, _gStructStr, _gSceneStructArr) {
+	var _changed = false;
 	
-		var fstr = NULL;
+	var fstr = NULL;
 	
-		if(FileGetSize(fileJson) > 0) {
-			fstr = FileRead(fileJson);
-		}
-	
-		if(fstr != NULL) {
-			// variable_global_set(_gStructStr, json_parse(fstr));
-			
-			var _gStruct = variable_global_get(_gStructStr);
-			
-			var _jsonCopyTemp = json_parse(fstr);
-			if(variable_struct_exists(_jsonCopyTemp, "materials")) {
-				var _jsonCopyTempMaterialsLen = array_length(_jsonCopyTemp.materials);
-				for(var iJson = 0; iJson < _jsonCopyTempMaterialsLen; iJson++) {
-					if(CheckStructCanBeUse(_jsonCopyTemp.materials[iJson]) == false) {
-						continue;
-					}
-					
-					_gStruct.materials[iJson] = _jsonCopyTemp.materials[iJson];
-					/*
-					if(variable_struct_exists(_jsonCopyTemp.materials[iJson], "filename")) {
-						_gStruct.materials[iJson].filename = _jsonCopyTemp.materials[iJson].filename;
-					}
-					if(variable_struct_exists(_jsonCopyTemp.materials[iJson], "hitbox")) {
-						_gStruct.materials[iJson].hitbox = _jsonCopyTemp.materials[iJson].hitbox;
-					}
-					if(variable_struct_exists(_jsonCopyTemp.materials[iJson], "offset")) {
-						_gStruct.materials[iJson].offset = _jsonCopyTemp.materials[iJson].offset;
-					}*/
-				}
-			}
-			
-		
-			_changed = false;
-		
-			for(var i = 0; i < array_length(_gStruct.materials); i++) {
-				var _name = _gStruct.materials[i].filename;
-			
-				if(FileGetSize(filePath + _name) <= 0) {
-					// 删除失效文件名
-					array_delete(_gStruct.materials, i, 1);
-					_changed = true;
-				
-					// 删除失效文件名的场景物体（此时这些场景物体暂时还没有被放置
-					for(var j = 0; j < array_length(_gSceneStructArr); j++) {
-						if(!CheckStructCanBeUse(_gSceneStructArr[j])) {
-							continue;
-						}
-						if(_gSceneStructArr[j].materialId == i) {
-							array_delete(_gSceneStructArr, j, 1);
-						}
-					}
-				
-					// SceneElement_BackgroundsAlignAfterDelete(i, 1);
-				
-					i--;
-					continue;
-				}
-			
-				var _sprTemp = sprite_add(filePath + _name, 1, false, true, 0, 0);
-				// 此处的 offset 和 bbox 都只是编辑器内为了拖拽而设定的，实际游戏内的值以 _gStruct 结构体内的值为准
-				sprite_set_offset(_sprTemp, sprite_get_width(_sprTemp) / 2, sprite_get_height(_sprTemp) / 2);
-				sprite_set_bbox_mode(_sprTemp, DragObjBboxMode);
-				array_push(_gSpriteStruct.sprites, _sprTemp);
-				
-				
-				// 修复 offset
-				if(variable_struct_exists(_gStruct.materials[i], "offset")) {
-					if(array_length(_gStruct.materials[i].offset) < 2) {
-						_gStruct.materials[i].offset = [sprite_get_width(_sprTemp) / 2, sprite_get_height(_sprTemp) / 2];
-					}
-				}
-			}
-		
-			// 如果有删除过失效文件名，进行重新写入json
-			if(_changed) {
-				var _changedjson = json_stringify(_gStruct);
-				FileWrite(fileJson, _changedjson);
-			}
-		}
+	if(FileGetSize(fileJson) > 0) {
+		fstr = FileRead(fileJson);
 	}
 	
-	
+	if(fstr != NULL) {
+		// variable_global_set(_gStructStr, json_parse(fstr));
+			
+		var _gStruct = variable_global_get(_gStructStr);
+			
+		var _jsonCopyTemp = json_parse(fstr);
+		if(variable_struct_exists(_jsonCopyTemp, "materials")) {
+			var _jsonCopyTempMaterialsLen = array_length(_jsonCopyTemp.materials);
+			for(var iJson = 0; iJson < _jsonCopyTempMaterialsLen; iJson++) {
+				if(CheckStructCanBeUse(_jsonCopyTemp.materials[iJson]) == false) {
+					continue;
+				}
+					
+				_gStruct.materials[iJson] = _jsonCopyTemp.materials[iJson];
+				/*
+				if(variable_struct_exists(_jsonCopyTemp.materials[iJson], "filename")) {
+					_gStruct.materials[iJson].filename = _jsonCopyTemp.materials[iJson].filename;
+				}
+				if(variable_struct_exists(_jsonCopyTemp.materials[iJson], "hitbox")) {
+					_gStruct.materials[iJson].hitbox = _jsonCopyTemp.materials[iJson].hitbox;
+				}
+				if(variable_struct_exists(_jsonCopyTemp.materials[iJson], "offset")) {
+					_gStruct.materials[iJson].offset = _jsonCopyTemp.materials[iJson].offset;
+				}*/
+			}
+		}
+			
+		
+		_changed = false;
+		
+		for(var i = 0; i < array_length(_gStruct.materials); i++) {
+			var _name = _gStruct.materials[i].filename;
+			
+			if(FileGetSize(filePath + _name) <= 0) {
+				// 删除失效文件名
+				array_delete(_gStruct.materials, i, 1);
+				_changed = true;
+				
+				// 删除失效文件名的场景物体（此时这些场景物体暂时还没有被放置
+				for(var j = 0; j < array_length(_gSceneStructArr); j++) {
+					if(!CheckStructCanBeUse(_gSceneStructArr[j])) {
+						continue;
+					}
+					if(_gSceneStructArr[j].materialId == i) {
+						array_delete(_gSceneStructArr, j, 1);
+					}
+				}
+				
+				// SceneElement_BackgroundsAlignAfterDelete(i, 1);
+				
+				i--;
+				continue;
+			}
+			
+			var _sprTemp = sprite_add(filePath + _name, 1, false, true, 0, 0);
+			// 此处的 offset 和 bbox 都只是编辑器内为了拖拽而设定的，实际游戏内的值以 _gStruct 结构体内的值为准
+			sprite_set_offset(_sprTemp, sprite_get_width(_sprTemp) / 2, sprite_get_height(_sprTemp) / 2);
+			// sprite_set_bbox_mode(_sprTemp, DragObjBboxMode);
+			sprite_set_bbox_mode(_sprTemp, bboxmode_manual);
+			array_push(_gSpriteStruct.sprites, _sprTemp);
+				
+				
+			// 修复 offset
+			if(variable_struct_exists(_gStruct.materials[i], "offset")) {
+				if(array_length(_gStruct.materials[i].offset) < 2) {
+					_gStruct.materials[i].offset = [sprite_get_width(_sprTemp) / 2, sprite_get_height(_sprTemp) / 2];
+				}
+			}
+		}
+		
+		// 如果有删除过失效文件名，进行重新写入json
+		if(_changed) {
+			var _changedjson = json_stringify(_gStruct);
+			FileWrite(fileJson, _changedjson);
+		}
+	}
+}
+
+function LoadCloudPack(_loadSleepers) {
+	var ChildFunc_LoadSprites = LoadCloudPack_ChildFunc_LoadSprites;
 	
 	var fscene = NULL;
 	
@@ -219,8 +222,9 @@ function LoadCloudPack() {
 	}
 	
 	
-	
-	ChildFunc_LoadSprites(WORKFILEPATH + FILEPATH_sleepers, WORKFILEPATH + FILEJSON_sleepers, gSleepersSpritesStruct, "gSleepersStruct", gSceneStruct.sleepers);
+	if(_loadSleepers) {
+		ChildFunc_LoadSprites(WORKFILEPATH + FILEPATH_sleepers, WORKFILEPATH + FILEJSON_sleepers, gSleepersSpritesStruct, "gSleepersStruct", gSceneStruct.sleepers);
+	}
 	ChildFunc_LoadSprites(WORKFILEPATH + FILEPATH_backgrounds, WORKFILEPATH + FILEJSON_backgrounds, gBackgroundsSpritesStruct, "gBackgroundsStruct", gSceneStruct.backgrounds);
 	ChildFunc_LoadSprites(WORKFILEPATH + FILEPATH_decorates, WORKFILEPATH + FILEJSON_decorates, gDecoratesSpritesStruct, "gDecoratesStruct", gSceneStruct.decorates);
 	ChildFunc_LoadSprites(WORKFILEPATH + FILEPATH_beds, WORKFILEPATH + FILEJSON_beds, gBedsSpritesStruct, "gBedsStruct", gSceneStruct.beds);
@@ -485,5 +489,19 @@ function EditCloudPackIpPort() {
 	if(fWriteRes != 0) {
 		show_message("写入文件失败");
 	}
+}
+
+
+
+/// @desc 从字符串切割出IP和端口，返回 [ip(string), port(real)]
+function CutIpPort(_ipport) {
+	var _ipTemp = "";
+	var _portTemp = -1;
+	var _cutRes = string_pos_ext(":", _ipport, 1);
+	if(_cutRes != 0) {
+		_ipTemp = string_copy(_ipport, 1, _cutRes - 1);
+		_portTemp = real(string_copy(_ipport, _cutRes + 1, string_length(_ipport) - _cutRes + 1));
+	}
+	return [_ipTemp, _portTemp];
 }
 
