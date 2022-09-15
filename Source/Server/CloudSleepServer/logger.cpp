@@ -37,13 +37,10 @@ std::pair<std::tm*, long int> GetTimeStamp()
 
     return std::make_pair(&tm, wtm.wMilliseconds);
 #else
-    std::pair<std::tm*, long int> GetTimeStamp()
-    {
-        struct timeval tv;
-        gettimeofday(&tv, NULL);
+    struct timeval tv;
+    gettimeofday(&tv, NULL);
 
-        return std::make_pair(std::localtime(&tv.tv_sec), tv.tv_usec / 1000);
-    }
+    return std::make_pair(std::localtime(&tv.tv_sec), tv.tv_usec / 1000);
 
 #endif // _WIN32
 }

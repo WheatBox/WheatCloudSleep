@@ -146,7 +146,7 @@ ViolationRules::ViolationRules()
 {
     std::map<ViolationRuleKey, std::string> rules;
     //添加默认ip规则 连接数=5，每秒发包数100，每秒比特81920(10KB)  
-    rules.emplace(ViolationRuleKey{ "ip" }, "conn=5,pps=100,bps=81920");
+    rules.emplace(ViolationRuleKey{ "ip", "" }, "conn=5,pps=100,bps=81920");
     //为了测试方便，对于127.0.0.1放开限制 
     rules.emplace(ViolationRuleKey{ "ip", "127.0.0.1" }, "conn=1000,pps=100000,bps=819200000");
     UpdateRules(std::move(rules));

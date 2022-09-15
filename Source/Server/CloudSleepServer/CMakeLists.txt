@@ -67,10 +67,10 @@ if (UNIX) # Building on unix-like system, link pthread for asio.
         PUBLIC "-Werror"
         PUBLIC "-g"
     )
-    target_link_options(${EXE_NAME}
-		#PUBLIC "-static-libstdc++"
-		#PUBLIC "-static-libgcc"
-    )
+    #target_link_options(${EXE_NAME}
+	#PUBLIC "-static-libstdc++"
+	#PUBLIC "-static-libgcc"
+    #)
 endif()
 
 install (TARGETS ${EXE_NAME}

@@ -1,5 +1,6 @@
 #include "file_update_monitor.h"
 #include "wheat_common.h"
+#include <mutex>
 
 #ifdef _WIN32
 #include "windows.h"
@@ -147,7 +148,7 @@ void FileUpdateMonitor::ThreadProcEx()
         FD_ZERO(&rfd);
         FD_SET(m_fd, &rfd);
 
-        struct timeval tv; //NOLINT (legal/name)
+        struct timeval tv;
         tv.tv_sec = 0;
         tv.tv_usec = 100000; // 100000 us
 
@@ -163,14 +164,14 @@ void FileUpdateMonitor::ThreadProcEx()
         int i = 0;
         while (i < iLen)
         {
-            struct inotify_event* event = (struct inotify_event*)&buffer[i]; //NOLINT (legal/name)
+            struct inotify_event* event = (struct inotify_event*)&buffer[i];
 
             std::string dir;
             for (auto& [monite_path, monite_info] : m_monite_paths)
             {
                 if (monite_info.fd == event->wd)
                 {
-                    auto canonical_file_path = fsp::sss::util::GetFileCanonicalPath(event->name, monite_path);
+                    auto canonical_file_path = GetFileCanonicalPath(event->name);
                     if (!canonical_file_path.empty())
                     {
                         auto file_iter = monite_info.files.find(canonical_file_path);

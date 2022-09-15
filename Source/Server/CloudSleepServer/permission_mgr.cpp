@@ -35,6 +35,7 @@ void PermissionMgr::SetPermissionFile(std::filesystem::path path)
 
 bool PermissionMgr::IsAdministrator(std::string_view key)
 {
+    (void)key;
     return true;
     /* todo 等需要实现管理员权限时放开 
     std::lock_guard lk(m_mutex);

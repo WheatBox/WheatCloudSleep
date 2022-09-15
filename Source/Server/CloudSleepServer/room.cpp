@@ -64,7 +64,7 @@ void Room::Leave(SleeperId id)
 
 bool Room::Sleep(SleeperId id, int bed_num)
 {
-    if (bed_num >= 0 && bed_num < m_beds.size())
+    if (bed_num >= 0 && bed_num < (int)m_beds.size())
     {
         // 对于自改客户端的重复发送 sleep$ 的防范 
         int sleeperSleepingBedId = m_sleepers[id]->GetBedId();
