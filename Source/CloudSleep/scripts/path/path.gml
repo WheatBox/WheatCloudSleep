@@ -1,5 +1,8 @@
-globalvar grid, gridCellSize;
+globalvar grid, gridCellSize, gridOffsetXAdd, gridOffsetYAdd;
 gridCellSize = 32;
+
+gridOffsetXAdd = 0;
+gridOffsetYAdd = 0;
 
 var gridsize = [
 	0,

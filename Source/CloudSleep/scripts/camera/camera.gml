@@ -49,3 +49,13 @@ function GuiHeight() {
 	return display_get_gui_height();
 }
 
+function CameraSetPos(_x, _y) {
+	// camera_set_view_pos(view_camera[0], _x, _y);
+	if(InstanceExists(obj_camera)) {
+		obj_camera.cameraCenterX = _x;
+		obj_camera.cameraCenterY = _y;
+		
+		camera_set_view_pos(view_camera[0], obj_camera.cameraCenterX - CameraWidth() / 2, obj_camera.cameraCenterY - CameraHeight() / 2);
+	}
+}
+

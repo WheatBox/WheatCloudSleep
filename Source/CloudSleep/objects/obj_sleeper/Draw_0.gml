@@ -1,5 +1,5 @@
 depth = -y;
-
+/*
 var sprite = spr_Boy;
 
 switch(type) {
@@ -9,7 +9,8 @@ switch(type) {
 	case SleeperType.Boy:
 		sprite = spr_Boy;
 		break;
-}
+}*/
+var sprite = gSleepersSpritesStruct.sprites[type];
 
 draw_set_alpha(1);
 

@@ -18,7 +18,15 @@ if(mouse_check_button_pressed(mb_right)) {
 				var _dir = point_direction(sleepers[mySleeperId].x, sleepers[mySleeperId].y, mouse_x, mouse_y);
 				var _len1x = lengthdir_x(1, _dir);
 				var _len1y = lengthdir_y(1, _dir);
-				for(var ixy = 0; ixy < 200; ixy++) {
+				
+				var _collibackdis = 1;
+				var _bedIns = collision_point(mouse_x, mouse_y, obj_bed, true, false);
+				if(InstanceExists(_bedIns))
+				if(sprite_exists(_bedIns.sprite_index)) {
+					_collibackdis = sqrt(power(_bedIns.sprite_width, 2) + power(_bedIns.sprite_height, 2)) + 1;
+				}
+				
+				for(var ixy = 0; ixy < _collibackdis; ixy++) {
 					var _x = mouse_x - round(_len1x * ixy);
 					var _y = mouse_y - round(_len1y * ixy);
 					if(sleepers[mySleeperId].MyPathCanGo(_x, _y)) {

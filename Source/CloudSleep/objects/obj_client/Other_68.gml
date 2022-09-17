@@ -48,7 +48,7 @@ if(map[? "type"] == network_type_data) {
 					sleepers[mySleeperId].isMe = true;
 					sleepers[mySleeperId].sleeperId = mySleeperId;
 					
-					SendPos(sleepers[mySleeperId].x, sleepers[mySleeperId].y);
+					// SendPos(sleepers[mySleeperId].x, sleepers[mySleeperId].y);
 				}
 				break;
 			case CommandType.sleeper:

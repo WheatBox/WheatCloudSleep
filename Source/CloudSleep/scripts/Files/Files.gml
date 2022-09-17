@@ -203,7 +203,7 @@ function LoadCloudPack_ChildFunc_LoadSprites(filePath, fileJson, _gSpriteStruct,
 	}
 }
 
-function LoadCloudPack(_loadSleepers) {
+function LoadCloudPack(_loadSleepers, _loadOthers) {
 	var ChildFunc_LoadSprites = LoadCloudPack_ChildFunc_LoadSprites;
 	
 	var fscene = NULL;
@@ -225,9 +225,11 @@ function LoadCloudPack(_loadSleepers) {
 	if(_loadSleepers) {
 		ChildFunc_LoadSprites(WORKFILEPATH + FILEPATH_sleepers, WORKFILEPATH + FILEJSON_sleepers, gSleepersSpritesStruct, "gSleepersStruct", gSceneStruct.sleepers);
 	}
-	ChildFunc_LoadSprites(WORKFILEPATH + FILEPATH_backgrounds, WORKFILEPATH + FILEJSON_backgrounds, gBackgroundsSpritesStruct, "gBackgroundsStruct", gSceneStruct.backgrounds);
-	ChildFunc_LoadSprites(WORKFILEPATH + FILEPATH_decorates, WORKFILEPATH + FILEJSON_decorates, gDecoratesSpritesStruct, "gDecoratesStruct", gSceneStruct.decorates);
-	ChildFunc_LoadSprites(WORKFILEPATH + FILEPATH_beds, WORKFILEPATH + FILEJSON_beds, gBedsSpritesStruct, "gBedsStruct", gSceneStruct.beds);
+	if(_loadOthers) {
+		ChildFunc_LoadSprites(WORKFILEPATH + FILEPATH_backgrounds, WORKFILEPATH + FILEJSON_backgrounds, gBackgroundsSpritesStruct, "gBackgroundsStruct", gSceneStruct.backgrounds);
+		ChildFunc_LoadSprites(WORKFILEPATH + FILEPATH_decorates, WORKFILEPATH + FILEJSON_decorates, gDecoratesSpritesStruct, "gDecoratesStruct", gSceneStruct.decorates);
+		ChildFunc_LoadSprites(WORKFILEPATH + FILEPATH_beds, WORKFILEPATH + FILEJSON_beds, gBedsSpritesStruct, "gBedsStruct", gSceneStruct.beds);
+	}
 
 
 
@@ -495,13 +497,16 @@ function EditCloudPackIpPort() {
 
 /// @desc 从字符串切割出IP和端口，返回 [ip(string), port(real)]
 function CutIpPort(_ipport) {
-	var _ipTemp = "";
-	var _portTemp = -1;
+	var _ipTemp; // = "";
+	var _portTemp; // = -1;
 	var _cutRes = string_pos_ext(":", _ipport, 1);
+	if(_cutRes == 0) _cutRes = string_pos_ext("：", _ipport, 1);
+	
 	if(_cutRes != 0) {
 		_ipTemp = string_copy(_ipport, 1, _cutRes - 1);
 		_portTemp = real(string_copy(_ipport, _cutRes + 1, string_length(_ipport) - _cutRes + 1));
 	}
+	
 	return [_ipTemp, _portTemp];
 }
 

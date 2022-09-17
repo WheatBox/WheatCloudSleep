@@ -79,7 +79,7 @@ function GuiElement_CreateImportButton(explorerCaption, filePath, fileJson, gStr
 					DebugMes([filename, " copy to ", __FilePath + _name]);
 					
 					if(_copyRes != 0) {
-						show_message("文件复制失败！\n请确认文件目录或文件名中没有使用中文");
+						show_message("文件复制失败！");
 						return;
 					}
 					

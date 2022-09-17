@@ -38,6 +38,8 @@ if(PackName != packNamePrevious) {
 	}
 	
 	if(_canUpdatePackNamePrev) {
+		myType = -1;
+		
 		packNamePrevious = PackName;
 		TextboxSetText(textboxIpPort, PackIpPort);
 		
@@ -57,7 +59,12 @@ if(PackName != packNamePrevious) {
 		if(is_array(gSceneStruct.sleepers))
 		array_delete(gSceneStruct.sleepers, 0, array_length(gSceneStruct.sleepers));
 		
-		LoadCloudPack_ChildFunc_LoadSprites(WORKFILEPATH + FILEPATH_sleepers, WORKFILEPATH + FILEJSON_sleepers, gSleepersSpritesStruct, "gSleepersStruct", gSceneStruct.sleepers);
+		// LoadCloudPack_ChildFunc_LoadSprites(WORKFILEPATH + FILEPATH_sleepers, WORKFILEPATH + FILEJSON_sleepers, gSleepersSpritesStruct, "gSleepersStruct", gSceneStruct.sleepers);
+		LoadCloudPack(true, false);
 	}
+}
+
+if(keyboard_check_pressed(vk_enter)) {
+	MyEnterToBedRoom();
 }
 

@@ -1,5 +1,6 @@
 beds = [];
 
+/*
 var _initBedSleepId = 0;
 for(var iy = 0; iy < 16; iy++) {
 	for(var ix = 0; ix < 16; ix++) {
@@ -8,9 +9,14 @@ for(var iy = 0; iy < 16; iy++) {
 		beds[_initBedSleepId] = CreateBed(ix * 320 + _offsetX, iy * 288 + _offsetY, _initBedSleepId);
 		_initBedSleepId++;
 	}
+}*/
+
+var _bedsArrSiz = array_length(gSceneStruct.beds);
+for(var i = 0; i < _bedsArrSiz; i++) {
+	beds[i] = CreateBed(gSceneStruct.beds[i].xPos + gridOffsetXAdd, gSceneStruct.beds[i].yPos + gridOffsetYAdd, i, gSceneStruct.beds[i].materialId);
 }
 
-mp_grid_add_instances(grid, obj_bed, false);
+// mp_grid_add_instances(grid, obj_bed, false);
 
 sleepers = [];
 

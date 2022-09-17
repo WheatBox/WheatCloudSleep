@@ -11,7 +11,7 @@
 	"\t" + "github@WheatBox\n" + \
 	"客户端开发：\n" + \
 	"\t" + "github@WheatBox\n" + \
-	"美术：\n" + \
+	"美术创作：\n" + \
 	"\t" + "github@WheatBox\n"\
 )
 
@@ -20,4 +20,7 @@
 
 // 聊天记录的最大记录条数
 #macro ChatHistoryMaxLines 100
+
+// 名称的最短长度
+#macro NameMinimumLength 2
 

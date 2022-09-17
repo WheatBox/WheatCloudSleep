@@ -108,6 +108,7 @@
     {"resourceType":"GMIncludedFile","resourceVersion":"1.0","name":"LICENSE","CopyToMask":-1,"filePath":"datafiles/LICENSE/Textbox - Single line",},
     {"resourceType":"GMIncludedFile","resourceVersion":"1.0","name":"file_dll.dll","CopyToMask":-1,"filePath":"datafiles/dll",},
     {"resourceType":"GMIncludedFile","resourceVersion":"1.0","name":"systemCmd.dll","CopyToMask":-1,"filePath":"datafiles/dll",},
+    {"resourceType":"GMIncludedFile","resourceVersion":"1.0","name":"StringConverter.dll","CopyToMask":-1,"filePath":"datafiles/dll",},
   ],
   "MetaData": {
     "IDEVersion": "2022.8.1.37",

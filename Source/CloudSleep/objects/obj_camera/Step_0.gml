@@ -20,6 +20,7 @@ if(gMouseOnGUI == false && mouse_wheel_up() && CameraScale(0, true) > 0.1 && Cam
 cameraW = camera_get_view_width(view_camera[0]);
 cameraH = camera_get_view_height(view_camera[0]);
 
+if(0) {
 mouseXPrevious ??= mouse_x;
 mouseYPrevious ??= mouse_y;
 // show_debug_message([gMouseOnGUI, mouseCameraMoveLock]);
@@ -29,7 +30,7 @@ if(mouse_check_button(mb_left) && mouseCameraMoveLock == false) {
 	
 	findingPlayer = false;
 }
-
+} else findingPlayer = true;
 camera_set_view_pos(view_camera[0], cameraCenterX - cameraW / 2, cameraCenterY - cameraH / 2);
 
 mouseXPrevious = mouse_x;
@@ -46,11 +47,13 @@ if(keyboard_check_pressed(vk_space) && findingPlayer == false && mouseCameraMove
 }
 
 
-if(findingPlayer && instance_exists(obj_client)) {
+if(findingPlayer && InstanceExists(obj_client)) {
 	if(obj_client.MyCanUseSleeperId(mySleeperId)) {
 		findingPlayerCurveX += 0.01;
-		cameraCenterX = MyCameraLinear(findingPlayerCurveX, findingPlayerStartX, obj_client.sleepers[mySleeperId].x);
-		cameraCenterY = MyCameraLinear(findingPlayerCurveX, findingPlayerStartY, obj_client.sleepers[mySleeperId].y - 44);
+		// cameraCenterX = MyCameraLinear(findingPlayerCurveX, findingPlayerStartX, obj_client.sleepers[mySleeperId].x);
+		// cameraCenterY = MyCameraLinear(findingPlayerCurveX, findingPlayerStartY, obj_client.sleepers[mySleeperId].y - 44);
+		cameraCenterX = obj_client.sleepers[mySleeperId].x;
+		cameraCenterY = obj_client.sleepers[mySleeperId].y - 64;
 	}
 }
 

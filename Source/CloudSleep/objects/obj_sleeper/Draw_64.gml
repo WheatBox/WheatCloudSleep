@@ -4,7 +4,7 @@ if(gShowSleeperId) {
 }
 
 var posX = GetPositionXOnGUI(x);
-var posY = GetPositionYOnGUI(y - 150);
+var posY = GetPositionYOnGUI(bbox_top - 50);
 
 draw_set_color(c_black);
 draw_set_alpha(0.7);
