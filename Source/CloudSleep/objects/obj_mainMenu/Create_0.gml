@@ -153,7 +153,7 @@ buttonAbout = GuiElement_CreateButton_ext(buttonAboutX, buttonAboutY, buttonAbou
 	}
 );
 
-MyAsyncTextBoxsGUI = function() {
+MySynchTextBoxsGUI = function() {
 	textboxNameY = GuiHeight() - textboxNameHeight - 32;
 	textbox_set_position(textboxName, textboxNameX, textboxNameY, false);
 	textboxIpPortY = GuiHeight() - textboxIpPortHeight - 96;
@@ -167,7 +167,7 @@ MyAsyncTextBoxsGUI = function() {
 	buttonAboutX = GuiWidth() - buttonAboutWidth / 2;
 	buttonAbout.x = buttonAboutX;
 }
-MyAsyncTextBoxsGUI();
+MySynchTextBoxsGUI();
 
 
 pageWidth = 256;

@@ -1,5 +1,5 @@
 packagesPage.height = GuiHeight();
-MyAsyncTextBoxsGUI();
+MySynchTextBoxsGUI();
 
 if(PackName != packNamePrevious) {
 	var _canUpdatePackNamePrev = true;
