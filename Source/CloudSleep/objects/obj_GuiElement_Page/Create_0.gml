@@ -35,7 +35,7 @@ MyStopWork = function() {
 	}
 }
 
-scrollYSpeed = 50;
+scrollYSpeed = GUIScrollYSpeed;
 
 scrollY = 0;
 MyScrollElements = function(_yAdd) {

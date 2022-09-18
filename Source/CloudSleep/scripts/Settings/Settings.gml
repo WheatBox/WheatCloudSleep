@@ -24,3 +24,6 @@
 // 名称的最短长度
 #macro NameMinimumLength 2
 
+// GUI滚动速度
+#macro GUIScrollYSpeed 50
+

@@ -15,4 +15,4 @@ if(inited == false) {
 	mp_grid_add_instances(grid, id, true);
 }
 
-depth = -y;
+SynchDepth();

@@ -13,7 +13,12 @@ textboxIpPort = textbox_create(textboxIpPortX, textboxIpPortY, textboxIpPortWidt
 textbox_set_font(textboxIpPort, fontRegular, GUIDefaultColor, textboxIpPortHeight, 0);
 
 
+myEnterLock = false;
 MyEnterToBedRoom = function() {
+	if(myEnterLock) {
+		return;
+	}
+	
 	if(PackName == "") {
 		show_message("请先选择一个场景包");
 		return;
@@ -130,6 +135,9 @@ MyEnterToBedRoom = function() {
 		}
 	}
 	
+	
+	WriteMyName();
+	
 	room_goto(rm_bedroom);
 }
 
@@ -213,6 +221,8 @@ if(directory_exists(WORKFILEPATH)) {
 					PackName = args[0];
 					WORKFILEPATH = WORKFILEPATH_default;
 					
+					scrollY = 0;
+					
 					DebugMes([PackName, WORKFILEPATH]);
 				}
 			));
@@ -230,4 +240,10 @@ windowHeight = 720;
 packNamePrevious = PackName;
 
 myImageMinimumWidthHeight = 160;
+
+scrollY = 0;
+scrollYSpeed = GUIScrollYSpeed;
+
+attentionText = "";
+attentionTextColor = GUIWarningColor;
 

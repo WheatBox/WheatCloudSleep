@@ -4,6 +4,7 @@
 
 #macro GUIDefaultColor #000037
 #macro GUIDangerousColor c_red
+#macro GUIWarningColor c_yellow
 
 #macro GUIDefaultAlpha 0.6
 #macro GUIHighLightAlpha 0.3

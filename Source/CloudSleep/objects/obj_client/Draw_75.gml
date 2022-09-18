@@ -22,11 +22,7 @@ if(myTextBox != noone) {
 	
 	var _offy = GuiHeight() - 48 - 6;
 	
-	if(gShowSleeperId) {
-		
-	} else {
-		chatHistoryMaximumWidth = max(string_width(strChatHistory + string(vecChatHistorySleeperId.Container[i])), chatHistoryMaximumWidth);
-	}
+	chatHistoryMaximumWidth = max(string_width(strChatHistory), chatHistoryMaximumWidth);
 	
 	var _strSingleLineHeight = chatHistoryStringSingleLineHeight;
 	var _strHeight = min(vecChatHistory.size(), chatHistoryShowSizeMax) * _strSingleLineHeight;

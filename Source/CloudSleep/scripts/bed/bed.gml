@@ -1,3 +1,17 @@
+/// @desc 创建背景
+function CreateBackground(_x, _y, _materialId) {
+	var newins = instance_create_depth(_x, _y, 0, obj_background);
+	newins.materialId = _materialId;
+	return newins;
+}
+
+/// @desc 创建不可互动物体
+function CreateDecorate(_x, _y, _materialId) {
+	var newins = instance_create_depth(_x, _y, 0, obj_decorate);
+	newins.materialId = _materialId;
+	return newins;
+}
+
 /// @desc 创建床
 /// @param {real} _x x
 /// @param {real} _y y
@@ -14,7 +28,7 @@ function CreateBed(_x, _y, _bedSleepId, _materialId) {
 /// @param {Id.Instance} _betInsid 床的实例id
 /// @param {real} _bedSleepId 床位睡觉id
 function InitBed(_betInsid, _bedSleepId) {
-	_betInsid.sprite_index = spr_bedEmpty;
+	// _betInsid.sprite_index = spr_bedEmpty;
 	_betInsid.bedSleepId = _bedSleepId;
 	_betInsid.bedSleeperName = undefined;
 	_betInsid.empty = true;

@@ -1,4 +1,4 @@
-depth = -y;
+SynchDepth();
 /*
 var sprite = spr_Boy;
 

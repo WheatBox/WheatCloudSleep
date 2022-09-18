@@ -38,6 +38,32 @@ if(PackName != packNamePrevious) {
 	}
 	
 	if(_canUpdatePackNamePrev) {
+		myEnterLock = false;
+		
+		attentionText = "";
+		if(ClientVersion != PackMainClient) {
+			attentionText = PackMainClientHowToGet;
+			
+			var _isCompatible = false;
+			for(var iTemp = 0; iTemp < array_length(PackArrCompatibleClients); iTemp++) {
+				if(ClientVersion == PackArrCompatibleClients[iTemp]) {
+					_isCompatible = true;
+					break;
+				}
+			}
+			
+			if(_isCompatible) {
+				attentionText = "当前客户端版本与场景包兼容，但可能会有错误\n通过以下方式获得最合适于该场景包的客户端：\n" + attentionText;
+				attentionTextColor = GUIWarningColor;
+			} else {
+				attentionText = "当前客户端版本与场景包不兼容\n通过以下方式获得最合适于该场景包的客户端：\n" + attentionText;
+				attentionTextColor = GUIDangerousColor;
+				
+				myEnterLock = true;
+			}
+		}
+		
+		
 		myType = -1;
 		
 		packNamePrevious = PackName;

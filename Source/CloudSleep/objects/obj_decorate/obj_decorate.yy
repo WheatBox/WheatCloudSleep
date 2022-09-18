@@ -1,7 +1,7 @@
 {
   "resourceType": "GMObject",
   "resourceVersion": "1.0",
-  "name": "obj_bed",
+  "name": "obj_decorate",
   "spriteId": null,
   "solid": false,
   "visible": true,

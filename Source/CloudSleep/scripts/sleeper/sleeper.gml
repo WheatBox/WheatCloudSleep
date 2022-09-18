@@ -3,13 +3,13 @@
 #macro NewSleeperPosX -100000
 #macro NewSleeperPosY -100000
 
-
+/*
 // 这里 SleeperType 的内容的顺序要和服务器上一样
 enum SleeperType {
 	Girl,
 	Boy
 };
-
+*/
 
 globalvar gShowSleeperId;
 gShowSleeperId = false;
@@ -46,4 +46,26 @@ function CreateSleeper(_x, _y) {
 	var newins = instance_create_depth(_x, _y, 0, obj_sleeper);
 	return newins;
 }
+
+
+
+/// @desc 从本地读取用户名
+function ReadMyName() {
+	ini_open("settings.ini");
+	
+	myName = ini_read_string("user", "name", "");
+	
+	ini_close();
+}
+
+/// @desc 从本地写入用户名
+function WriteMyName() {
+	ini_open("settings.ini");
+	
+	ini_write_string("user", "name", myName);
+	
+	ini_close();
+}
+
+ReadMyName();
 
