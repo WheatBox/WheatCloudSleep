@@ -14,7 +14,8 @@
 
 #macro FILEJSON_TextboxPlaceHolders "\\contents\\TextboxPlaceHolders.json"
 
-#macro PACKAGESFILEPATH "F:\\packages\\"
+#macro PACKAGESFILEPATH ".\\packages\\"
+// #macro PACKAGESFILEPATH "F:\\packages\\"
 #macro WORKFILEPATH_default PACKAGESFILEPATH + PackName + "\\"
 
 // #macro WORKFILEPATH ".\\packages\\" + PackName + "\\"
@@ -65,6 +66,10 @@ gSleepersSpritesStruct = DefaultSpritesStruct;
 gBackgroundsSpritesStruct = DefaultSpritesStruct;
 gDecoratesSpritesStruct = DefaultSpritesStruct;
 gBedsSpritesStruct = DefaultSpritesStruct;
+
+// 例如 gBedSleepSpritesStruct[bed's materialId][sleeper's materialId (睡客皮肤 type)] = sprite_add(...);
+globalvar gArrBedSleepSprites;
+gArrBedSleepSprites = [{}];
 
 // Struct Scene Element
 function SSceneElement(_materialId, _xPos, _yPos) constructor {
@@ -333,5 +338,43 @@ function CutIpPort(_ipport) {
 	}
 	
 	return [_ipTemp, _portTemp];
+}
+
+
+
+function LoadBedSleepSprites() {
+	gArrBedSleepSprites ??= [{}];
+	
+	var materialsSiz = array_length(gBedsStruct.materials);
+	for(var i = 0; i < materialsSiz; i++) { // i = materialId
+		if(array_length(gArrBedSleepSprites) < i + 1) {
+			gArrBedSleepSprites[i] = undefined;
+		}
+		gArrBedSleepSprites[i] ??= {};
+		
+		var sleepfilenamesSiz = array_length(gBedsStruct.materials[i].sleepfilenames);
+		for(var j = 0; j < sleepfilenamesSiz; j++) {
+			if(gBedsStruct.materials[i].sleepfilenames[j] == 0) {
+				gArrBedSleepSprites[i][j] = -1;
+				continue;
+			}
+			
+			var _fname = gBedsStruct.materials[i].filename + "\\" + gBedsStruct.materials[i].sleepfilenames[j];
+			
+			var _spr = sprite_add(WORKFILEPATH + FILEPATH_beds_bedsleep + _fname, 1, false, true, 0, 0);
+			
+			var _xoffTemp = sprite_get_width(_spr) / 2;
+			var _yoffTemp = sprite_get_height(_spr) / 2;
+			if(variable_instance_exists(gBedsStruct.materials[i], "offset") == true)
+			if(is_array(gBedsStruct.materials[i].offset) == true)
+			if(array_length(gBedsStruct.materials[i].offset) >= 2) {
+				_xoffTemp = gBedsStruct.materials[i].offset[0];
+				_yoffTemp = gBedsStruct.materials[i].offset[1];
+			}
+			sprite_set_offset(_spr, _xoffTemp, _yoffTemp);
+			
+			gArrBedSleepSprites[i][j] = _spr;
+		}
+	}
 }
 

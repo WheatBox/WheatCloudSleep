@@ -57,10 +57,6 @@ MyEnterToBedRoom = function() {
 	
 	
 	// 初始化睡客出生点数组
-	DebugMes("==================================");
-	DebugMes(gSleepersStruct.materials);
-	DebugMes(gSceneStruct.sleepers);
-	DebugMes("==================================");
 	
 	for(var i = 0; i < array_length(gSleepersStruct.materials); i++) {
 		gArrSleepersInitPosx[i] = [];
@@ -134,6 +130,10 @@ MyEnterToBedRoom = function() {
 			sprite_set_offset(spr, arroffs[0], arroffs[1]);
 		}
 	}
+	
+	
+	LoadBedSleepSprites();
+	DebugMes(gArrBedSleepSprites);
 	
 	
 	WriteMyName();
