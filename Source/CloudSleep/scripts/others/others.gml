@@ -123,3 +123,21 @@ function GuidGenerate(withBrace = true) {
 	return res;
 }
 
+
+
+function CutStringToArray(str, delimiter) {
+	var _cli = str;
+	var _arrRes = [];
+	var _cutPos = 1;
+	var _cutRes = string_pos_ext(delimiter, _cli, _cutPos);
+	var delimiterLen = string_length(delimiter);
+	while(_cutRes != 0) {
+		array_push(_arrRes, string_copy(_cli, _cutPos, _cutRes - _cutPos));
+		_cutPos = _cutRes + delimiterLen;
+		_cutRes = string_pos_ext(delimiter, _cli, _cutPos);
+	}
+	array_push(_arrRes, string_copy(_cli, _cutPos, string_length(_cli) - _cutPos + 1));
+	
+	return _arrRes;
+}
+

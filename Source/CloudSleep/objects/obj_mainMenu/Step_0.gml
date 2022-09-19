@@ -9,19 +9,8 @@ if(PackName != packNamePrevious) {
 		PackGuid = _structTemp.guid;
 		PackMainClient = _structTemp.mainclient;
 		PackMainClientHowToGet = _structTemp.mainclient_howtoget;
-		
-		var _cli = _structTemp.compatibleclients;
-		var _arrcli = [];
-		var _cutPos = 1;
-		var _cutRes = string_pos_ext("$$", _cli, _cutPos);
-		while(_cutRes != 0) {
-			array_push(_arrcli, string_copy(_cli, _cutPos, _cutRes - _cutPos));
-			_cutPos = _cutRes + 2;
-			_cutRes = string_pos_ext("$$", _cli, _cutPos);
-		}
-		array_push(_arrcli, string_copy(_cli, _cutPos, string_length(_cli) - _cutPos + 1));
-		
-		PackArrCompatibleClients = _arrcli;
+				
+		PackArrCompatibleClients = CutStringToArray(_structTemp.compatibleclients, "$$");
 		
 		PackIpPort = _structTemp.ipport;
 		

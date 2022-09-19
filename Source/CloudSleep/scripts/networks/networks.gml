@@ -82,7 +82,9 @@ function SendGetup() {
 }
 
 function SendChat(_chatStr) {
-	sendMessageQueue.push_back(CommandMakeMessage(CommandType.chat, _chatStr));
+	if(!ChatCommand(_chatStr)) {
+		sendMessageQueue.push_back(CommandMakeMessage(CommandType.chat, _chatStr));
+	}
 }
 
 function SendMove(_x, _y) {
@@ -103,5 +105,29 @@ function SendAgree() {
 
 function SendRefuse() {
 	sendMessageQueue.push_back(CommandMakeMessage(CommandType.refuse));
+}
+
+
+function ChatCommand(str) {
+	var isChatCommand = true;
+	
+	var args = CutStringToArray(str, " ");
+	DebugMes(args);
+	
+	switch(args[0]) {
+		case "/kick":
+			if(array_length(args) >= 2) {
+				var strTemp = string_digits(args[1]);
+				if(strTemp != "") {
+					SendKick(real(strTemp));
+				}
+			}
+			break;
+			
+		default:
+			isChatCommand = false;
+	}
+	
+	return isChatCommand;
 }
 
