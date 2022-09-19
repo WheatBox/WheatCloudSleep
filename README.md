@@ -1,8 +1,8 @@
 # WheatCloudSleep
 
-master分支已弃用（因为服务器代码太烂），新的开发进度请切换到其它分支进行查看
+# master分支已弃用（因为服务器代码太烂），新的开发进度请切换到其它分支进行查看
 
-master is soooooo sh*t. So we abandoned it. Now we are using other branches.
+# master is soooooo sh*t. So we abandoned it. Now we are using other branches.
 
 ## 十分感谢 B1aNB1aN 和 ymx-mshk 的帮助！！Very Thanks for B1aNB1aN And ymx-mshk!!
 
