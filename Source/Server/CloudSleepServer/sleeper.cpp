@@ -112,6 +112,9 @@ asio::awaitable<void> Sleeper::Reader()
 
                 //部分消息不需要(或者处理失败时不需要)转发 
                 bool forward = true;
+
+                WheatCommand msgCommand = ParseCommand(msg);
+
                 std::visit(
                 overloaded{
                     [this, &forward](CmdSleep cmd) {
@@ -149,10 +152,10 @@ asio::awaitable<void> Sleeper::Reader()
                     [this, &forward](CmdVoteRefuse) { m_room.Refuse(m_id); forward = false; },
                     [](auto&&) { }
                 }, 
-                ParseCommand(msg));
+                msgCommand);
 
                 if (forward)
-                    m_room.Deliver(m_id, msg);
+                    m_room.Deliver(m_id, PackCommandWithId(m_id, msgCommand));
             }
             catch (const std::exception& e)
             {

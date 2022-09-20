@@ -40,6 +40,7 @@ file (GLOB CPP_FILES *.cpp)
 add_executable (${EXE_NAME}
     ${CPP_FILES}
     ${HEADER_FILES}
+	"cJSON.c"
 )
 
 target_include_directories (${EXE_NAME}
