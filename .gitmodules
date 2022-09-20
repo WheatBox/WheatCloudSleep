@@ -1,3 +1,6 @@
 [submodule "Source/Server/CloudSleepServer/third/asio"]
 	path = Source/Server/CloudSleepServer/third/asio
 	url = https://github.com/chriskohlhoff/asio.git
+[submodule "Source/Server/CloudSleepServer/third/json"]
+	path = Source/Server/CloudSleepServer/third/json
+	url = https://github.com/nlohmann/json.git
