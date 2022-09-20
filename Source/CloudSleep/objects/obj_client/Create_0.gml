@@ -25,6 +25,8 @@ for(var i = 0; i < _arrSiz; i++) {
 	beds[i] = CreateBed(gSceneStruct.beds[i].xPos + gridOffsetXAdd, gSceneStruct.beds[i].yPos + gridOffsetYAdd, i, gSceneStruct.beds[i].materialId);
 }
 
+alarm_set(1, 2);
+
 // mp_grid_add_instances(grid, obj_bed, false);
 
 sleepers = [];
