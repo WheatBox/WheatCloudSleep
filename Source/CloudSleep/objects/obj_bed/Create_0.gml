@@ -1,21 +1,22 @@
-mask_index = spr_bedHitbox;
+// mask_index = spr_bedHitbox;
 
+materialId = 0;
 bedSleepId = -1;
 // bedSleeperName = undefined;
 // empty = false;
 
 MySleep = function(_sleeperType) {
-	switch(_sleeperType) {
-		case SleeperType.Girl:
-			sprite_index = spr_bedGirl;
-			break;
-		case SleeperType.Boy:
-			sprite_index = spr_bedBoy;
-			break;
+	if(array_length(gArrBedSleepSprites) > materialId)
+	if(array_length(gArrBedSleepSprites[materialId]) > _sleeperType)
+	if(sprite_exists(gArrBedSleepSprites[materialId][_sleeperType])) {
+		sprite_index = gArrBedSleepSprites[materialId][_sleeperType];
 	}
+	DebugMes(["BedSleep", materialId, _sleeperType, sprite_index])
 }
 
 MyGetup = function() {
-	sprite_index = spr_bedEmpty;
+	sprite_index = mask_index;
 }
 
+
+inited = false;

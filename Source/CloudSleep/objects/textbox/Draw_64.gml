@@ -12,6 +12,7 @@ if (!surface_exists(su)) {
 }
 
 draw_set_color(draw.co);
+draw_set_alpha(1.0);
 draw_rectangle(sx - 1, sy - 1, sx + dw + 1, sy + dh + 1, true);
 
 if (draw.re) {

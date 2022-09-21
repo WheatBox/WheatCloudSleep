@@ -3,6 +3,13 @@ serverIP = "";
 serverPort = -1;
 socket = undefined;
 
+globalvar PackGuid, PackMainClient, PackMainClientHowToGet, PackArrCompatibleClients, PackIpPort;
+PackGuid = "";
+PackMainClient = "";
+PackMainClientHowToGet = "";
+PackArrCompatibleClients = [""];
+PackIpPort = "";
+
 globalvar sendMessageQueue;
 sendMessageQueue = new vector();
 
@@ -59,7 +66,7 @@ function SendMessage(str) {
 }
 
 function SendName(name = myName) {
-	sendMessageQueue.push_back(CommandMakeMessage(CommandType.name, name));
+	sendMessageQueue.push_back(CommandMakeMessage(CommandType.name, [name]));
 }
 
 function SendType(type = myType) {
@@ -75,7 +82,9 @@ function SendGetup() {
 }
 
 function SendChat(_chatStr) {
-	sendMessageQueue.push_back(CommandMakeMessage(CommandType.chat, _chatStr));
+	if(!ChatCommand(_chatStr)) {
+		sendMessageQueue.push_back(CommandMakeMessage(CommandType.chat, [_chatStr]));
+	}
 }
 
 function SendMove(_x, _y) {
@@ -96,5 +105,29 @@ function SendAgree() {
 
 function SendRefuse() {
 	sendMessageQueue.push_back(CommandMakeMessage(CommandType.refuse));
+}
+
+
+function ChatCommand(str) {
+	var isChatCommand = true;
+	
+	var args = CutStringToArray(str, " ");
+	DebugMes(args);
+	
+	switch(args[0]) {
+		case "/kick":
+			if(array_length(args) >= 2) {
+				var strTemp = string_digits(args[1]);
+				if(strTemp != "") {
+					SendKick(real(strTemp));
+				}
+			}
+			break;
+			
+		default:
+			isChatCommand = false;
+	}
+	
+	return isChatCommand;
 }
 

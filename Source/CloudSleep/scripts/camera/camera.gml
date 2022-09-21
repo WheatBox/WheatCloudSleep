@@ -14,8 +14,19 @@ function CameraHeight() {
 	return camera_get_view_height(view_camera[0]);
 }
 
-function CameraScale() {
-	return CameraWidth() / 1280;
+function CameraScale(useWidth_0_OrHeight_1_ = 0, useDefaultGuiSize = false) {
+	if(useWidth_0_OrHeight_1_) {
+		if(useDefaultGuiSize) {
+			return CameraHeight() / 720;
+		} else {
+			return CameraHeight() / GuiHeight();
+		}
+	}
+	if(useDefaultGuiSize) {
+		return CameraWidth() / 1280;
+	} else {
+		return CameraWidth() / GuiWidth();
+	}
 }
 
 function CameraLock() {
@@ -27,6 +38,24 @@ function CameraLock() {
 function CameraUnlock() {
 	if(instance_exists(obj_camera)) {
 		obj_camera.mouseCameraMoveLock = false;
+	}
+}
+
+function GuiWidth() {
+	return display_get_gui_width();
+}
+
+function GuiHeight() {
+	return display_get_gui_height();
+}
+
+function CameraSetPos(_x, _y) {
+	// camera_set_view_pos(view_camera[0], _x, _y);
+	if(InstanceExists(obj_camera)) {
+		obj_camera.cameraCenterX = _x;
+		obj_camera.cameraCenterY = _y;
+		
+		camera_set_view_pos(view_camera[0], obj_camera.cameraCenterX - CameraWidth() / 2, obj_camera.cameraCenterY - CameraHeight() / 2);
 	}
 }
 

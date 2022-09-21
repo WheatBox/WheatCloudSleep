@@ -13,8 +13,9 @@ var my = GetPositionYOnGUI(mouse_y);
 if(mouse_check_button(mb_left)) {
 	if(mx >= _x - strW / 2 && mx < _x + strW / 2 && my >= _y - strH / 2 && my < _y + strH / 2) {
 		voteLoading++;
+		gMouseOnGUI = true;
 	} else {
-		CameraUnlock();
+		// CameraUnlock();
 		instance_destroy();
 	}
 } else if(voteLoading > 0) {
@@ -22,7 +23,7 @@ if(mouse_check_button(mb_left)) {
 }
 
 if(voteLoading >= voteLoadingMax) {
-	CameraUnlock();
+	// CameraUnlock();
 	SendKick(sleeperId);
 	instance_destroy();
 }

@@ -305,3 +305,8 @@ function textbox_update_cursor(c, s) {
 	textbox_refresh_surface();
 		
 }
+
+
+function TextboxSetText(_textboxIns, str) {
+	_textboxIns.curt.tx = string(str);
+}

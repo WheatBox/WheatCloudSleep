@@ -1,0 +1,2 @@
+delete vecChatHistory;
+delete vecChatHistorySleeperId;

@@ -7,7 +7,8 @@ anglePositive = choose(-1, 1);
 isMe = false; // 是不是我自己，也就是说是不是本客户端的睡客
 
 name = "";
-type = SleeperType.Boy;
+// type = SleeperType.Boy;
+type = 0;
 
 myPath = path_add();
 mySpeed = 3;
@@ -73,7 +74,7 @@ MySleep = function(_sleepBedId) {
 	yBeforeSleep = y;
 	
 	x = obj_client.beds[_sleepBedId].x;
-	y = obj_client.beds[_sleepBedId].y + 88;
+	y = (obj_client.beds[_sleepBedId].bbox_top + obj_client.beds[_sleepBedId].bbox_bottom) / 2;
 }
 MyGetup = function() {
 	if(!instance_exists(obj_client) || sleepingBedId == -1) {
@@ -93,4 +94,7 @@ xBeforeSleep = x;
 yBeforeSleep = y;
 
 sleeperId = -1;
+
+
+inited = false;
 

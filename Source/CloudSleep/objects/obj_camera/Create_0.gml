@@ -1,3 +1,5 @@
+depth = -11451;
+
 cameraCenterX = NewSleeperPosX;
 cameraCenterY = NewSleeperPosY;
 
@@ -22,4 +24,7 @@ MyCameraLinear = function(curveX, a, b) {
 	var curveY = animcurve_channel_evaluate(curve.channels[0], curveX);
 	return a + (b - a) * curveY;
 }
+
+windowWidth = 1280;
+windowHeight = 720;
 
