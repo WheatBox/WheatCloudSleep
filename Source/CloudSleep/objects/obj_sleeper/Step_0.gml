@@ -6,9 +6,9 @@ if(inited == false) {
 		x = gArrSleepersInitPosx[myType][_initPosIndexTemp];
 		y = gArrSleepersInitPosy[myType][_initPosIndexTemp];
 		
-		DebugMes(gArrSleepersInitPosx);
-		DebugMes(myType);
-		DebugMes(_initPosIndexTemp);
+		// DebugMes(gArrSleepersInitPosx);
+		// DebugMes(myType);
+		// DebugMes(_initPosIndexTemp);
 		
 		CameraSetPos(x, y);
 		

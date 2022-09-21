@@ -135,7 +135,7 @@ namespace wheat
         std::string temp = PackCommand(cmd);//能力有限，先把Command的“}”删了，再把id作为addid,append
         // temp.erase(remove(temp.begin(), temp.end(), '}'), temp.end());
         temp = temp.substr(0, temp.size() - 2);
-        temp.append(",\"addid\":\"" + std::to_string(id) + "\"}");
+        temp.append(",\"Id\":\"" + std::to_string(id) + "\"}");
         return temp;
     }
 

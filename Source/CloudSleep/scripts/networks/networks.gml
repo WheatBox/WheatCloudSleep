@@ -1,5 +1,3 @@
-#macro DefaultNetworkJson { Cmd:"", Args:"" }
-
 globalvar serverIP, serverPort, socket;
 serverIP = "";
 serverPort = -1;

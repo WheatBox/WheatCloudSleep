@@ -67,7 +67,7 @@ function GetCommandTypeFromString(buf) {
 /// @arg _CommandType CommandType.xxxxx
 /// @arg params（可能为字符串，数字，数组）
 function CommandMakeMessage(_CommandType, params = undefined) {
-	var sendJson = DefaultNetworkJson;
+	var sendJson = { Cmd:"", Args:"" };
 	
 	switch(_CommandType) {
 		case CommandType.yourid:

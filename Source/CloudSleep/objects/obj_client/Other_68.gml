@@ -13,7 +13,7 @@ if(map[? "type"] == network_type_data) {
 			
 			var _Cmd = GetCommandTypeFromString(bufjson.Cmd);
 			var _Args = bufjson.Args;
-			var mesSleeperId = real(bufjson.addid);
+			var mesSleeperId = real(bufjson.Id);
 			
 			switch(_Cmd) {
 				case CommandType.unknown:
@@ -29,12 +29,12 @@ if(map[? "type"] == network_type_data) {
 					break;
 				case CommandType.sleeper:
 					var arg = real(_Args[0]);
-					if(arg <= mesSleeperIdMax) {
-						if(InstanceExists(sleepers[arg])) {
-							instance_destroy(sleepers[arg]);
-						}
+					if(MyCanUseSleeperId(arg)) {
+						instance_destroy(sleepers[arg]);
 					}
 					sleepers[arg] = CreateSleeper(NewSleeperPosX, NewSleeperPosY);
+					sleepers[arg].x = 1000;
+					sleepers[arg].y = 1000;
 					sleepers[arg].sleeperId = arg;
 					break;
 				case CommandType.name:
@@ -107,7 +107,7 @@ if(map[? "type"] == network_type_data) {
 					break;
 			}
 		} catch(error) {
-			DebugMes(error.message);
+			DebugMes([error.script, error.message]);
 		}
 	}
 }
