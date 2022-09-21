@@ -136,7 +136,7 @@ namespace wheat
         // temp.erase(remove(temp.begin(), temp.end(), '}'), temp.end());
         temp = temp.substr(0, temp.size() - 2);
         temp.append(",\"Id\":\"" + std::to_string(id) + "\"}");
-        return temp;
+        return '\0' + temp;
     }
 
 }

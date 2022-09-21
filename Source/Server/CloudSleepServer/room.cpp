@@ -158,9 +158,9 @@ void Room::Refuse(SleeperId id)
     }
 }
 
-void Room::Deliver(SleeperId src_id, std::string_view msg)
+void Room::Deliver(std::string_view msg)
 {
-    DeliverToAll(/*std::to_string(src_id) + '\0' + */std::string(msg));
+    DeliverToAll(std::string(msg));
 }
 
 void Room::DeliverToAll(const std::string& msg)

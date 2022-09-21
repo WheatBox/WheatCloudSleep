@@ -76,7 +76,7 @@ void Sleeper::Deliver(std::string msg)
 std::string Sleeper::MakeSelfInfo() const
 {
     std::string info;
-    auto make_cmd_str = [this](const WheatCommand& cmd) { return '\0' + PackCommandWithId(m_id, cmd); };
+    auto make_cmd_str = [this](const WheatCommand& cmd) { return PackCommandWithId(m_id, cmd); };
 
     info += make_cmd_str(CmdSleeper{ m_id });
     info += make_cmd_str(CmdName{ m_name });
@@ -155,7 +155,7 @@ asio::awaitable<void> Sleeper::Reader()
                 msgCommand);
 
                 if (forward)
-                    m_room.Deliver(m_id, PackCommandWithId(m_id, msgCommand));
+                    m_room.Deliver(PackCommandWithId(m_id, msgCommand));
             }
             catch (const std::exception& e)
             {
