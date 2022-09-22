@@ -2,7 +2,7 @@
 
 ## 停服了，今天进橘子喝茶了，得整改
 
-## 整改的时间里也没闲着，久等了，编辑器：https://github.com/WheatBox/CloudSleepEngine，新客户端和新服务端也在保持开发中
+## 整改的时间里也没闲着，久等了，编辑器：https://github.com/WheatBox/CloudSleepEngine ，新客户端和新服务端也在保持开发中
 
 ## 十分感谢 B1aNB1aN 和 ymx-mshk 和 zhhhhhhhh 的帮助！！Very Thanks for B1aNB1aN And ymx-mshk And zhhhhhhhh!!
 
