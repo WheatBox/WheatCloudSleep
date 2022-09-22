@@ -132,7 +132,7 @@ namespace wheat
 
     std::string PackCommandWithId(SleeperId id, const WheatCommand& cmd)
     {
-        std::string temp = PackCommand(cmd);//能力有限，先把Command的“}”删了，再把id作为addid,append
+        std::string temp = PackCommand(cmd);//鑳藉姏鏈夐檺锛屽厛鎶奀ommand鐨勨�渳鈥濆垹浜嗭紝鍐嶆妸id浣滀负addid,append
         // temp.erase(remove(temp.begin(), temp.end(), '}'), temp.end());
         temp = temp.substr(0, temp.size() - 2);
         temp.append(",\"Id\":\"" + std::to_string(id) + "\"}");

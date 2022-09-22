@@ -11,12 +11,13 @@
 namespace wheat
 {
 
-Sleeper::Sleeper(Room& room, socket sock)
+Sleeper::Sleeper(Room& room, socket sock, std::shared_ptr<ContentFilter> content_filter)
     : m_room(room)
     , m_id(MakeSleeperId())
     , m_sock(std::move(sock))
     , m_ip(m_sock.remote_endpoint().address().to_v4())
     , m_timer(m_sock.get_executor())
+    , m_content_filter(std::move(content_filter))
 {
     m_timer.expires_at(std::chrono::steady_clock::time_point::max());
     LOG_INFO("new sleeper, sleeper_id:%lld, remote_ip:%s", m_id, GetIp().c_str());
@@ -135,6 +136,11 @@ asio::awaitable<void> Sleeper::Reader()
                     },
                     [this](CmdChat cmd) { 
                         LOG_INFO("sleeper:%lld say:%s", m_id, cmd.msg.c_str());
+                        bool modified = m_content_filter->FilterContent(cmd.msg, '*'); // currently use '*'
+                        if (modified)
+                        {
+                            LOG_INFO("sleeper:%lld after modified say:%s", m_id, cmd.msg.c_str());
+                        }
                     },
                     [this](CmdPos cmd) { m_pos = cmd.pos; },
                     [this](CmdMove cmd) { m_pos = cmd.pos; },
