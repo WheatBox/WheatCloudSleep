@@ -236,3 +236,13 @@ function GuiElement_CreateBedSleepSetter(_materialMasterArr, _materialId, _sprit
 	return ins;
 }
 
+function GuiElement_CreateMessage(_text) {
+	var ins = noone;
+	if(!InstanceExists(obj_GuiElement_Message)) {
+		ins = instance_create_depth(0, 0, GUIMessageDepth, obj_GuiElement_Message);
+	} else {
+		ins = obj_GuiElement_Message;
+	}
+
+	ins.MyAdd(_text);
+}
