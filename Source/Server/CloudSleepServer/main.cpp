@@ -7,18 +7,29 @@
 #include "traffic_recorder.h"
 #include "config.h"
 #include "file_update_monitor.h"
+#include "content_filter.h"
 #include <iostream>
 #include <filesystem>
-
+#include <string>
+#include <vector>
 
 asio::awaitable<void> Listener(asio::ip::tcp::acceptor acceptor)
 {
+    std::vector<std::string> word_list;
+    word_list.push_back("习近平");
+    word_list.push_back("江泽民");
+    word_list.push_back("傻逼");
+    word_list.push_back("操你妈");
+    word_list.push_back("死");
+    word_list.push_back("杀");
+    std::shared_ptr<wheat::ContentFilter> content_filter = std::make_shared<wheat::ContentFilter>(word_list);
     wheat::Room room(acceptor.get_executor());
     for (;;)
     {
         std::make_shared<wheat::Sleeper>(
             room,
-            co_await acceptor.async_accept(asio::use_awaitable)
+            co_await acceptor.async_accept(asio::use_awaitable),
+            content_filter
             )->Start();
     }
 }

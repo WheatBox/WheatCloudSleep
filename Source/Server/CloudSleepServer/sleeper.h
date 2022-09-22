@@ -5,6 +5,7 @@
 #include <string>
 #include <atomic>
 #include "wheat_command.h"
+#include "content_filter.h"
 
 namespace wheat
 {
@@ -21,7 +22,7 @@ class Sleeper
 {
     using socket = asio::ip::tcp::socket;
 public:
-    Sleeper(Room& room, socket sock);
+    Sleeper(Room& room, socket sock, std::shared_ptr<ContentFilter> content_filter);
 
     void Start();
 
@@ -57,6 +58,8 @@ private:
 
     asio::steady_timer m_timer;   //此定时器用于发送消息队列的同步，asio常用做法 
     std::deque<std::string> m_write_msgs;
+
+    std::shared_ptr<ContentFilter> m_content_filter;
 };
 
 

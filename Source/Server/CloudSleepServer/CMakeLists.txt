@@ -55,6 +55,11 @@ target_compile_features (${EXE_NAME}
 if (MSVC) # static link MultiThreaded lib
     set_property(TARGET ${EXE_NAME} PROPERTY
         MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+    # set UTF-8 compile for msvc
+    target_compile_options(
+        ${EXE_NAME}
+        PUBLIC "/utf-8"
+    )
 endif()
 
 if (UNIX) # Building on unix-like system, link pthread for asio.
