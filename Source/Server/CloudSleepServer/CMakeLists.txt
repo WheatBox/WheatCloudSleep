@@ -62,7 +62,7 @@ if (UNIX) # Building on unix-like system, link pthread for asio.
         pthread
     )
     target_compile_options(${EXE_NAME}
-        #PUBLIC "-fcoroutines"
+        PUBLIC "-fcoroutines"
         PUBLIC "-Wall"
         PUBLIC "-Wextra"
         PUBLIC "-Werror"
