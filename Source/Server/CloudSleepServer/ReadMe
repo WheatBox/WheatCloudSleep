@@ -1,0 +1,23 @@
+1、	首先，请确定你的编译器版本在10及以上，并已安装Cmake：
+[root@VM-24-4-centos ~]# gcc -v
+[root@VM-24-4-centos ~]# g++ -v
+[root@VM-24-4-centos ~]# cmake -version
+如果gcc不是10及以上，请参考：
+https://blog.csdn.net/whatday/article/details/122081503
+
+下载release中的source code，并解压
+
+下载asio独立版本：https://think-async.com/Asio/AsioStandalone.html
+解压后将asio文件夹放置到third目录下的asio下
+
+
+2、	准备就绪，进入到服务端目录下
+[root@VM-24-4-centos ~]# cd YourPath/WheatCloudSleep_correcting/Source/Server/CloudSleepServer
+创建并进入build文件夹
+[root@VM-24-4-centos ~]#mkdir build
+[root@VM-24-4-centos ~]#cd build 
+3、	开始编译：
+[root@VM-24-4-centos ~]#cmake ..
+[root@VM-24-4-centos ~]#make
+4、	如果顺利，可执行文件将会出现在build目录内
+

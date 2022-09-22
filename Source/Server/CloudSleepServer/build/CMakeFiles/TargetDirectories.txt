@@ -1,0 +1,7 @@
+/root/wheat/Wheat_920/WheatCloudSleep_correcting/Source/Server/CloudSleepServer/build/CMakeFiles/CloudSleepServer.dir
+/root/wheat/Wheat_920/WheatCloudSleep_correcting/Source/Server/CloudSleepServer/build/CMakeFiles/edit_cache.dir
+/root/wheat/Wheat_920/WheatCloudSleep_correcting/Source/Server/CloudSleepServer/build/CMakeFiles/rebuild_cache.dir
+/root/wheat/Wheat_920/WheatCloudSleep_correcting/Source/Server/CloudSleepServer/build/CMakeFiles/list_install_components.dir
+/root/wheat/Wheat_920/WheatCloudSleep_correcting/Source/Server/CloudSleepServer/build/CMakeFiles/install.dir
+/root/wheat/Wheat_920/WheatCloudSleep_correcting/Source/Server/CloudSleepServer/build/CMakeFiles/install/local.dir
+/root/wheat/Wheat_920/WheatCloudSleep_correcting/Source/Server/CloudSleepServer/build/CMakeFiles/install/strip.dir
