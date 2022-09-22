@@ -141,3 +141,66 @@ function CutStringToArray(str, delimiter) {
 	return _arrRes;
 }
 
+
+
+function ClearSpritesArray(array) {
+	if(is_array(array)) {
+		var arrSiz = array_length(array);
+		for(var i = 0; i < arrSiz; i++) {
+			if(sprite_exists(array[i])) {
+				sprite_delete(array[i]);
+			}
+		}
+		array_delete(array, 0, arrSiz);
+	}
+}
+
+function ArrayClear(array) {
+	if(is_array(array)) {
+		array_delete(array, 0, array_length(array));
+	}
+}
+
+function GameRestart() {
+	gSleepersStruct = DefaultStructSleepers;
+	gBackgroundsStruct = DefaultStructBackgrounds;
+	gDecoratesStruct = DefaultStructDecorates;
+	gBedsStruct = DefaultStructBeds;
+	
+	gSceneStruct = DefaultSceneStruct;
+	
+	ClearSpritesArray(gSleepersSpritesStruct.sprites);
+	ClearSpritesArray(gBackgroundsSpritesStruct.sprites);
+	ClearSpritesArray(gDecoratesSpritesStruct.sprites);
+	ClearSpritesArray(gBedsSpritesStruct.sprites);
+	
+	gSleepersSpritesStruct = DefaultSpritesStruct;
+	gBackgroundsSpritesStruct = DefaultSpritesStruct;
+	gDecoratesSpritesStruct = DefaultSpritesStruct;
+	gBedsSpritesStruct = DefaultSpritesStruct;
+	
+	for(var i = 0; i < array_length(gArrBedSleepSprites); i++) {
+		ClearSpritesArray(gArrBedSleepSprites[i]);
+	}
+	ArrayClear(gArrBedSleepSprites);
+	
+	WORKFILEPATH = working_directory;
+	PackName = "";
+	
+	PackGuid = "";
+	PackIpPort = "";
+	PackMainClient = "";
+	PackMainClientHowToGet = "";
+	ArrayClear(PackArrCompatibleClients);
+	
+	ArrayClear(gArrSleepersInitPosx);
+	ArrayClear(gArrSleepersInitPosy);
+	
+	if(socket != undefined) {
+		network_destroy(socket);
+		socket = undefined;
+	}
+	
+	game_restart();
+}
+

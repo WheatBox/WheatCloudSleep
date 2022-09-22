@@ -55,6 +55,19 @@ function SSingleStruct_Bed(_fname = "") constructor {
 
 #macro DefaultSpritesStruct { sprites : [] }
 
+#macro DefaultSceneStruct {\
+	left : 0,\
+	top : 0,\
+	right : 100,\
+	bottom : 80,\
+	\
+	\// 这几个数组内存储的都会是 new SSceneElement()
+	sleepers : [],\
+	backgrounds : [],\
+	decorates : [],\
+	beds : []\
+}
+
 globalvar gSleepersStruct, gBackgroundsStruct, gDecoratesStruct, gBedsStruct;
 gSleepersStruct = DefaultStructSleepers;
 gBackgroundsStruct = DefaultStructBackgrounds;
@@ -79,18 +92,7 @@ function SSceneElement(_materialId, _xPos, _yPos) constructor {
 }
 
 globalvar gSceneStruct;
-gSceneStruct = {
-	left : 0,
-	top : 0,
-	right : 100,
-	bottom : 80,
-	
-	// 这几个数组内存储的都会是 new SSceneElement()
-	sleepers : [],
-	backgrounds : [],
-	decorates : [],
-	beds : []
-}
+gSceneStruct = DefaultSceneStruct;
 
 /// @desc 由文件目录获取文件名称
 ///			第二个参数是是否要返回后缀

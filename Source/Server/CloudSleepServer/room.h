@@ -34,7 +34,7 @@ public:
 
     void Refuse(SleeperId id);
 
-    void Deliver(SleeperId src_id, std::string_view msg);
+    void Deliver(std::string_view msg);
 
 private:
     void DeliverToAll(const std::string& msg);

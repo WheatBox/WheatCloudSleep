@@ -17,6 +17,7 @@
     {"id":{"name":"obj_kickShowVotes","path":"objects/obj_kickShowVotes/obj_kickShowVotes.yy",},"order":1,},
     {"id":{"name":"rm_bedroom","path":"rooms/rm_bedroom/rm_bedroom.yy",},"order":1,},
     {"id":{"name":"VoteToKick","path":"scripts/VoteToKick/VoteToKick.yy",},"order":11,},
+    {"id":{"name":"obj_GuiElement_Message","path":"objects/obj_GuiElement_Message/obj_GuiElement_Message.yy",},"order":2,},
     {"id":{"name":"obj_GuiElement_Button","path":"objects/obj_GuiElement_Button/obj_GuiElement_Button.yy",},"order":0,},
     {"id":{"name":"obj_bed","path":"objects/obj_bed/obj_bed.yy",},"order":0,},
     {"id":{"name":"STLvector","path":"scripts/STLvector/STLvector.yy",},"order":9,},

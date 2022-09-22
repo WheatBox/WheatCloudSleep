@@ -25,6 +25,8 @@ for(var i = 0; i < _arrSiz; i++) {
 	beds[i] = CreateBed(gSceneStruct.beds[i].xPos + gridOffsetXAdd, gSceneStruct.beds[i].yPos + gridOffsetYAdd, i, gSceneStruct.beds[i].materialId);
 }
 
+alarm_set(1, 2);
+
 // mp_grid_add_instances(grid, obj_bed, false);
 
 sleepers = [];
@@ -131,21 +133,27 @@ myTextBox = noone;
 
 textboxPlaceHolders = [""];
 
-if(file_exists(WORKFILEPATH + FILEJSON_TextboxPlaceHolders)) {
-	var _jsonTemp = "";
-	
-	var file = file_text_open_read(WORKFILEPATH + FILEJSON_TextboxPlaceHolders);
-	while(!file_text_eoln(file)) {
-		var _lineTemp = file_text_readln(file);
+try {
+	if(file_exists(WORKFILEPATH + FILEJSON_TextboxPlaceHolders)) {
+		var _jsonTemp = "";
 		
-		_lineTemp = string_replace_all(_lineTemp, "$NAME", string(myName));
+		var file = file_text_open_read(WORKFILEPATH + FILEJSON_TextboxPlaceHolders);
+		while(!file_text_eoln(file)) {
+			var _lineTemp = file_text_readln(file);
+			
+			_lineTemp = string_replace_all(_lineTemp, "$NAME", string(myName));
+			
+			_jsonTemp += _lineTemp;
+		}
+		file_text_close(file);
 		
-		_jsonTemp += _lineTemp;
+		if(_jsonTemp != "") {
+			textboxPlaceHolders = json_parse(_jsonTemp);
+		}
 	}
-	file_text_close(file);
+} catch(error) {
+	DebugMes([error.script, error.message]);
 	
-	if(_jsonTemp != "") {
-		textboxPlaceHolders = json_parse(_jsonTemp);
-	}
+	textboxPlaceHolders = ["无法正确读取聊天框背景占位文字"];
 }
 

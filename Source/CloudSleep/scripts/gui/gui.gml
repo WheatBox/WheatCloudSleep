@@ -1,6 +1,7 @@
 #macro GUIDepth -10000
 #macro GUIPageDepth -9900
 #macro GUIDragObjDepth -10100
+#macro GUIMessageDepth -10200
 
 #macro GUIDefaultColor #000037
 #macro GUIDangerousColor c_red

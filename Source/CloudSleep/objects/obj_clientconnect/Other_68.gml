@@ -9,7 +9,7 @@ if(asyncType == network_type_non_blocking_connect) {
 		instance_destroy(id);
 	} else {
 		show_message("连接服务器 " + serverIP + ":" + string(serverPort) + " 失败！！！");
-		game_restart();
+		GameRestart();
 	}
 }
 

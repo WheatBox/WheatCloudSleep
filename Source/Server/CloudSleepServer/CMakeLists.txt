@@ -23,7 +23,7 @@ set (EXE_NAME "CloudSleepServer")
 project (${PROJECT_NAME})
 
 set (ASIO_DIR "third/asio/asio/include")
-set (JSON_DIR "third/nlohmann/include")
+set (JSON_DIR "third/json/include")
 set (INSTALL_DIR "install")
 
 # Override default install dir
@@ -40,6 +40,7 @@ file (GLOB CPP_FILES *.cpp)
 add_executable (${EXE_NAME}
     ${CPP_FILES}
     ${HEADER_FILES}
+	"cJSON.c"
 )
 
 target_include_directories (${EXE_NAME}
