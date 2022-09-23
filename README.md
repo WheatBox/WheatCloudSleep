@@ -2,7 +2,7 @@
 
 # 最新的开发进度请切换到 cmake-asio-server 分支查看！master分支仅作为阶段性的代码暂存
 
-## 停服了，今天进橘子喝茶了，得整改
+## 停服了，正在整改
 
 ## 十分感谢 B1aNB1aN 和 ymx-mshk 的帮助！！Very Thanks for B1aNB1aN And ymx-mshk!!
 
