@@ -51,7 +51,7 @@ function CreateSleeper(_x, _y) {
 
 /// @desc 从本地读取用户名
 function ReadMyName() {
-	ini_open("settings.ini");
+	ini_open(FILEINI_Settings);
 	
 	myName = ini_read_string("user", "name", "");
 	
@@ -60,7 +60,7 @@ function ReadMyName() {
 
 /// @desc 从本地写入用户名
 function WriteMyName() {
-	ini_open("settings.ini");
+	ini_open(FILEINI_Settings);
 	
 	ini_write_string("user", "name", myName);
 	

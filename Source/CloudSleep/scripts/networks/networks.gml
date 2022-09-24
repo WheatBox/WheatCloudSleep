@@ -66,7 +66,8 @@ function SendMessage(str) {
 }
 
 function SendName(name = myName) {
-	sendMessageQueue.push_back(CommandMakeMessage(CommandType.name, [name]));
+	// sendMessageQueue.push_back(StringConverter_UTF8ToMultiByte(CommandMakeMessage(CommandType.name, [name])));
+	sendMessageQueue.push_back((CommandMakeMessage(CommandType.name, [name])));
 }
 
 function SendType(type = myType) {
@@ -83,7 +84,8 @@ function SendGetup() {
 
 function SendChat(_chatStr) {
 	if(!ChatCommand(_chatStr)) {
-		sendMessageQueue.push_back(CommandMakeMessage(CommandType.chat, [_chatStr]));
+		// sendMessageQueue.push_back(StringConverter_UTF8ToMultiByte(CommandMakeMessage(CommandType.chat, [_chatStr])));
+		sendMessageQueue.push_back((CommandMakeMessage(CommandType.chat, [_chatStr])));
 	}
 }
 

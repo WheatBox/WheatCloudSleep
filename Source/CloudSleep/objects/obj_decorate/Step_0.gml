@@ -9,7 +9,6 @@ if(inited == false) {
 
 if(overlappingSleeper) {
 	overlappingSleeper = false;
-	
 	image_alpha = lerp(image_alpha, 0.2, 0.1);
 } else {
 	image_alpha = lerp(image_alpha, 1.0, 0.1);

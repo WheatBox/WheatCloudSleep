@@ -6,6 +6,9 @@ if(map[? "type"] == network_type_data) {
 	
 	while(buffer_tell(_buffer) < buffer_get_size(_buffer)) {
 		var buf = buffer_read(_buffer, buffer_string);
+		if(buf == "") {
+			continue;
+		}
 		DebugMes("buf:" + string(buf));
 		
 		try {
@@ -40,7 +43,8 @@ if(map[? "type"] == network_type_data) {
 				case CommandType.name:
 					if(!MyCanUseSleeperId(mesSleeperId)) break;
 					
-					sleepers[mesSleeperId].name = _Args[0];
+					// sleepers[mesSleeperId].name = StringConverter_MultiByteToUTF8(_Args[0]);
+					sleepers[mesSleeperId].name = (_Args[0]);
 					break;
 				case CommandType.type:
 					if(!MyCanUseSleeperId(mesSleeperId)) break;
@@ -70,9 +74,12 @@ if(map[? "type"] == network_type_data) {
 				case CommandType.chat:
 					if(!MyCanUseSleeperId(mesSleeperId)) break;
 					
-					sleepers[mesSleeperId].MyChat(_Args[0]);
+					// var _chatMes = StringConverter_MultiByteToUTF8(_Args[0]);
+					var _chatMes = (_Args[0]);
 					
-					MyChatHistoryAdd(mesSleeperId, _Args[0]);
+					sleepers[mesSleeperId].MyChat(_chatMes);
+					
+					MyChatHistoryAdd(mesSleeperId, _chatMes);
 					break;
 					
 				case CommandType.move: // 进行到此
