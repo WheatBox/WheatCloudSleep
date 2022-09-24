@@ -1,12 +1,14 @@
 #include "sleeper.h"
-#include "room.h"
-#include "wheat_command.h"
+
 #include <atomic>
-#include "logger.h"
-#include "violation_detector.h"
-#include "traffic_recorder.h"
+
 #include "black_list.h"
+#include "logger.h"
 #include "permission_mgr.h"
+#include "room.h"
+#include "traffic_recorder.h"
+#include "violation_detector.h"
+#include "wheat_command.h"
 
 namespace wheat
 {
@@ -94,6 +96,14 @@ std::string Sleeper::MakeSelfInfo() const
     return info;
 }
 
+void Sleeper::EliminateBadWord(std::string& msg) const noexcept
+{
+    while (m_content_filter->FilterContent(msg, '*'))
+    {
+        0;
+    }
+}
+
 asio::awaitable<void> Sleeper::Reader()
 {
     try
@@ -115,6 +125,7 @@ asio::awaitable<void> Sleeper::Reader()
                 bool forward = true;
 
                 WheatCommand msgCommand = ParseCommand(msg);
+                WheatCommand replayMsgCommand;
 
                 std::visit(
                 overloaded{
@@ -125,9 +136,17 @@ asio::awaitable<void> Sleeper::Reader()
                             forward = false;
                     },
                     [this](CmdGetup) { m_room.GetUp(m_id); },
-                    [this](CmdName cmd) { 
-                        m_name = std::move(cmd.name); 
-                        LOG_INFO("sleeper:%lld's name is:%s", m_id, m_name.c_str());
+                    [this, &forward, &replayMsgCommand](CmdName cmd) { 
+                        if (m_content_filter->CheckContent(cmd.name))
+                        {
+                            m_name = std::move(cmd.name); 
+                            LOG_INFO("sleeper:%lld's name is:%s", m_id, m_name.c_str());
+                        }
+                        else
+                        {
+                            forward = false;
+                            replayMsgCommand = CmdError{ WheatErrorCode::InvalidName };
+                        }
                     },
                     [this](CmdType cmd) { 
                         // m_sex = std::move(cmd.sex); 
@@ -160,8 +179,15 @@ asio::awaitable<void> Sleeper::Reader()
                 }, 
                 msgCommand);
 
+                if (!std::holds_alternative<std::monostate>(replayMsgCommand))
+                {
+                    Deliver(PackCommandWithId(m_id, replayMsgCommand));
+                }
+
                 if (forward)
+                {
                     m_room.Deliver(PackCommandWithId(m_id, msgCommand));
+                }
             }
             catch (const std::exception& e)
             {

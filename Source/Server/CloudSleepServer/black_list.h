@@ -1,8 +1,9 @@
 #pragma once
 
+#include <chrono>
 #include <map>
 #include <string>
-#include <chrono>
+
 #include <asio.hpp>
 
 namespace wheat

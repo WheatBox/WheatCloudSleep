@@ -1,17 +1,19 @@
-#include "asio.hpp"
-#include "sleeper.h"
-#include "room.h"
-#include "logger.h"
-#include "black_list.h"
-#include "violation_detector.h"
-#include "traffic_recorder.h"
-#include "config.h"
-#include "file_update_monitor.h"
-#include "content_filter.h"
-#include <iostream>
 #include <filesystem>
+#include <iostream>
 #include <string>
 #include <vector>
+
+#include <asio.hpp>
+
+#include "black_list.h"
+#include "config.h"
+#include "content_filter.h"
+#include "file_update_monitor.h"
+#include "logger.h"
+#include "room.h"
+#include "sleeper.h"
+#include "traffic_recorder.h"
+#include "violation_detector.h"
 
 asio::awaitable<void> Listener(asio::ip::tcp::acceptor acceptor)
 {

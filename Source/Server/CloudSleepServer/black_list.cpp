@@ -1,6 +1,7 @@
 #include "black_list.h"
-#include "logger.h"
+
 #include "config.h"
+#include "logger.h"
 
 namespace wheat
 {

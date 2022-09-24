@@ -1,14 +1,17 @@
 #include "config.h"
-#include "nlohmann/json.hpp"
+
+#include <algorithm>
 #include <fstream>
 #include <map>
-#include "logger.h"
 #include <string_view>
-#include <algorithm>
-#include "violation_detector.h"
+
 #include <asio/dispatch.hpp>
-#include "traffic_recorder.h"
+#include <nlohmann/json.hpp>
+
+#include "logger.h"
 #include "permission_mgr.h"
+#include "traffic_recorder.h"
+#include "violation_detector.h"
 
 using nlohmann::json;
 using namespace std::literals::string_view_literals;
