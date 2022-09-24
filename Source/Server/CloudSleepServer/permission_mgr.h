@@ -1,10 +1,11 @@
 #pragma once
 
-#include <string_view>
-#include <string>
-#include <set>
 #include <filesystem>
+#include <set>
+#include <string>
+#include <string_view>
 #include <mutex>
+
 #include "file_update_monitor.h"
 
 namespace wheat

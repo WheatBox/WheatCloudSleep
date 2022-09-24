@@ -1,7 +1,9 @@
 #include "violation_detector.h"
-#include "wheat_common.h"
+
 #include <charconv>
 #include <cstdlib>
+
+#include "wheat_common.h"
 
 namespace wheat
 {

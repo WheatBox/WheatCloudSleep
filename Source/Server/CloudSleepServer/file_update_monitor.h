@@ -1,10 +1,10 @@
 #pragma once
 
-#include <set>
 #include <map>
+#include <set>
+#include <shared_mutex>
 #include <string>
 #include <thread>
-#include <shared_mutex>
 
 #ifdef _WIN32
 #include "windows.h"

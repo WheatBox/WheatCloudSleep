@@ -1,9 +1,11 @@
 #include "room.h"
-#include "wheat_command.h"
+
 #include <algorithm>
-#include "logger.h"
+
 #include "black_list.h"
 #include "config.h"
+#include "logger.h"
+#include "wheat_command.h"
 
 namespace wheat
 {

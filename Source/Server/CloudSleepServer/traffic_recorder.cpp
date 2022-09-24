@@ -1,11 +1,13 @@
 #include "traffic_recorder.h"
+
+#include <cmath>
+
 #include <asio/co_spawn.hpp>
 #include <asio/detached.hpp>
 #include <asio/redirect_error.hpp>
-#include "violation_detector.h"
-#include "logger.h"
 
-#include <cmath>
+#include "logger.h"
+#include "violation_detector.h"
 
 namespace wheat
 {

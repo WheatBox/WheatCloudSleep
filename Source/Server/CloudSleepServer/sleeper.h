@@ -1,11 +1,14 @@
 #pragma once
-#include <asio.hpp>
-#include <memory>
-#include <deque>
-#include <string>
+
 #include <atomic>
-#include "wheat_command.h"
+#include <deque>
+#include <memory>
+#include <string>
+
+#include <asio.hpp>
+
 #include "content_filter.h"
+#include "wheat_command.h"
 
 namespace wheat
 {
@@ -40,6 +43,8 @@ public:
     inline void ClearBedId() { m_bed_id = -1; }
 
 private:
+    void EliminateBadWord(std::string& msg) const noexcept;
+
     asio::awaitable<void> Reader();
 
     asio::awaitable<void> Writer();
