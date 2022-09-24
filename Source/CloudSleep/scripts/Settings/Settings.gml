@@ -27,3 +27,21 @@
 // GUI滚动速度
 #macro GUIScrollYSpeed 50
 
+
+
+// 非程序可执行目录的保存位置
+// 请尽量不要更改这一小段，除非你希望用户在从别的客户端切换到你开发的客户端的时候需要把配置项再都部署一遍
+if(file_exists("settings.ini") == false) {
+	file_text_close(file_text_open_write("settings.ini"));
+}
+globalvar __SavePath;
+__SavePath = filename_dir("settings.ini") + "\\";
+#macro SavePath __SavePath
+
+// 外部配置项文件
+#macro FILEINI_Settings (SavePath + "settings.ini")
+/*
+[user]
+name = myName
+*/
+

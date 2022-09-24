@@ -104,7 +104,7 @@ MyChatHistorySurfRefresh = function() {
 	
 	surface_set_target(surfChatHistory);
 	
-	draw_clear_alpha(c_black, 0.0);
+	SurfaceClear();
 	
 	draw_set_color(c_white);
 	draw_set_alpha(1);
@@ -128,6 +128,31 @@ MyChatHistorySurfRefresh = function() {
 		}
 	}
 }
+
+
+
+buttonOpenOurPhoneX = 0;
+buttonOpenOurPhoneY = 0;
+buttonOpenOurPhone = GuiElement_CreateButton(buttonOpenOurPhoneX, buttonOpenOurPhoneY, "ourPhone"
+	, function() {
+		if(InstanceExists(obj_ourPhone)) {
+			if(obj_ourPhone.working) {
+				obj_ourPhone.MyStopWork();
+			} else {
+				obj_ourPhone.MyWork();
+			}
+		}
+	}
+);
+
+MySynchMyGuiElementsPosition = function() {
+	buttonOpenOurPhoneX = GuiWidth() - 64;
+	buttonOpenOurPhoneY = GuiHeight() - 32;
+	buttonOpenOurPhone.x = buttonOpenOurPhoneX;
+	buttonOpenOurPhone.y = buttonOpenOurPhoneY;
+}
+MySynchMyGuiElementsPosition();
+
 
 myTextBox = noone;
 

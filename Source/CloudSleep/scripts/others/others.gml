@@ -204,3 +204,38 @@ function GameRestart() {
 	game_restart();
 }
 
+
+function GetCurrentTimeString(_withSecond) {
+	var res = "";
+	
+	var _hour = string(current_hour);
+	
+	var _minute = string(current_minute);
+	if(current_minute < 10) {
+		_minute = "0" + _minute;
+	}
+	
+	res = _hour + ":" + _minute;
+	
+	if(_withSecond) {
+		var _second = string(current_second);
+		if(current_second < 10) {
+			_second = "0" + _second;
+		}
+		res += ":" + _second;
+	}
+	
+	return res;
+}
+
+
+function SurfaceClear() {
+	draw_clear_alpha(c_black, 0.0);
+}
+
+function SurfaceClear_surf(surf) {
+	surface_set_target(surf);
+	draw_clear_alpha(c_black, 0.0);
+	surface_reset_target();
+}
+

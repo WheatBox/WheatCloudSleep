@@ -6,6 +6,9 @@ if(map[? "type"] == network_type_data) {
 	
 	while(buffer_tell(_buffer) < buffer_get_size(_buffer)) {
 		var buf = buffer_read(_buffer, buffer_string);
+		if(buf == "") {
+			continue;
+		}
 		DebugMes("buf:" + string(buf));
 		
 		try {

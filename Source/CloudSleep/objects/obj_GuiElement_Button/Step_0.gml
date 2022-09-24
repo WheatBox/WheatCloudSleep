@@ -7,7 +7,7 @@ mouseOnMe = (width == undefined)
 
 
 if(mouseOnMe == true){
-	window_set_cursor(cr_handpoint);
+	GUI_SetCursorHandpoint();
 	
 	gMouseOnGUI = true;
 	

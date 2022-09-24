@@ -13,6 +13,7 @@ switch(type) {
 var sprite = gSleepersSpritesStruct.sprites[type];
 
 draw_set_alpha(1);
+draw_set_color(c_white);
 
 if(isMe && MyPathIsRunning()) {
 	draw_path(myPath, 0, 0, true);

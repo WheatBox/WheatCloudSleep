@@ -85,3 +85,6 @@ if(myTextBox != noone) {
 	}
 }
 
+
+MySynchMyGuiElementsPosition();
+
