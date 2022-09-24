@@ -26,8 +26,8 @@ namespace wheat
 
         cJSON* temp1 = (cJSON_GetObjectItem(pcjson_parsed, "Cmd"));
         cJSON* temp2 = (cJSON_GetObjectItem(pcjson_parsed, "Args"));
-        if (temp1 == NULL || temp2 == NULL
-            || temp1->type == NULL || temp2->type == NULL) {
+        if (temp1 == nullptr || temp2 == nullptr
+            || temp1->type == 0 || temp2->type == 0) {
             LOG_WARN("json get object fail");
             throw std::runtime_error("invalid msg:" + std::string(msg));
             cJSON_Delete(pcjson_parsed);
