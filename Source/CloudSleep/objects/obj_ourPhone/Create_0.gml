@@ -71,8 +71,8 @@ myOurAppSurf = -1;
 myOurAppSurfStatic = -1;
 
 myOurAppSurfAlpha = 1.0;
-myOurAppSurfX = x;
-myOurAppSurfY = y;
+myOurAppSurfX = 0;
+myOurAppSurfY = 0;
 myOurAppSurfXscale = 1.0;
 myOurAppSurfYscale = 1.0;
 

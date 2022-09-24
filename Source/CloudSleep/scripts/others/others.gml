@@ -41,7 +41,7 @@ function IsNight() {
 	// show_debug_message([current_hour, current_minute]);
 	
 	if((current_hour > nightBeginHour || (current_hour == nightBeginHour && current_minute >= nightBeginMinute)) || current_hour <= nightEndHour) {
-		return true;
+		//return true;
 	}
 	
 	return false;

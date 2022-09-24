@@ -78,8 +78,8 @@ function GUI_MouseGuiOnMe_Radius(_x, _y, _radius) {
 
 function GUI_DrawText(_xGui, _yGui, str, onCenter = false) {
 	if(onCenter) {
-		var ha = fa_center;
-		var va = fa_middle;
+		var ha = draw_get_halign();
+		var va = draw_get_valign();
 		
 		draw_set_halign(fa_center);
 		draw_set_valign(fa_middle);
@@ -94,8 +94,8 @@ function GUI_DrawText(_xGui, _yGui, str, onCenter = false) {
 
 function GUI_DrawTextTransformed(_xGui, _yGui, str, xscale, yscale, angle, onCenter = false) {
 	if(onCenter) {
-		var ha = fa_center;
-		var va = fa_middle;
+		var ha = draw_get_halign();
+		var va = draw_get_valign();
 		
 		draw_set_halign(fa_center);
 		draw_set_valign(fa_middle);
