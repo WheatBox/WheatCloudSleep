@@ -6,7 +6,11 @@
 #macro OurAppIconBboxWidth 50 // OurApp 的碰撞体积
 #macro OurAppIconBboxHeight 50
 
-#macro FILEPATH_ourPhoneWallpapers SavePath + "ourPhoneWallpapers\\"
+#macro FILEPATH_ourPhoneWallpapers (SavePath + "ourPhoneWallpapers\\")
+
+globalvar FILEPATH_ourPhoneMusics;
+FILEPATH_ourPhoneMusics = "";
+#macro MciOpenAudio_Aliasname_OurPhoneMusic "music"
 
 
 #macro OurAppStepEventHead {\
@@ -74,11 +78,63 @@ function OurPhone_LoadWallpaperDefault() {
 	}
 }
 
+
 function OurPhone_CreateOurApp(_ourAppObj, _iconSpr) {
 	return {
 		// 该ins的(x, y)坐标会由创建该ourApp的obj_ourPhone来控制
 		ins : instance_create_depth(0, 0, OurAppDepth, _ourAppObj),
 		iconSpr : _iconSpr
 	};
+}
+
+
+function OurPhone_WriteMusicDirectory(_newDir) {
+	if(_newDir == "") {
+		return false;
+	}
+	
+	try {
+		ini_open(FILEINI_Settings);
+		
+		if(!directory_exists(_newDir)) {
+			systemCmd("md " + _newDir);
+		}
+		if(directory_exists(_newDir)) {
+			ini_write_string("ourPhone", "musicDir", _newDir);
+			
+			ini_close();
+			
+			return true;
+		}
+		
+		ini_close();
+	} catch(error) {
+		DebugMes([error.script, error.message]);
+		
+		return false;
+	}
+	
+	return false;
+}
+
+function OurPhone_ReadMusicDirectory() {
+	try {
+		ini_open(FILEINI_Settings);
+		
+		var _newDir = ini_read_string("ourPhone", "musicDir", "D:\\Music\\");
+		if(!directory_exists(_newDir)) {
+			systemCmd("md " + _newDir);
+		}
+		if(directory_exists(_newDir)) {
+			if(string_char_at(_newDir, string_length(_newDir)) != "\\") {
+				 _newDir += "\\";
+			}
+			FILEPATH_ourPhoneMusics = _newDir;
+		}
+		
+		ini_close();
+	} catch(error) {
+		DebugMes([error.script, error.message]);
+	}
 }
 

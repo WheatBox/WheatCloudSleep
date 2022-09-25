@@ -43,5 +43,11 @@ __SavePath = filename_dir("settings.ini") + "\\";
 /*
 [user]
 name = myName
+[ourPhone]
+wallpaperFilename = "xxxxx.png"
+musicDir = "X:\xxxx\"
 */
 
+
+
+#macro DEBUGMODE true

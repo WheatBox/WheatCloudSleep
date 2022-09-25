@@ -182,3 +182,11 @@ try {
 	textboxPlaceHolders = ["无法正确读取聊天框背景占位文字"];
 }
 
+
+
+
+if(DEBUGMODE) {
+	show_debug_overlay(true);
+	
+	debugStrBufs = "";
+}

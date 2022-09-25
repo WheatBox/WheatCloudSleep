@@ -40,22 +40,13 @@ if(myTextBox != noone) {
 		var surfX = 0;
 		var surfY = _offy - _strHeight;
 		
-		draw_surface_part(surfChatHistory, surfPartLeft, surfPartTop + chatHistoryScrollY, surface_get_width(surfChatHistory) /* surfPartRight - surfPartLeft */, surfPartBottom - surfPartTop, surfX, surfY);
+		draw_surface_part(surfChatHistory, surfPartLeft, surfPartTop - chatHistoryScrollY, surface_get_width(surfChatHistory) /* surfPartRight - surfPartLeft */, surfPartBottom - surfPartTop, surfX, surfY);
 		draw_text(0, _offy - string_height(strChatHistory) - _strHeight, strChatHistory);
 		
 		if(GUI_MouseGuiOnMe(surfX + surfPartLeft, surfY, surfX + surfPartRight, surfY + _strHeight)) {
 			gMouseOnGUI = true;
-			if(mouse_wheel_up()) {
-				chatHistoryScrollY -= chatHistoryScrollYSpeed;
-				if(surfPartTop + chatHistoryScrollY < 0) {
-					chatHistoryScrollY -= surfPartTop + chatHistoryScrollY;
-				}
-			} else if(mouse_wheel_down()) {
-				chatHistoryScrollY += chatHistoryScrollYSpeed;
-				if(surfPartBottom + chatHistoryScrollY > vecChatHistory.size() * _strSingleLineHeight) {
-					chatHistoryScrollY -= surfPartBottom + chatHistoryScrollY - vecChatHistory.size() * _strSingleLineHeight;
-				}
-			}
+			
+			chatHistoryScrollY = ScrollYCalculate(chatHistoryScrollY, chatHistoryScrollYSpeed, surfPartTop, surfPartBottom, surfPartBottom)
 		}
 		
 	} else {

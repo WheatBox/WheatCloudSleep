@@ -10,6 +10,9 @@ if(map[? "type"] == network_type_data) {
 			continue;
 		}
 		DebugMes("buf:" + string(buf));
+		if(DEBUGMODE) {
+			debugStrBufs += string(buf) + "\n";
+		}
 		
 		try {
 			var bufjson = json_parse(buf);

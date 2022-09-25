@@ -1,5 +1,7 @@
 event_inherited();
 
+mouseOnMe = false;
+
 scrollY = 0;
 scrollYSpeed = 50;
 
@@ -12,6 +14,7 @@ arrWallpaperFilenameDefault = [
 ];
 
 arrWallpaperFilename = [];
+wallpaperFilenameLineHeight = 28;
 
 MyRefresh = function() {
 	array_delete(arrWallpaperFilename, 0, array_length(arrWallpaperFilename));

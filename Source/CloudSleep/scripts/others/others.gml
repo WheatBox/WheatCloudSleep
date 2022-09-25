@@ -201,6 +201,8 @@ function GameRestart() {
 		socket = undefined;
 	}
 	
+	ArrayClear(sendMessageQueue.Container);
+	
 	game_restart();
 }
 
@@ -237,5 +239,32 @@ function SurfaceClear_surf(surf) {
 	surface_set_target(surf);
 	draw_clear_alpha(c_black, 0.0);
 	surface_reset_target();
+}
+
+
+/// @desc 计算 scrollY
+function ScrollYCalculate(scrollY, scrollYSpeed, _guiTop, _guiBottom, _pageHeight) {
+	var top = _guiTop;
+	var bottom = _guiBottom;
+	
+	scrollY = -scrollY;
+	
+	if(mouse_wheel_up()) {
+		scrollY -= scrollYSpeed;
+		if(top + scrollY < 0) {
+			scrollY -= top + scrollY;
+		}
+	} else if(mouse_wheel_down()) {
+		if(_pageHeight >= bottom) {
+			scrollY += scrollYSpeed;
+			if(bottom + scrollY > _pageHeight) {
+				scrollY -= bottom + scrollY - _pageHeight;
+			}
+		}
+	}
+	
+	scrollY = -scrollY;
+	
+	return scrollY;
 }
 

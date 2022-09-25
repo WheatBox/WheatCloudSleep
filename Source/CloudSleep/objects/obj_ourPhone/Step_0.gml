@@ -7,7 +7,7 @@ if(working) {
 x = GuiWidth() + xAdd;
 y = GuiHeight() + yAdd;
 
-if(GUI_MouseGuiOnMe(bbox_left, bbox_top, bbox_right, bbox_bottom)) {
+if(GUI_MouseGuiOnMe(x, y, x + screenWidth, y + screenHeight)) {
 	gMouseOnGUI = true;
 	
 	mouseOnMe = true;

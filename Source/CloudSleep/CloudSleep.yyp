@@ -4,6 +4,7 @@
   "name": "CloudSleep",
   "resources": [
     {"id":{"name":"GetPositionOnGUI","path":"scripts/GetPositionOnGUI/GetPositionOnGUI.yy",},"order":8,},
+    {"id":{"name":"spr_ourApp_MusicPlayer_LoopModeSingleLoop","path":"sprites/spr_ourApp_MusicPlayer_LoopModeSingleLoop/spr_ourApp_MusicPlayer_LoopModeSingleLoop.yy",},"order":2,},
     {"id":{"name":"WheatCommand","path":"scripts/WheatCommand/WheatCommand.yy",},"order":5,},
     {"id":{"name":"Files","path":"scripts/Files/Files.yy",},"order":20,},
     {"id":{"name":"obj_makeMyCharacterOverButton","path":"objects/obj_makeMyCharacterOverButton/obj_makeMyCharacterOverButton.yy",},"order":1,},
@@ -40,6 +41,7 @@
     {"id":{"name":"textbox","path":"objects/textbox/textbox.yy",},"order":1,},
     {"id":{"name":"spr_SleeperHitbox","path":"sprites/spr_SleeperHitbox/spr_SleeperHitbox.yy",},"order":8,},
     {"id":{"name":"spr_ourPhone","path":"sprites/spr_ourPhone/spr_ourPhone.yy",},"order":0,},
+    {"id":{"name":"spr_ourApp_MusicPlayer_LoopModeStop","path":"sprites/spr_ourApp_MusicPlayer_LoopModeStop/spr_ourApp_MusicPlayer_LoopModeStop.yy",},"order":0,},
     {"id":{"name":"obj_mainMenu","path":"objects/obj_mainMenu/obj_mainMenu.yy",},"order":0,},
     {"id":{"name":"rm_MainMenu","path":"rooms/rm_MainMenu/rm_MainMenu.yy",},"order":2,},
     {"id":{"name":"obj_inputMyNameTextbox","path":"objects/obj_inputMyNameTextbox/obj_inputMyNameTextbox.yy",},"order":2,},
@@ -65,6 +67,7 @@
     {"id":{"name":"spr_Boy","path":"sprites/spr_Boy/spr_Boy.yy",},"order":4,},
     {"id":{"name":"Bed","path":"scripts/Bed/Bed.yy",},"order":2,},
     {"id":{"name":"obj_background","path":"objects/obj_background/obj_background.yy",},"order":3,},
+    {"id":{"name":"spr_ourApp_MusicPlayer_LoopModeListLoop","path":"sprites/spr_ourApp_MusicPlayer_LoopModeListLoop/spr_ourApp_MusicPlayer_LoopModeListLoop.yy",},"order":1,},
     {"id":{"name":"spr_ourApp_CustomWallpaper","path":"sprites/spr_ourApp_CustomWallpaper/spr_ourApp_CustomWallpaper.yy",},"order":0,},
     {"id":{"name":"Sleeper","path":"scripts/Sleeper/Sleeper.yy",},"order":4,},
     {"id":{"name":"animcurve_cameraLinear","path":"animcurves/animcurve_cameraLinear/animcurve_cameraLinear.yy",},"order":0,},
@@ -116,6 +119,7 @@
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Textbox - Single line","folderPath":"folders/Textbox - Single line.yy","order":14,},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Tile Sets","folderPath":"folders/Tile Sets.yy","order":1,},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Timelines","folderPath":"folders/Timelines.yy","order":7,},
+    {"resourceType":"GMFolder","resourceVersion":"1.0","name":"MusicPlayerIcons","folderPath":"folders/Sprites/ourPhone/ourApp/MusicPlayerIcons.yy","order":3,},
   ],
   "AudioGroups": [
     {"resourceType":"GMAudioGroup","resourceVersion":"1.3","name":"audiogroup_default","targets":-1,},
@@ -130,6 +134,8 @@
     {"resourceType":"GMIncludedFile","resourceVersion":"1.0","name":"file_dll.dll","CopyToMask":-1,"filePath":"datafiles/dll",},
     {"resourceType":"GMIncludedFile","resourceVersion":"1.0","name":"systemCmd.dll","CopyToMask":-1,"filePath":"datafiles/dll",},
     {"resourceType":"GMIncludedFile","resourceVersion":"1.0","name":"StringConverter.dll","CopyToMask":-1,"filePath":"datafiles/dll",},
+    {"resourceType":"GMIncludedFile","resourceVersion":"1.0","name":"AudioPlayerDLL.dll","CopyToMask":-1,"filePath":"datafiles/dll",},
+    {"resourceType":"GMIncludedFile","resourceVersion":"1.0","name":"About_dlls.txt","CopyToMask":-1,"filePath":"datafiles",},
   ],
   "MetaData": {
     "IDEVersion": "2022.8.1.37",

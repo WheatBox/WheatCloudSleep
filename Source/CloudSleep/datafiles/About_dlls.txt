@@ -1,0 +1,7 @@
+StringConverter.dll
+	https://github.com/JoyLeeSoft/StringConverter
+
+AudioPlayerDLL.dll
+file_dll.dll
+systemCmd.dll
+	We wrote them.

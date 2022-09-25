@@ -80,8 +80,8 @@ if(myOurAppSurf == -1) {
 if(surface_exists(myOurAppSurfStatic) && myOurAppSurfAlpha > 0.05) {
 	GUI_DrawSurface_ext(myOurAppSurfStatic, x + myOurAppSurfX, y + myOurAppSurfY, myOurAppSurfXscale, myOurAppSurfYscale, 0, c_white, myOurAppSurfAlpha);
 }
-gMouseOnOurPhoneX = (GetPositionXOnGUI(mouse_x) - myOurAppSurfX - x) * myOurAppSurfXscale;
-gMouseOnOurPhoneY = (GetPositionYOnGUI(mouse_y) - myOurAppSurfY - y) * myOurAppSurfYscale;
+gMouseOnOurPhoneX = (GetPositionXOnGUI(mouse_x) - myOurAppSurfX - x) / myOurAppSurfXscale;
+gMouseOnOurPhoneY = (GetPositionYOnGUI(mouse_y) - myOurAppSurfY - y) / myOurAppSurfYscale;
 
 // 绘制ourPhone外观
 draw_set_color(c_white);
