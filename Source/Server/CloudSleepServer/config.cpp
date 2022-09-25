@@ -115,6 +115,10 @@ bool Config::ParseConfig(std::filesystem::path path)
         {
             permission_file = iter->get<std::string>();
         }
+        if (auto iter = config_items.find("bad_word_list"); iter != config_items.end())
+        {
+            bad_word_list = iter->get<std::string>();
+        }
     }
     catch (const std::exception& e)
     {

@@ -43,7 +43,9 @@ public:
     inline void ClearBedId() { m_bed_id = -1; }
 
 private:
-    void EliminateBadWord(std::string& msg) const noexcept;
+    bool EliminateBadWord(std::string& msg) const noexcept;
+
+    void SyncDeliver(const std::string& msg);
 
     asio::awaitable<void> Reader();
 

@@ -15,16 +15,44 @@
 #include "traffic_recorder.h"
 #include "violation_detector.h"
 
+std::unique_ptr<wheat::ContentFilter> BuildContentFilter()
+{
+    const std::filesystem::path& bad_word_list = wheat::Config::Instance().bad_word_list;
+    if (bad_word_list.empty())
+    {
+        LOG_WARN("bad word list file not found, please specify!");
+        return nullptr;
+    }
+
+    return std::make_unique<wheat::ContentFilter>(bad_word_list);
+}
+
+std::unique_ptr<wheat::ContentFilter> BuildDefaultContentFilter()
+{
+    std::vector<std::string> bad_words;
+    bad_words.push_back("习近平");
+    bad_words.push_back("傻逼");
+    bad_words.push_back("操你");
+    bad_words.push_back("日你");
+    bad_words.push_back("草你");
+    bad_words.push_back("杀");
+    bad_words.push_back("死");
+
+    return std::make_unique<wheat::ContentFilter>(bad_words);
+}
+
 asio::awaitable<void> Listener(asio::ip::tcp::acceptor acceptor)
 {
-    std::vector<std::string> word_list;
-    word_list.push_back("习近平");
-    word_list.push_back("江泽民");
-    word_list.push_back("傻逼");
-    word_list.push_back("操你妈");
-    word_list.push_back("死");
-    word_list.push_back("杀");
-    std::shared_ptr<wheat::ContentFilter> content_filter = std::make_shared<wheat::ContentFilter>(word_list);
+    std::shared_ptr<wheat::ContentFilter> content_filter = BuildContentFilter();
+    if (!content_filter)
+    {
+        LOG_WARN("using default bad word list which is very simple!");
+        content_filter = BuildDefaultContentFilter();
+    }
+    else
+    {
+        LOG_INFO("using bad word list file at %s", wheat::Config::Instance().bad_word_list.string().c_str());
+    }
     wheat::Room room(acceptor.get_executor());
     for (;;)
     {
