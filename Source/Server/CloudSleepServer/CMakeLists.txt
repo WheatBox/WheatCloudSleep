@@ -24,6 +24,7 @@ project (${PROJECT_NAME})
 
 set (ASIO_DIR "third/asio/asio/include")
 set (JSON_DIR "third/json/include")
+set (CONFIG_DIR "config")
 set (INSTALL_DIR "install")
 
 # Override default install dir
@@ -78,6 +79,11 @@ if (UNIX) # Building on unix-like system, link pthread for asio.
     #)
 endif()
 
+# Install binary and config file
 install (TARGETS ${EXE_NAME}
     RUNTIME DESTINATION "."
+)
+
+install (DIRECTORY ${CONFIG_DIR}
+    DESTINATION "."
 )

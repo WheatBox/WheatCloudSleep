@@ -2,6 +2,7 @@
 #ifndef CONTENT_FILTER_H_
 #define CONTENT_FILTER_H_
 
+#include <filesystem>
 #include <string>
 
 #include "trie_tree.h"
@@ -17,6 +18,7 @@ namespace wheat
         ~ContentFilter() = default;
 
         ContentFilter(const std::vector<std::basic_string<char_type>>& word_list);
+        ContentFilter(const std::filesystem::path& word_list_filename);
 
         ContentFilter(const ContentFilter& l) = default;
         ContentFilter& operator=(const ContentFilter& l) = default;

@@ -1,5 +1,8 @@
 #include "content_filter.h"
 
+#include <fstream>
+#include <stdexcept>
+
 namespace wheat
 {
     ContentFilter::ContentFilter(const std::vector<std::basic_string<char_type>>& word_list)
@@ -7,6 +10,23 @@ namespace wheat
     {
         for (const auto& word : word_list)
         {
+            trie_tree_.add_word(word);
+        }
+    }
+
+    ContentFilter::ContentFilter(const std::filesystem::path& word_list_filename)
+        : trie_tree_()
+    {
+        std::ifstream word_list_file_stream(word_list_filename);
+        if (!word_list_file_stream.is_open())
+        {
+            throw std::runtime_error("word_list file open failed");
+        }
+
+        while (!word_list_file_stream.eof())
+        {
+            std::string word;
+            std::getline(word_list_file_stream, word);
             trie_tree_.add_word(word);
         }
     }

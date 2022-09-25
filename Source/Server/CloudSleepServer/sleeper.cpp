@@ -96,12 +96,24 @@ std::string Sleeper::MakeSelfInfo() const
     return info;
 }
 
-void Sleeper::EliminateBadWord(std::string& msg) const noexcept
+bool Sleeper::EliminateBadWord(std::string& msg) const noexcept
 {
-    while (m_content_filter->FilterContent(msg, '*'))
+    bool modified = false;
+    while (true)
     {
-        0;
+        bool is_modified = m_content_filter->FilterContent(msg, '*'); // currently use '*'
+        if (!is_modified)
+        {
+            break;
+        }
+        modified = true;
     }
+    return modified;
+}
+
+void Sleeper::SyncDeliver(const std::string& msg)
+{
+    asio::write(m_sock, asio::buffer(msg));
 }
 
 asio::awaitable<void> Sleeper::Reader()
@@ -153,9 +165,9 @@ asio::awaitable<void> Sleeper::Reader()
                         m_sex = cmd.sex;
                         LOG_INFO("sleeper:%lld's sex is:%d", m_id, m_sex);
                     },
-                    [this](CmdChat cmd) { 
+                    [this](CmdChat& cmd) { 
                         LOG_INFO("sleeper:%lld say:%s", m_id, cmd.msg.c_str());
-                        bool modified = m_content_filter->FilterContent(cmd.msg, '*'); // currently use '*'
+                        bool modified = EliminateBadWord(cmd.msg);
                         if (modified)
                         {
                             LOG_INFO("sleeper:%lld after modified say:%s", m_id, cmd.msg.c_str());
@@ -179,9 +191,12 @@ asio::awaitable<void> Sleeper::Reader()
                 }, 
                 msgCommand);
 
-                if (!std::holds_alternative<std::monostate>(replayMsgCommand))
+                if (std::holds_alternative<CmdError>(replayMsgCommand))
                 {
-                    Deliver(PackCommandWithId(m_id, replayMsgCommand));
+                    // Send back error message, stop socket, then break out
+                    SyncDeliver(PackCommandWithId(m_id, replayMsgCommand));
+                    Stop();
+                    break;
                 }
 
                 if (forward)

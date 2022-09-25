@@ -37,6 +37,7 @@ public:
 
     std::filesystem::path violation_rules_config_file;
     std::filesystem::path permission_file;
+    std::filesystem::path bad_word_list;
 private:
     bool ParseConfig(std::filesystem::path path);
 

@@ -1,12 +1,13 @@
 {
-    "listen_port": 11451,
-    "max_bed_num": 256,
-    "vote_wait_period_s": 10,
-    "traffic_upload_interval_ms":  1000,
-    "block_period_m": 10,
-    "max_block_period_m": 1440,
-    "watch_period_m": 20,
-    "max_watch_period_m": 2880,
-    "violation_rules_config_file": "rule.json",
-    "permission_file": "permission.txt"
+  "listen_port": 14514,
+  "max_bed_num": 256,
+  "vote_wait_period_s": 10,
+  "traffic_upload_interval_ms": 1000,
+  "block_period_m": 10,
+  "max_block_period_m": 1440,
+  "watch_period_m": 20,
+  "max_watch_period_m": 2880,
+  "violation_rules_config_file": "config/rule.json",
+  "permission_file": "config/permission.txt",
+  "bad_word_list": "config/bad_word.txt"
 }
