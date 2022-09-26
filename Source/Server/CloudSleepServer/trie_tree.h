@@ -276,12 +276,11 @@ namespace trie_tree
                 }
                 else
                 {
-                    word_len = last_word_len;
                     break;
                 }
             }
 
-            return word_len;
+            return last_word_len;
         }
 
         void delete_node_recursively(trie_tree_node* node)
