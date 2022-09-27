@@ -1,3 +1,10 @@
+if(working == false) {
+	if(musicIsPlaying) {
+		musicPosition = MciGetAudioPosition(MciOpenAudio_Aliasname_OurPhoneMusic);
+	}
+	
+	MyMusicFinishCheck();
+}
 OurAppStepEventHead
 
 
@@ -43,7 +50,12 @@ for(var i = 0; i < arrMusicFilenameSiz; { i++; yTemp += yTempAdd; }) {
 			draw_text_transformed(xTemp, yTemp, "刷新列表", textScale, textScale, 0);
 			break;
 		default:
-			draw_text_transformed(xTemp, yTemp, arrMusicFilename[i], textScale, textScale, 0);
+			if(i != musicPlayingIndex) {
+				draw_text_transformed(xTemp, yTemp, arrMusicFilename[i], textScale, textScale, 0);
+			} else {
+				draw_text_transformed_color(xTemp, yTemp, arrMusicFilename[i], textScale, textScale, 0, #00D600, #00D600, #00D600, #00D600, 1.0);
+				draw_rectangle_color(0, yTemp, 4, yTemp + yTempAdd - 1, #00D600, #00D600, #00D600, #00D600, false);
+			}
 	}
 	
 	var _highlightX = 0;
@@ -153,17 +165,24 @@ var bottomYOff = screenHeight - bottomHeight;
 	) {
 		musicProgressBarHeight = lerp(musicProgressBarHeight, musicProgressBarHeightFocus, 0.2);
 		
-		if(MouseLeftHold()) {
+		if(MouseLeftPressed()) {
+			musicPositionSetting = true;
+		}
+		if(MouseLeftHold() && musicPositionSetting) {
 			musicPositionSetting = musicLength * ((gMouseOnOurPhoneX - _barX) / _barW);
 			_barWWhite = _barW * ((gMouseOnOurPhoneX - _barX) / _barW);
 		}
-		if(MouseLeftReleased()) {
+		if(MouseLeftReleased() && musicPositionSetting) {
 			MyMusicSeek(musicPositionSetting);
 			MciPlayAudio(MciOpenAudio_Aliasname_OurPhoneMusic);
 			_barWWhite = _barW * ((gMouseOnOurPhoneX - _barX) / _barW);
 		}
 	} else {
 		musicProgressBarHeight = lerp(musicProgressBarHeight, musicProgressBarHeightNature, 0.2);
+	}
+	
+	if(MouseLeftHold() == false) {
+		musicPositionSetting = false;
 	}
 	
 	var _barH = musicProgressBarHeight;
@@ -183,42 +202,7 @@ draw_set_alpha(1.0);
 draw_text_transformed(playButtonX + playButtonRad + 6, bottomYOff + 2, musicPlayingName, 0.7, 0.7, 0);
 
 
-if(musicPosition >= musicLength) {
-	if(musicFinishedRefreshed == false) {
-		musicFinishedRefreshed = true;
-		MyRefresh();
-	}
-	if(array_length(arrMusicFilename) > array_length(arrMusicFilenameDefault)) {
-		musicFinishedRefreshed = false;
-		MyMusicSeek(0);
-		
-		switch(musicLoopMode) {
-			case 0:
-				if(musicPlayingIndex >= array_length(arrMusicFilenameDefault)) {
-					musicPlayingName = arrMusicFilename[musicPlayingIndex];
-				} else {
-					musicPlayingName = "";
-				}
-				musicIsPlaying = false;
-				musicIsClose = true;
-				break;
-			case 1:
-				musicPlayingIndex++;
-				if(musicPlayingIndex >= array_length(arrMusicFilename)) {
-					musicPlayingIndex = array_length(arrMusicFilenameDefault);
-				}
-				MyMusicPlay(musicPlayingIndex);
-				break;
-			case 2:
-				MyMusicPlay(musicPlayingIndex);
-				break;
-		}
-	}
-}
-if(musicPlayingName == "" && musicIsPlaying) {
-	musicIsPlaying = false;
-	MyMusicSeek(0);
-}
+MyMusicFinishCheck();
 
 
 { // 循环模式图标
@@ -244,6 +228,8 @@ if(musicPlayingName == "" && musicIsPlaying) {
 			if(musicLoopMode > musicLoopModeMax) {
 				musicLoopMode = 0;
 			}
+			
+			OurPhone_WriteMusicLoopMode(musicLoopMode);
 		}
 	}
 }

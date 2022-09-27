@@ -138,3 +138,32 @@ function OurPhone_ReadMusicDirectory() {
 	}
 }
 
+
+function OurPhone_WriteMusicLoopMode(_musicLoopMode) {
+	try {
+		ini_open(FILEINI_Settings);
+		
+		ini_write_real("ourPhone", "musicLoopMode", _musicLoopMode);
+		
+		ini_close();
+	} catch(error) {
+		DebugMes([error.script, error.message]);
+	}
+}
+
+function OurPhone_ReadMusicLoopMode() {
+	var _newDir = 0;
+	
+	try {
+		ini_open(FILEINI_Settings);
+		
+		_newDir = ini_read_real("ourPhone", "musicLoopMode", 0);
+		
+		ini_close();
+	} catch(error) {
+		DebugMes([error.script, error.message]);
+	}
+	
+	return _newDir;
+}
+

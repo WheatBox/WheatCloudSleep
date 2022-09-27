@@ -46,8 +46,10 @@ name = myName
 [ourPhone]
 wallpaperFilename = "xxxxx.png"
 musicDir = "X:\xxxx\"
+musicLoopMode = 0
 */
 
 
 
-#macro DEBUGMODE true
+#macro DEBUGMODE false
+show_debug_overlay(true);

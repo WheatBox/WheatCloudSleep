@@ -35,8 +35,8 @@ if(myOurAppIconAlpha > 0.05) {
 						if(MouseLeftPressed()) {
 							myOurAppSurfX = _xTemp - x;
 							myOurAppSurfY = _yTemp - y;
-							myOurAppWorkingIconX = _xTemp;
-							myOurAppWorkingIconY = _yTemp;
+							myOurAppWorkingIconX = myOurAppSurfX;
+							myOurAppWorkingIconY = myOurAppSurfY;
 							
 							MyPressApp(ij);
 						}
@@ -72,8 +72,8 @@ if(myOurAppSurf != -1) {
 }
 if(myOurAppSurf == -1) {
 	myOurAppSurfAlpha = lerp(myOurAppSurfAlpha, 0.0, myOurAppTransLerpAmount);
-	myOurAppSurfX = lerp(myOurAppSurfX, myOurAppWorkingIconX - 24 - x, myOurAppTransLerpAmount);
-	myOurAppSurfY = lerp(myOurAppSurfY, myOurAppWorkingIconY - y, myOurAppTransLerpAmount);
+	myOurAppSurfX = lerp(myOurAppSurfX, myOurAppWorkingIconX - 24, myOurAppTransLerpAmount);
+	myOurAppSurfY = lerp(myOurAppSurfY, myOurAppWorkingIconY, myOurAppTransLerpAmount);
 	myOurAppSurfXscale = lerp(myOurAppSurfXscale, 0.2, myOurAppTransLerpAmount);
 	myOurAppSurfYscale = lerp(myOurAppSurfYscale, 0.05, myOurAppTransLerpAmount);
 }

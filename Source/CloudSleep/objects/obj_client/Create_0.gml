@@ -133,23 +133,18 @@ MyChatHistorySurfRefresh = function() {
 
 buttonOpenOurPhoneX = 0;
 buttonOpenOurPhoneY = 0;
-buttonOpenOurPhone = GuiElement_CreateButton(buttonOpenOurPhoneX, buttonOpenOurPhoneY, "ourPhone"
-	, function() {
-		if(InstanceExists(obj_ourPhone)) {
-			if(obj_ourPhone.working) {
-				obj_ourPhone.MyStopWork();
-			} else {
-				obj_ourPhone.MyWork();
-			}
-		}
-	}
-);
+buttonOpenOurPhone = noone;
+
+alarm_set(2, 1); // 初始化各个 GUI组件
+
 
 MySynchMyGuiElementsPosition = function() {
-	buttonOpenOurPhoneX = GuiWidth() - 64;
-	buttonOpenOurPhoneY = GuiHeight() - 32;
-	buttonOpenOurPhone.x = buttonOpenOurPhoneX;
-	buttonOpenOurPhone.y = buttonOpenOurPhoneY;
+	if(InstanceExists(buttonOpenOurPhone)) {
+		buttonOpenOurPhoneX = GuiWidth() - 64;
+		buttonOpenOurPhoneY = GuiHeight() - 32;
+		buttonOpenOurPhone.x = buttonOpenOurPhoneX;
+		buttonOpenOurPhone.y = buttonOpenOurPhoneY;
+	}
 }
 MySynchMyGuiElementsPosition();
 

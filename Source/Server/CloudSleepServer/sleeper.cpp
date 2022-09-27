@@ -149,15 +149,13 @@ asio::awaitable<void> Sleeper::Reader()
                     },
                     [this](CmdGetup) { m_room.GetUp(m_id); },
                     [this, &forward, &replayMsgCommand](CmdName cmd) { 
-                        if (m_content_filter->CheckContent(cmd.name))
-                        {
-                            m_name = std::move(cmd.name); 
-                            LOG_INFO("sleeper:%lld's name is:%s", m_id, m_name.c_str());
-                        }
-                        else
-                        {
+                        m_name = std::move(cmd.name); 
+                        LOG_INFO("sleeper:%lld's name is:%s", m_id, m_name.c_str());
+                        bool modified = EliminateBadWord(m_name);
+                        if(modified) {
                             forward = false;
                             replayMsgCommand = CmdError{ WheatErrorCode::InvalidName };
+                            LOG_INFO("sleeper:%lld's name after modified is:%s", m_id, m_name.c_str());
                         }
                     },
                     [this](CmdType cmd) { 
