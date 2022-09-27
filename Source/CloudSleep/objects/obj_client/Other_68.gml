@@ -10,7 +10,7 @@ if(map[? "type"] == network_type_data) {
 			continue;
 		}
 		DebugMes("buf:" + string(buf));
-		if(DEBUGMODE) {
+		if(DEBUGMODE && string_height(debugStrBufs) <= 720 / 0.7) {
 			debugStrBufs += string(buf) + "\n";
 		}
 		
@@ -114,6 +114,10 @@ if(map[? "type"] == network_type_data) {
 					if(instance_exists(obj_kickShowVotes)) {
 						instance_destroy(obj_kickShowVotes);
 					}
+					break;
+					
+				case CommandType.error:
+					CommandError(_Args[0]);
 					break;
 			}
 		} catch(error) {

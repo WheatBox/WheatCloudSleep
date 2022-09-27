@@ -181,7 +181,5 @@ try {
 
 
 if(DEBUGMODE) {
-	show_debug_overlay(true);
-	
 	debugStrBufs = "";
 }

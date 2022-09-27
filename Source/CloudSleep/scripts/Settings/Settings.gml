@@ -51,5 +51,5 @@ musicLoopMode = 0
 
 
 
-#macro DEBUGMODE false
-show_debug_overlay(true);
+#macro DEBUGMODE 1
+show_debug_overlay(DEBUGMODE);
