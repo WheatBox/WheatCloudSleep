@@ -97,7 +97,7 @@ function OurPhone_WriteMusicDirectory(_newDir) {
 		ini_open(FILEINI_Settings);
 		
 		if(!directory_exists(_newDir)) {
-			systemCmd("md " + _newDir);
+			MakeFolder(_newDir);
 		}
 		if(directory_exists(_newDir)) {
 			ini_write_string("ourPhone", "musicDir", _newDir);
@@ -123,7 +123,7 @@ function OurPhone_ReadMusicDirectory() {
 		
 		var _newDir = ini_read_string("ourPhone", "musicDir", "D:\\Music\\");
 		if(!directory_exists(_newDir)) {
-			systemCmd("md " + _newDir);
+			MakeFolder(_newDir);
 		}
 		if(directory_exists(_newDir)) {
 			if(string_char_at(_newDir, string_length(_newDir)) != "\\") {

@@ -380,3 +380,11 @@ function LoadBedSleepSprites() {
 	}
 }
 
+
+function OpenInExplorer(fname) {
+	systemCmd("start \"\" \"" + fname + "\"");
+}
+function MakeFolder(fname) {
+	systemCmd("md \"" + fname + "\"");
+}
+

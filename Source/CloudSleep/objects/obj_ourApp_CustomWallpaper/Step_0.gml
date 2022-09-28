@@ -2,7 +2,7 @@ OurAppStepEventHead
 
 if(pressed) {
 	if(directory_exists(FILEPATH_ourPhoneWallpapers) == false) {
-		systemCmd("md " + FILEPATH_ourPhoneWallpapers);
+		MakeFolder(FILEPATH_ourPhoneWallpapers);
 	}
 }
 
@@ -69,10 +69,10 @@ for(var i = 0; i < arrWallpaperFilenameSiz; { i++; yTemp += yTempAdd; }) {
 			switch(arrWallpaperFilename[i]) {
 				case ":opendir":
 					if(!directory_exists(FILEPATH_ourPhoneWallpapers)) {
-						systemCmd("md " + FILEPATH_ourPhoneWallpapers);
+						MakeFolder(FILEPATH_ourPhoneWallpapers);
 					}
 					if(directory_exists(FILEPATH_ourPhoneWallpapers)) {
-						systemCmd("start " + FILEPATH_ourPhoneWallpapers);
+						OpenInExplorer(FILEPATH_ourPhoneWallpapers);
 					} else {
 						show_message_async("路径不存在且无法被建立：\n" + FILEPATH_ourPhoneWallpapers);
 					}

@@ -81,10 +81,10 @@ for(var i = 0; i < arrMusicFilenameSiz; { i++; yTemp += yTempAdd; }) {
 					break;
 				case ":opendir":
 					if(!directory_exists(FILEPATH_ourPhoneMusics)) {
-						systemCmd("md " + FILEPATH_ourPhoneMusics);
+						MakeFolder(FILEPATH_ourPhoneMusics);
 					}
 					if(directory_exists(FILEPATH_ourPhoneMusics)) {
-						systemCmd("start " + FILEPATH_ourPhoneMusics);
+						OpenInExplorer(FILEPATH_ourPhoneMusics);
 					} else {
 						show_message_async("路径不存在且无法被建立：\n" + FILEPATH_ourPhoneMusics);
 					}
