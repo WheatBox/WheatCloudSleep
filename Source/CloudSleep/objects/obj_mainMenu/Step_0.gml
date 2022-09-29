@@ -6,12 +6,18 @@ if(PackName != packNamePrevious) {
 	
 	var _structTemp = EditCloudPack_Head()[1];
 	try {
-		PackGuid = _structTemp.guid;
+		PackGuid = _structTemp.guid; // 必须有的
+		
+		_structTemp[$ "mainclient"] ??= "";
 		PackMainClient = _structTemp.mainclient;
+		
+		_structTemp[$ "mainclient_howtoget"] ??= "";
 		PackMainClientHowToGet = _structTemp.mainclient_howtoget;
-				
+		
+		_structTemp[$ "compatibleclients"] ??= "";
 		PackArrCompatibleClients = CutStringToArray(_structTemp.compatibleclients, "$$");
 		
+		_structTemp[$ "ipport"] ??= "";
 		PackIpPort = _structTemp.ipport;
 		
 		DebugMes(PackGuid);
@@ -23,7 +29,8 @@ if(PackName != packNamePrevious) {
 	} catch(error) {
 		PackName = packNamePrevious;
 		_canUpdatePackNamePrev = false;
-		show_message("无法正确打开场景包");
+		DebugMes("无法正确打开场景包\n" + error.script + "\n" + error.message);
+		show_message("无法正确打开场景包\n" + error.script + "\n" + error.message);
 	}
 	
 	if(_canUpdatePackNamePrev) {
