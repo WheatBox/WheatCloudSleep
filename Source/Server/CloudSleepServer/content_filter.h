@@ -17,8 +17,8 @@ namespace wheat
         ContentFilter() = default;
         ~ContentFilter() = default;
 
-        ContentFilter(const std::vector<std::basic_string<char_type>>& word_list);
-        ContentFilter(const std::filesystem::path& word_list_filename);
+        ContentFilter(const std::vector<std::basic_string<char_type>>& word_list, const std::vector<std::basic_string<char_type>> & stop_char_list);
+        ContentFilter(const std::filesystem::path& word_list_filename, const std::filesystem::path & stop_char_list_filename);
 
         ContentFilter(const ContentFilter& l) = default;
         ContentFilter& operator=(const ContentFilter& l) = default;

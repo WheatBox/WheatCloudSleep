@@ -1,16 +1,19 @@
-#pragma once
+﻿#pragma once
 #ifndef TRIE_TREE_HPP_
 #define TRIE_TREE_HPP_
 
 #include <concepts>
 #include <map>
 #include <memory>
-#include <set>
+//#include <set>
+#include <unordered_set>
 #include <stack>
 #include <stdexcept>
 #include <string>
 #include <utility>
 #include <vector>
+
+#include "utf8tools.h"
 
 namespace trie_tree
 {
@@ -155,17 +158,22 @@ namespace trie_tree
             erase_word(word.c_str(), word.length());
         }
 
-        void add_stop_char(_CType stpo_char)
+        void add_stop_char(const _CType * stop_char)
         {
-            stop_charset_.emplace(stpo_char);
+            stop_charset_.emplace(std::basic_string<_CType>(stop_char));
+
+            std::size_t len = strlen(stop_char);
+            if(len > stop_charMaxLen) {
+                stop_charMaxLen = len;
+            }
         }
 
-        void erase_stop_char(_CType stop_char)
+        void erase_stop_char(const _CType * stop_char)
         {
             stop_charset_.erase(stop_char);
         }
 
-        void add_stop_chars(const std::basic_string<_CType>& stop_chars)
+        /*void add_stop_chars(const std::basic_string<_CType>& stop_chars)
         {
             for (_CType stop_char : stop_chars)
             {
@@ -179,7 +187,7 @@ namespace trie_tree
             {
                 erase_stop_char(stop_char);
             }
-        }
+        }*/
 
         std::pair<std::size_t, std::size_t> find_in(const _CType* str, std::size_t len) const noexcept
         {
@@ -246,20 +254,48 @@ namespace trie_tree
             }
         }
 
-        std::size_t find_word_at_start(const _CType* str, std::size_t len) const noexcept
+        std::size_t find_word_at_start(const _CType* sz, std::size_t len) const noexcept
         {
             trie_tree_node* cur_node = root_;
             std::size_t last_word_len = 0;
             std::size_t word_len = 0;
 
-            if (stop_charset_.find(str[0]) != stop_charset_.end())
-            {
-                // find stop char, skip search
-                return 0;
+            std::basic_string<_CType> str = sz;
+
+            for(std::size_t i = 0; i < str.length(); i++) {
+                if(str[i] >= 'A' && str[i] <= 'Z') {
+                    str[i] += 32;
+                }
             }
+
+            //if (stop_charset_.find(str[0]) != stop_charset_.end())
+            //{
+            //    // find stop char, skip search
+            //    return 0;
+            //}
+
+            std::size_t iTemp = 0;
+            std::size_t wordLenTemp = 0;
+            trie_tree_node * currentNodeTemp = cur_node;
+            
+            bool _GodDamnEveryThingIsAllFineButIFixedBugsAllOfTodayBeginFromTwelveToTwentyThreeOClockAndIDontKnowHowToNameThisVariableButICanTellYouThisBoolMeansWhetherAllBytesOfAnySensitiveWordHasBeenFoundWaitASecondCanThisVariableBeCompliedWellIDontKnowLetsJustTakeATryOhOneMoreThingThisVariableIsNotWrotenByWheatBoxEhhhYepImVerySure = false; // 是否找到过任意一个敏感词的所有字节
+            bool & booltemp = _GodDamnEveryThingIsAllFineButIFixedBugsAllOfTodayBeginFromTwelveToTwentyThreeOClockAndIDontKnowHowToNameThisVariableButICanTellYouThisBoolMeansWhetherAllBytesOfAnySensitiveWordHasBeenFoundWaitASecondCanThisVariableBeCompliedWellIDontKnowLetsJustTakeATryOhOneMoreThingThisVariableIsNotWrotenByWheatBoxEhhhYepImVerySure; // 多此亿举的引用，但是很酷
+            bool bFoundBeginChar = false;
 
             for (std::size_t i = 0; i < len; ++i)
             {
+                if(utf8tools::IsUtf8BeginChar(str[i])) {
+                    iTemp = i;
+                    wordLenTemp = word_len;
+                    currentNodeTemp = cur_node;
+
+                    if(bFoundBeginChar) {
+                        booltemp = true;
+                    }
+
+                    bFoundBeginChar = true;
+                }
+                
                 if (trie_tree_node* child_node = cur_node->get_child(str[i]))
                 {
                     ++word_len;
@@ -268,15 +304,38 @@ namespace trie_tree
                     {
                         last_word_len = word_len;
                     }
-                }
-                else if (stop_charset_.find(str[i]) != stop_charset_.end())
-                {
-                    // find stop char
-                    ++word_len;
-                }
-                else
-                {
-                    break;
+                } else {
+                    if(booltemp == false) {
+                        break;
+                    }
+
+                    bool stop_charFound = false;
+
+                    for(std::size_t j = stop_charMaxLen; j >= 1; j--) {
+                        if(str[i] == '*') {
+                            j = 1;
+                            stop_charFound = true;
+                        } else
+                        if (stop_charset_.find(str.substr(iTemp, j)) != stop_charset_.end()) {
+                            stop_charFound = true;
+                        }
+
+                        if(stop_charFound) {
+                            // find stop char
+                            i = iTemp;
+                            word_len = wordLenTemp;
+                            cur_node = currentNodeTemp;
+
+                            i += j - 1;
+                            word_len += j;
+
+                            break;
+                        }
+                    }
+
+                    if(!stop_charFound) { // 既没有敏感词，也没有停止词了，那么就结束循环
+                        break;
+                    }
                 }
             }
 
@@ -293,7 +352,9 @@ namespace trie_tree
         }
 
         trie_tree_node* root_;
-        std::set<_CType> stop_charset_;
+
+        std::unordered_set<std::basic_string<_CType>> stop_charset_; // = { ",", ".", "[]", "*", "，", "。" };
+        std::size_t stop_charMaxLen = 0; // 3; // 单个 stop_char 的最长长度，该变量会在 add_stop_char() 里随着停顿词添加而自动更新
     };
 
     using trie_tree		= basic_trie_tree<char>;

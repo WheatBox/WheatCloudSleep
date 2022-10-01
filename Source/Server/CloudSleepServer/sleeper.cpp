@@ -165,7 +165,11 @@ asio::awaitable<void> Sleeper::Reader()
                     },
                     [this](CmdChat& cmd) { 
                         LOG_INFO("sleeper:%lld say:%s", m_id, cmd.msg.c_str());
+                        // auto t1 = std::chrono::steady_clock::now();
                         bool modified = EliminateBadWord(cmd.msg);
+                        // auto t2 = std::chrono::steady_clock::now();
+                        // double dr_ms = std::chrono::duration<double, std::milli>(t2 - t1).count();
+                        // LOG_INFO("time: %lf ms.", dr_ms);
                         if (modified)
                         {
                             LOG_INFO("sleeper:%lld after modified say:%s", m_id, cmd.msg.c_str());

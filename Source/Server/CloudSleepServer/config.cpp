@@ -22,6 +22,12 @@ if (auto iter = config_items.find(#item_name); iter != config_items.end())  \
    item_name = *iter;                                                       \
 }
 
+#define GET_CONFIG_ITEM_FROM_JSON__STRING(json_obj, item_name)              \
+if (auto iter = config_items.find(#item_name); iter != config_items.end())  \
+{                                                                           \
+   item_name = iter->get<std::string>();                                    \
+}
+
 namespace wheat
 {
 
@@ -107,18 +113,11 @@ bool Config::ParseConfig(std::filesystem::path path)
         GET_CONFIG_ITEM_FROM_JSON(config_items, max_block_period_m);
         GET_CONFIG_ITEM_FROM_JSON(config_items, watch_period_m);
         GET_CONFIG_ITEM_FROM_JSON(config_items, max_watch_period_m);
-        if (auto iter = config_items.find("violation_rules_config_file"); iter != config_items.end())
-        {
-            violation_rules_config_file = iter->get<std::string>();
-        }
-        if (auto iter = config_items.find("permission_file"); iter != config_items.end())
-        {
-            permission_file = iter->get<std::string>();
-        }
-        if (auto iter = config_items.find("bad_word_list"); iter != config_items.end())
-        {
-            bad_word_list = iter->get<std::string>();
-        }
+
+        GET_CONFIG_ITEM_FROM_JSON__STRING(config_items, violation_rules_config_file);
+        GET_CONFIG_ITEM_FROM_JSON__STRING(config_items, permission_file);
+        GET_CONFIG_ITEM_FROM_JSON__STRING(config_items, bad_word_list);
+        GET_CONFIG_ITEM_FROM_JSON__STRING(config_items, stop_char_list);
     }
     catch (const std::exception& e)
     {

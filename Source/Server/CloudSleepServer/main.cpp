@@ -24,21 +24,124 @@ std::unique_ptr<wheat::ContentFilter> BuildContentFilter()
         return nullptr;
     }
 
-    return std::make_unique<wheat::ContentFilter>(bad_word_list);
+    const std::filesystem::path& f_stop_char_list = wheat::Config::Instance().stop_char_list;
+    if (f_stop_char_list.empty())
+    {
+        LOG_WARN("stop char word list file not found, please specify!");
+        return nullptr;
+    }
+
+    return std::make_unique<wheat::ContentFilter>(bad_word_list, f_stop_char_list);
 }
 
+// 若未能检测到敏感词文件，则会启用该备用敏感词汇
 std::unique_ptr<wheat::ContentFilter> BuildDefaultContentFilter()
 {
     std::vector<std::string> bad_words;
+    bad_words.push_back("刁近平");
     bad_words.push_back("习近平");
+    bad_words.push_back("近平");
+    bad_words.push_back("习近");
+    bad_words.push_back("xijinping");
+    bad_words.push_back("xijin");
+    bad_words.push_back("jinping");
+    bad_words.push_back("xjp");
+    bad_words.push_back("杨尚昆");
+    bad_words.push_back("yangshangkun");
+    bad_words.push_back("ysk");
+    bad_words.push_back("江泽民");
+    bad_words.push_back("jiangzemin");
+    bad_words.push_back("jzm");
+    bad_words.push_back("李先念");
+    bad_words.push_back("lixiannian");
+    bad_words.push_back("lxn");
+    bad_words.push_back("胡锦涛");
+    bad_words.push_back("hujintao");
+    bad_words.push_back("hjt");
+    bad_words.push_back("刘少奇");
+    bad_words.push_back("liushaoqi");
+    bad_words.push_back("lsq");
+    bad_words.push_back("邓小平");
+    bad_words.push_back("dengxiaoping");
+    bad_words.push_back("dxp");
+    bad_words.push_back("毛泽东");
+    bad_words.push_back("maozedong");
+    bad_words.push_back("mzd");
+    
+    bad_words.push_back("台湾");
+    bad_words.push_back("台灣");
+    bad_words.push_back("tw");
+    bad_words.push_back("香港");
+    bad_words.push_back("xg");
+    bad_words.push_back("新疆");
+    bad_words.push_back("xj");
+
     bad_words.push_back("傻逼");
+    bad_words.push_back("sb");
+    bad_words.push_back("婊子");
+    bad_words.push_back("母狗");
     bad_words.push_back("操你");
     bad_words.push_back("日你");
     bad_words.push_back("草你");
     bad_words.push_back("杀");
     bad_words.push_back("死");
 
-    return std::make_unique<wheat::ContentFilter>(bad_words);
+    std::vector<std::string> stop_chars;
+    stop_chars.push_back(",");
+    stop_chars.push_back(".");
+    stop_chars.push_back("/");
+    stop_chars.push_back("?");
+    stop_chars.push_back(";");
+    stop_chars.push_back(":");
+    stop_chars.push_back("'");
+    stop_chars.push_back("\"");
+    stop_chars.push_back("[");
+    stop_chars.push_back("]");
+    stop_chars.push_back("{");
+    stop_chars.push_back("}");
+    stop_chars.push_back("(");
+    stop_chars.push_back(")");
+    stop_chars.push_back("*");
+    stop_chars.push_back("&");
+    stop_chars.push_back("^");
+    stop_chars.push_back("%");
+    stop_chars.push_back("$");
+    stop_chars.push_back("#");
+    stop_chars.push_back("@");
+    stop_chars.push_back("!");
+    stop_chars.push_back("~");
+    stop_chars.push_back("`");
+    stop_chars.push_back("<");
+    stop_chars.push_back(">");
+    stop_chars.push_back("\\");
+    stop_chars.push_back("|");
+    stop_chars.push_back("-");
+    stop_chars.push_back("_");
+    stop_chars.push_back("+");
+    stop_chars.push_back("=");
+
+    stop_chars.push_back("，");
+    stop_chars.push_back("。");
+    stop_chars.push_back("—");
+    stop_chars.push_back("…");
+    stop_chars.push_back("；");
+    stop_chars.push_back("‘");
+    stop_chars.push_back("‘");
+    stop_chars.push_back("“");
+    stop_chars.push_back("“");
+    stop_chars.push_back("、");
+    stop_chars.push_back("·");
+    stop_chars.push_back("（");
+    stop_chars.push_back("）");
+    stop_chars.push_back("【");
+    stop_chars.push_back("】");
+    stop_chars.push_back("！");
+    stop_chars.push_back("？");
+    stop_chars.push_back("《");
+    stop_chars.push_back("》");
+    stop_chars.push_back("￥");
+
+    return std::make_unique<wheat::ContentFilter>(bad_words, stop_chars);
 }
 
 asio::awaitable<void> Listener(asio::ip::tcp::acceptor acceptor)
@@ -46,12 +149,13 @@ asio::awaitable<void> Listener(asio::ip::tcp::acceptor acceptor)
     std::shared_ptr<wheat::ContentFilter> content_filter = BuildContentFilter();
     if (!content_filter)
     {
-        LOG_WARN("using default bad word list which is very simple!");
+        LOG_WARN("using default bad word and stop char list which is very simple!");
         content_filter = BuildDefaultContentFilter();
     }
     else
     {
         LOG_INFO("using bad word list file at %s", wheat::Config::Instance().bad_word_list.string().c_str());
+        LOG_INFO("using stop char list file at %s", wheat::Config::Instance().stop_char_list.string().c_str());
     }
     wheat::Room room(acceptor.get_executor());
     for (;;)
