@@ -2,6 +2,8 @@ vecChildElements = new vector();
 vecChildElementsInitY = new vector();
 vecChildElementsHeight = new vector();
 
+childElementsBottom = 0;
+
 labelText = "";
 labelAlpha = 1.0;
 
@@ -37,6 +39,7 @@ MyStopWork = function() {
 
 scrollYSpeed = GUIScrollYSpeed;
 
+scrollYPrev = 0;
 scrollY = 0;
 MyScrollElements = function(_yAdd) {
 	for(var i = 0; i < vecChildElements.size(); i++) {
@@ -52,3 +55,9 @@ MyScrollElements = function(_yAdd) {
 		}
 	}
 }
+
+scrollBarWidthMax = 16;
+scrollBarWidthMin = 8;
+scrollBarWidth = scrollBarWidthMin;
+scrollBarIsDragging = false;
+scrollBarDraggingOffY = 0;

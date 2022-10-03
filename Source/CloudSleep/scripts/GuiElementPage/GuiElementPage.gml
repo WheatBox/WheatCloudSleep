@@ -49,6 +49,8 @@ function GuiElement_PageAddElement(pageIns, elementIns, elementHeight = undefine
 			
 			ins.y -= insYTemp;
 			
+			childElementsBottom = ins.y + vecChildElementsHeight.back();
+			
 			instance_deactivate_object(ins);
 		}
 	}
@@ -101,7 +103,13 @@ function GuiElement_PageClearIns(_pageIns, beginI, endI = 0) {
 	}
 	
 	for(var i = beginI; i <= endI; i++) {
-		instance_destroy(_pageIns.vecChildElements.Container[i]);
+		if(InstanceExists(_pageIns.vecChildElements.Container[i])) {
+			//if(i != 0) {
+			//	_pageIns.childElementsBottom -= _pageIns.vecChildElementsInitY.Container[i];
+			//	_pageIns.childElementsBottom -= _pageIns.vecChildElementsHeight.Container[i];
+			//}
+			instance_destroy(_pageIns.vecChildElements.Container[i]);
+		}
 	}
 	
 	array_delete(_pageIns.vecChildElements.Container, beginI, endI - beginI + 1);
@@ -118,9 +126,11 @@ function GuiElement_PageAlign(_pageIns) {
 	if(!InstanceExists(_pageIns)) {
 		return;
 	}
+	
 	var _len = _pageIns.vecChildElements.size();
+	var ins = noone;
 	for(var i = 0; i < _len; i++) {
-		var ins = _pageIns.vecChildElements.Container[i];
+		ins = _pageIns.vecChildElements.Container[i];
 		ins.y = _pageIns.y + 32 - _pageIns.scrollY;
 		
 		for(var j = 0; j <= i; j++) {
@@ -130,6 +140,10 @@ function GuiElement_PageAlign(_pageIns) {
 		}
 		
 		ins.y -= _pageIns.vecChildElementsHeight.Container[i] / 2;
+	}
+	
+	if(InstanceExists(ins)) {
+		_pageIns.childElementsBottom = ins.y + _pageIns.vecChildElementsHeight.back();
 	}
 }
 

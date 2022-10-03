@@ -192,7 +192,10 @@ function GUI_SetCursorHandpoint() {
 	__CursorTEMP = cr_handpoint;
 }
 function GUI_SetCursorDefault() {
-	if(window_get_cursor() == cr_handpoint) {
+	var curCursor = window_get_cursor();
+	if(
+		curCursor == cr_handpoint
+	) {
 		// 等到下一帧看看 GUI_SetCursorHandpoint(); 会不会被再次触发（也就是鼠标依然在按钮上）
 		// 如果再次触发，那么忽略，进行下一次检查的准备（__CursorTEMP = cr_default）
 		if(__CursorTEMP == cr_default) {
