@@ -6,6 +6,8 @@
 
 #include "file_update_monitor.h"
 
+#include "content_filter.h"
+
 namespace wheat
 {
 
@@ -35,6 +37,9 @@ public:
     int watch_period_m = 2 * block_period_m;
     int max_watch_period_m = 2 * max_block_period_m;
 
+    // 屏蔽词系统的超级模式
+    int content_filter_super_mode = 1;
+
     std::filesystem::path violation_rules_config_file;
     std::filesystem::path permission_file;
     std::filesystem::path bad_word_list;
@@ -47,6 +52,9 @@ private:
     void UpdateConfig() const;
 private:
     asio::any_io_executor m_executor;
+
+public:
+    std::shared_ptr<ContentFilter> m_pContentFilter = nullptr;
 };
 
 

@@ -157,6 +157,10 @@ asio::awaitable<void> Listener(asio::ip::tcp::acceptor acceptor)
         LOG_INFO("using bad word list file at %s", wheat::Config::Instance().bad_word_list.string().c_str());
         LOG_INFO("using stop char list file at %s", wheat::Config::Instance().stop_char_list.string().c_str());
     }
+    content_filter->SetSuperMode(wheat::Config::Instance().content_filter_super_mode);
+    
+    wheat::Config::Instance().m_pContentFilter = content_filter;
+
     wheat::Room room(acceptor.get_executor());
     for (;;)
     {

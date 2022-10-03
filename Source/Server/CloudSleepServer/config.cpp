@@ -113,6 +113,7 @@ bool Config::ParseConfig(std::filesystem::path path)
         GET_CONFIG_ITEM_FROM_JSON(config_items, max_block_period_m);
         GET_CONFIG_ITEM_FROM_JSON(config_items, watch_period_m);
         GET_CONFIG_ITEM_FROM_JSON(config_items, max_watch_period_m);
+        GET_CONFIG_ITEM_FROM_JSON(config_items, content_filter_super_mode);
 
         GET_CONFIG_ITEM_FROM_JSON__STRING(config_items, violation_rules_config_file);
         GET_CONFIG_ITEM_FROM_JSON__STRING(config_items, permission_file);
@@ -146,6 +147,10 @@ void Config::UpdateConfig() const
         std::chrono::milliseconds(traffic_upload_interval_ms));
     GetViolationRules().SetConfigFile(violation_rules_config_file);
     PermissionMgr::Instance().SetPermissionFile(permission_file);
+
+    if(m_pContentFilter != nullptr)
+        m_pContentFilter->SetSuperMode(content_filter_super_mode);
+    LOG_INFO("ContentFilter SuperMode %s", content_filter_super_mode ? "Enabled" : "Disabled");
 }
 
 ViolationRules::ViolationRules()

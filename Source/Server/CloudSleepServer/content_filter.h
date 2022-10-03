@@ -30,6 +30,8 @@ namespace wheat
 
         bool FilterContent(std::basic_string<char_type>& content, char_type replacement) const noexcept;
 
+        void SetSuperMode(bool enable);
+
     private:
         trie_tree::basic_trie_tree<char_type> trie_tree_;
 

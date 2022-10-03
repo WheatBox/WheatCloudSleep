@@ -70,4 +70,8 @@ namespace wheat
         }
     }
 
+    void ContentFilter::SetSuperMode(bool enable) {
+        trie_tree_.bSuperMode = enable;
+    }
+
 } // namespace wheat

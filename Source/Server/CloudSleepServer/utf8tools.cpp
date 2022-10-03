@@ -2,21 +2,21 @@
 
 namespace utf8tools {
 
-	bool IsUtf8BeginChar(unsigned char chr) {
+	int GetUtf8BytesLen(unsigned char chr) {
 		if(chr >> 7 == 0) { // 1个字节长度
-			return true;
+			return 1;
 		}
 		if(chr >> 5 == 0b110) { // 2个字节长度
-			return true;
+			return 2;
 		}
 		if(chr >> 4 == 0b1110) { // 3个字节长度
-			return true;
+			return 3;
 		}
 		if(chr >> 3 == 0b11110) { // 4个字节长度
-			return true;
+			return 4;
 		}
 
-		return false;
+		return 0;
 	}
 
 }

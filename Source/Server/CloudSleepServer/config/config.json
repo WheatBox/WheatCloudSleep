@@ -10,5 +10,6 @@
   "violation_rules_config_file": "config/rule.json",
   "permission_file": "config/permission.txt",
   "bad_word_list": "config/bad_word.txt"
-  "stop_char_list": "config/stop_char.txt"
+  "stop_char_list": "config/stop_char.txt",
+  "content_filter_super_mode": 1
 }
