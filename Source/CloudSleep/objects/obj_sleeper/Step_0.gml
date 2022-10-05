@@ -34,7 +34,7 @@ if(myPathDestX != undefined && myPathDestY != undefined) {
 if(isMe) {
 	var _overlayDecorateInsList = ds_list_create();
 	
-	var _listSiz = collision_point_list(x, y, obj_decorate, false, false, _overlayDecorateInsList, false);
+	var _listSiz = collision_point_list(x, y, obj_decorate, true, false, _overlayDecorateInsList, false);
 	// DebugMes(place_meeting(x, y, obj_decorate));
 	for(var i = 0; i < _listSiz; i++) {
 		if(InstanceExists(_overlayDecorateInsList[| i])) {

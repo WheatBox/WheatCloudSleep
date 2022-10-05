@@ -51,7 +51,7 @@ musicLoopMode = 0
 
 
 globalvar gDecoratesOverlappingSleeperAlpha;
-gDecoratesOverlappingSleeperAlpha = 0.4;
+gDecoratesOverlappingSleeperAlpha = 0.9;
 globalvar gSleepersLabelAlpha;
 gSleepersLabelAlpha = 0.7;
 
