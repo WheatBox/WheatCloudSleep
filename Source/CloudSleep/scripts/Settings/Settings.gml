@@ -50,6 +50,11 @@ musicLoopMode = 0
 */
 
 
+globalvar gDecoratesOverlappingSleeperAlpha;
+gDecoratesOverlappingSleeperAlpha = 0.4;
+globalvar gSleepersLabelAlpha;
+gSleepersLabelAlpha = 0.7;
+
 
 #macro DEBUGMODE 1
 show_debug_overlay(DEBUGMODE);

@@ -246,3 +246,32 @@ function GuiElement_CreateMessage(_text) {
 
 	ins.MyAdd(_text);
 }
+
+/// @desc
+/// 关于 参数 _varType：0 = globalvar, 1 = struct variable, 2 = instance variable
+/// 当该参数为 0 时，_varInsOrStruct 填啥都行
+/// 参数 IntFunc 是个可以自定义的取整函数，但请注意该函数要有一个参数且要记得return，例如你可以这么写：function(n) { return round(n); }
+function GuiElement_CreateSlidingRod(_xGui, _yGui, _label, _width, _varType, _varInsOrStruct, _varName, _varMin, _varMax, _IntFunc = undefined, _color = GUIDefaultColor) {
+	var ins = instance_create_depth(_xGui, _yGui, GUIDepth, obj_GuiElement_SlidingRod);
+	ins.labelText = _label;
+	ins.width = _width;
+	ins.variableType = _varType;
+	switch(_varType) {
+		case 1:
+			ins.variableStruct = _varInsOrStruct;
+			break;
+		case 2:
+			ins.variableIns = _varInsOrStruct;
+			break;
+	}
+	ins.variableName = _varName;
+	ins.variableMin = _varMin;
+	ins.variableMax = _varMax;
+	if(_IntFunc != undefined) {
+		ins.MyIntFunc = _IntFunc;
+	}
+	ins.color = _color;
+	
+	return ins;
+}
+

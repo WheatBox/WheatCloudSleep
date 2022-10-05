@@ -135,6 +135,12 @@ buttonOpenOurPhoneX = 0;
 buttonOpenOurPhoneY = 0;
 buttonOpenOurPhone = noone;
 
+slidingRodOutFocusLayerAlphaWidth = 228;
+slidingRodOutFocusLayerAlphaIns = noone;
+
+slidingRodSleepersLabelAlphaWidth = slidingRodOutFocusLayerAlphaWidth;
+slidingRodSleepersLabelAlphaIns = noone;
+
 alarm_set(2, 1); // 初始化各个 GUI组件
 
 
@@ -144,6 +150,12 @@ MySynchMyGuiElementsPosition = function() {
 		buttonOpenOurPhoneY = GuiHeight() - 32;
 		buttonOpenOurPhone.x = buttonOpenOurPhoneX;
 		buttonOpenOurPhone.y = buttonOpenOurPhoneY;
+	}
+	if(InstanceExists(slidingRodOutFocusLayerAlphaIns)) {
+		slidingRodOutFocusLayerAlphaIns.x = GuiWidth() - slidingRodOutFocusLayerAlphaWidth;
+	}
+	if(InstanceExists(slidingRodSleepersLabelAlphaIns)) {
+		slidingRodSleepersLabelAlphaIns.x = GuiWidth() - slidingRodSleepersLabelAlphaWidth;
 	}
 }
 MySynchMyGuiElementsPosition();

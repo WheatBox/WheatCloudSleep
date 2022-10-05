@@ -5,6 +5,7 @@
   "resources": [
     {"id":{"name":"GetPositionOnGUI","path":"scripts/GetPositionOnGUI/GetPositionOnGUI.yy",},"order":8,},
     {"id":{"name":"spr_ourApp_MusicPlayer_LoopModeSingleLoop","path":"sprites/spr_ourApp_MusicPlayer_LoopModeSingleLoop/spr_ourApp_MusicPlayer_LoopModeSingleLoop.yy",},"order":2,},
+    {"id":{"name":"obj_GuiElement_SlidingRod","path":"objects/obj_GuiElement_SlidingRod/obj_GuiElement_SlidingRod.yy",},"order":3,},
     {"id":{"name":"WheatCommand","path":"scripts/WheatCommand/WheatCommand.yy",},"order":5,},
     {"id":{"name":"Files","path":"scripts/Files/Files.yy",},"order":20,},
     {"id":{"name":"obj_makeMyCharacterOverButton","path":"objects/obj_makeMyCharacterOverButton/obj_makeMyCharacterOverButton.yy",},"order":1,},

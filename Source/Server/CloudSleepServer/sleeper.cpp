@@ -125,7 +125,7 @@ asio::awaitable<void> Sleeper::Reader()
         while (true)
         {
             auto n = co_await asio::async_read_until(m_sock,
-                asio::dynamic_buffer(buffer, 4096), '\0', asio::use_awaitable);
+                asio::dynamic_buffer(buffer, 512), '\0', asio::use_awaitable);
             IPTrafficRecorder::Instance().OnData(m_ip, n * 8);
 
             try
@@ -151,11 +151,13 @@ asio::awaitable<void> Sleeper::Reader()
                     [this, &forward, &replayMsgCommand](CmdName cmd) { 
                         m_name = std::move(cmd.name); 
                         LOG_INFO("sleeper:%lld's name is:%s", m_id, m_name.c_str());
-                        bool modified = EliminateBadWord(m_name);
+                        // bool modified = EliminateBadWord(m_name);
+                        bool modified = ! m_content_filter->CheckContent(m_name);
                         if(modified) {
                             forward = false;
                             replayMsgCommand = CmdError{ WheatErrorCode::InvalidName };
-                            LOG_INFO("sleeper:%lld's name after modified is:%s", m_id, m_name.c_str());
+                            // LOG_INFO("sleeper:%lld's name after modified is:%s", m_id, m_name.c_str());
+                            LOG_INFO("sleeper:%lld's name %s include bad word", m_id, m_name.c_str());
                         }
                     },
                     [this](CmdType cmd) { 

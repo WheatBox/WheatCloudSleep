@@ -7,7 +7,7 @@ var posX = GetPositionXOnGUI(x);
 var posY = GetPositionYOnGUI(bbox_top - 50);
 
 draw_set_color(c_black);
-draw_set_alpha(0.7);
+draw_set_alpha(gSleepersLabelAlpha);
 var edgeWidth = 8;
 var edgeHeight = 4;
 draw_rectangle(
@@ -19,10 +19,10 @@ draw_rectangle(
 );
 
 draw_set_color(c_white);
-draw_set_alpha(1.0);
+// draw_set_alpha(1.0);
 draw_set_halign(fa_center);
 draw_set_valign(fa_middle);
 draw_text(posX, posY, str);
 draw_set_halign(fa_left);
 draw_set_valign(fa_top);
-
+draw_set_alpha(1.0);

@@ -10,9 +10,13 @@ if(map[? "type"] == network_type_data) {
 			continue;
 		}
 		DebugMes("buf:" + string(buf));
+		
 		if(DEBUGMODE && string_height(debugStrBufs) <= 720 / 0.7) {
 			debugStrBufs += string(buf) + "\n";
 		}
+		
+		buf = string_replace_all(buf, "\n", "\\n");
+		buf = string_replace_all(buf, "\\", "\\\\");
 		
 		try {
 			var bufjson = json_parse(buf);
