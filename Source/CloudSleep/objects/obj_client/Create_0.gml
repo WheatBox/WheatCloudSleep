@@ -176,6 +176,8 @@ MySynchMyGuiElementsPosition = function() {
 }
 MySynchMyGuiElementsPosition();
 
+showSleeperIdPrev = gShowSleeperId;
+
 
 myTextBox = noone;
 

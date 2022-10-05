@@ -1,9 +1,9 @@
-if(IsNight()) {
+/*if(IsNight()) {
 	draw_set_color(#000000);
 	draw_set_alpha(0.7);
 	
 	draw_rectangle(0, 0, GuiWidth(), GuiHeight(), false);
-}
+}*/
 
 if(surface_exists(surfChatHistory) == false) {
 	MyChatHistorySurfRefresh();

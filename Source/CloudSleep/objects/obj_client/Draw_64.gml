@@ -1,11 +1,11 @@
-draw_set_color(#B3CCB6);
+/*draw_set_color(#B3CCB6);
 if(IsNight()) {
 	draw_set_alpha(0.3);
 } else {
 	draw_set_alpha(0.5);
 }
 
-draw_rectangle(0, 0, GuiWidth(), GuiHeight(), false);
+draw_rectangle(0, 0, GuiWidth(), GuiHeight(), false);*/
 
 if(myTextBox != noone) {
 	draw_set_color(c_white);
