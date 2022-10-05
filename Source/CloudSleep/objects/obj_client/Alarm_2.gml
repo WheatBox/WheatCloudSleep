@@ -15,25 +15,39 @@ buttonOpenOurPhone = GuiElement_CreateButton(buttonOpenOurPhoneX, buttonOpenOurP
 	}
 );
 
+var _slidingRodOutFocusLayerAlphaWidth = 228;
 slidingRodOutFocusLayerAlphaIns = GuiElement_CreateSlidingRod(
-	GuiWidth() - slidingRodOutFocusLayerAlphaWidth
+	GuiWidth() - _slidingRodOutFocusLayerAlphaWidth
 	, (48 + 1) * 0
 	, "睡客重叠物体透明度"
-	, slidingRodOutFocusLayerAlphaWidth
+	, _slidingRodOutFocusLayerAlphaWidth
 	, 0, 0
 	, "gDecoratesOverlappingSleeperAlpha"
 	, 0, 1
 	, function(n) { n *= 10; return round(n) / 10; }
 );
 
+var _slidingRodSleepersLabelAlphaWidth = _slidingRodOutFocusLayerAlphaWidth;
 slidingRodSleepersLabelAlphaIns = GuiElement_CreateSlidingRod(
-	GuiWidth() - slidingRodSleepersLabelAlphaWidth
+	GuiWidth() - _slidingRodSleepersLabelAlphaWidth
 	, (48 + 1) * 1
 	, "睡客名称标签透明度"
-	, slidingRodSleepersLabelAlphaWidth
+	, _slidingRodSleepersLabelAlphaWidth
 	, 0, 0
 	, "gSleepersLabelAlpha"
 	, 0, 1
 	, function(n) { n *= 10; return round(n) / 10; }
+);
+
+var _slidingRodShowSleeperIdWidth = 96;
+slidingRodShowSleeperIdIns = GuiElement_CreateSlidingRod(
+	GuiWidth() - _slidingRodShowSleeperIdWidth
+	, (48 + 1) * 2
+	, "显示睡客ID"
+	, _slidingRodShowSleeperIdWidth
+	, 0, 0
+	, "gShowSleeperId"
+	, 0, 1
+	, function(n) { return round(n); }
 );
 

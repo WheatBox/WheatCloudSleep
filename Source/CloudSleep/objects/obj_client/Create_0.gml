@@ -135,28 +135,44 @@ buttonOpenOurPhoneX = 0;
 buttonOpenOurPhoneY = 0;
 buttonOpenOurPhone = noone;
 
-slidingRodOutFocusLayerAlphaWidth = 228;
 slidingRodOutFocusLayerAlphaIns = noone;
-
-slidingRodSleepersLabelAlphaWidth = slidingRodOutFocusLayerAlphaWidth;
 slidingRodSleepersLabelAlphaIns = noone;
+slidingRodShowSleeperIdIns = noone;
 
 alarm_set(2, 1); // 初始化各个 GUI组件
 
 
 MySynchMyGuiElementsPosition = function() {
+	static _SynchSlidingRodXScreenRightFunc = function(_insTemp) {
+		if(InstanceExists(_insTemp)) {
+			var _guiW = GuiWidth();
+			var _guiH = GuiHeight();
+			
+			var _xTemp = _insTemp.x;
+			var _yTemp = _insTemp.y;
+			var _wTemp = _insTemp.width;
+			var _hTemp = _insTemp.height;
+			if(GUI_MouseGuiOnMe(_xTemp - 48, _yTemp, _xTemp + _wTemp + 48, _yTemp + _hTemp) && GetPositionXOnGUI(mouse_x) < _guiW + 48) {
+				_xTemp = lerp(_xTemp, _guiW - _wTemp, 0.2);
+			} else {
+				_xTemp = lerp(_xTemp, _guiW - 32, 0.2);
+			}
+			_insTemp.x = _xTemp;
+		}
+	}
+	
+	var _guiW = GuiWidth();
+	var _guiH = GuiHeight();
 	if(InstanceExists(buttonOpenOurPhone)) {
-		buttonOpenOurPhoneX = GuiWidth() - 64;
-		buttonOpenOurPhoneY = GuiHeight() - 32;
+		buttonOpenOurPhoneX = _guiW - 64;
+		buttonOpenOurPhoneY = _guiH - 32;
 		buttonOpenOurPhone.x = buttonOpenOurPhoneX;
 		buttonOpenOurPhone.y = buttonOpenOurPhoneY;
 	}
-	if(InstanceExists(slidingRodOutFocusLayerAlphaIns)) {
-		slidingRodOutFocusLayerAlphaIns.x = GuiWidth() - slidingRodOutFocusLayerAlphaWidth;
-	}
-	if(InstanceExists(slidingRodSleepersLabelAlphaIns)) {
-		slidingRodSleepersLabelAlphaIns.x = GuiWidth() - slidingRodSleepersLabelAlphaWidth;
-	}
+	
+	_SynchSlidingRodXScreenRightFunc(slidingRodOutFocusLayerAlphaIns);
+	_SynchSlidingRodXScreenRightFunc(slidingRodSleepersLabelAlphaIns);
+	_SynchSlidingRodXScreenRightFunc(slidingRodShowSleeperIdIns);
 }
 MySynchMyGuiElementsPosition();
 
