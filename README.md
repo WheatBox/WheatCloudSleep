@@ -6,7 +6,7 @@
 
 ## 如何编译？看这里：https://docs.qq.com/doc/DTHlKbHROTWNMYUd1
 
-## 十分感谢 B1aNB1aN 和 ymx-mshk 和 zhhhhhhhh 的帮助！！Very Thanks for B1aNB1aN And ymx-mshk And zhhhhhhhh!!
+## 十分感谢 @B1aNB1aN 和 @ymx-mshk 和 @zhhhhhhhh 的帮助！！Very Thanks for @B1aNB1aN And @ymx-mshk And @zhhhhhhhh !!
 
 Wheat Cloud Sleep software, which is meaningless. All you need to do is just open the software and lie down to sleep.
 
