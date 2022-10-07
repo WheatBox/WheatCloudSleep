@@ -119,6 +119,8 @@ bool Config::ParseConfig(std::filesystem::path path)
         GET_CONFIG_ITEM_FROM_JSON__STRING(config_items, permission_file);
         GET_CONFIG_ITEM_FROM_JSON__STRING(config_items, bad_word_list);
         GET_CONFIG_ITEM_FROM_JSON__STRING(config_items, stop_char_list);
+
+        GET_CONFIG_ITEM_FROM_JSON__STRING(config_items, cloudpack_guid);
     }
     catch (const std::exception& e)
     {

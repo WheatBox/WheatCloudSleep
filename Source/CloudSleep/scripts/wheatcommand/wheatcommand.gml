@@ -23,6 +23,8 @@ enum CommandType {
 	
 	error,
 	
+	packguid,
+	
 };
 
 function GetCommandTypeFromString(buf) {
@@ -63,6 +65,9 @@ function GetCommandTypeFromString(buf) {
 		
 		case "error":
 			return CommandType.error;
+			
+		case "packguid":
+			return CommandType.packguid;
 	}
 	
 	return CommandType.unknown;
@@ -135,6 +140,11 @@ function CommandMakeMessage(_CommandType, params = undefined) {
 			break;
 			
 		case CommandType.error:
+			break;
+			
+		case CommandType.packguid:
+			sendJson.Cmd = "packguid";
+			sendJson.Args = PackGuid;
 			break;
 	}
 	

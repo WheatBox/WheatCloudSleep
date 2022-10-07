@@ -106,13 +106,18 @@ struct CmdError
     WheatErrorCode error_code;
 };
 
+struct CmdPackGuid
+{
+    std::string guid;
+};
+
 //用于std::visit访问varaint，参见https://zh.cppreference.com/w/cpp/utility/variant/visit 
 template<class... Ts> struct overloaded : Ts... { using Ts::operator()...; };
 template<class... Ts> overloaded(Ts...)->overloaded<Ts...>;
 
 using WheatCommand = std::variant<std::monostate, CmdYourid, CmdSleeper, CmdName, CmdType, 
     CmdLeave, CmdSleep, CmdGetup, CmdChat, CmdMove, CmdPos, CmdVoteKickStart, CmdVoteAgree, 
-    CmdVoteRefuse, CmdVoteState, CmdVoteKickOver, CmdError>;
+    CmdVoteRefuse, CmdVoteState, CmdVoteKickOver, CmdError, CmdPackGuid>;
 
 WheatCommand ParseCommand(std::string_view msg);
 

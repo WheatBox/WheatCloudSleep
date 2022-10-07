@@ -109,6 +109,10 @@ function SendRefuse() {
 	sendMessageQueue.push_back(CommandMakeMessage(CommandType.refuse));
 }
 
+function SendPackGuid() {
+	sendMessageQueue.push_back(CommandMakeMessage(CommandType.packguid));
+}
+
 
 function ChatCommand(str) {
 	var isChatCommand = true;

@@ -53,6 +53,9 @@ private:
     bool m_is_voting = false;
     VoteCounter<SleeperId> m_vote_counter;
 
+public:
+    std::string m_packGuid = "";
+
 };
 
 

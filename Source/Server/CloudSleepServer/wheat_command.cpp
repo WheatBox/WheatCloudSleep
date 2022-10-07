@@ -103,6 +103,10 @@ namespace wheat
             // return CmdVoteRefuse{ std::stoull(std::string(args)) }; 
             return CmdVoteRefuse{  };
         }
+        else if (command == "packguid")
+        {
+            return CmdPackGuid{ args };
+        }
         else
         {
             throw std::runtime_error("invalid msg:" + std::string(msg));

@@ -191,6 +191,14 @@ asio::awaitable<void> Sleeper::Reader()
                     },
                     [this, &forward](CmdVoteAgree) { m_room.Agree(m_id); forward = false; },
                     [this, &forward](CmdVoteRefuse) { m_room.Refuse(m_id); forward = false; },
+                    [this, &forward, &replayMsgCommand](CmdPackGuid cmd) {
+                        m_receivedPackGuid = true;
+                        forward = false;
+                        if(cmd.guid != m_room.m_packGuid) {
+                            replayMsgCommand = CmdError{ WheatErrorCode::InvalidScene };
+                            LOG_INFO("sleeper:%lld's cloudpack's guid %s does not match the server", m_id, cmd.guid.c_str());
+                        }
+                    },
                     [](auto&&) { }
                 }, 
                 msgCommand);
@@ -211,6 +219,12 @@ asio::awaitable<void> Sleeper::Reader()
             catch (const std::exception& e)
             {
                 LOG_WARN("%s, ParseCommand failed, err:%s, sleeper_id:%lld", __func__, e.what(), m_id);
+            }
+
+            if(m_receivedPackGuid == false) {
+                LOG_INFO("sleeper:%lld's first message is not cloudpack's guid", m_id);
+                Stop();
+                break;
             }
 
             buffer.erase(0, n);

@@ -62,6 +62,7 @@ private:
     SleeperSex m_sex = 0;
     int m_bed_id = -1;
     Pos m_pos = INVALID_POS;
+    bool m_receivedPackGuid = false;
 
     asio::steady_timer m_timer;   //此定时器用于发送消息队列的同步，asio常用做法 
     std::deque<std::string> m_write_msgs;

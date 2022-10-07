@@ -44,6 +44,8 @@ public:
     std::filesystem::path permission_file;
     std::filesystem::path bad_word_list;
     std::filesystem::path stop_char_list;
+
+    std::string cloudpack_guid = "";
 private:
     bool ParseConfig(std::filesystem::path path);
 

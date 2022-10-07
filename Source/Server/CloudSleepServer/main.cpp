@@ -162,6 +162,10 @@ asio::awaitable<void> Listener(asio::ip::tcp::acceptor acceptor)
     wheat::Config::Instance().m_pContentFilter = content_filter;
 
     wheat::Room room(acceptor.get_executor());
+    room.m_packGuid = wheat::Config::Instance().cloudpack_guid;
+
+    LOG_INFO("using cloudpack's guid = %s", room.m_packGuid.c_str());
+
     for (;;)
     {
         std::make_shared<wheat::Sleeper>(

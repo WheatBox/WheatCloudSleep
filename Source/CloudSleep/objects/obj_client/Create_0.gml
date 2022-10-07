@@ -31,6 +31,7 @@ alarm_set(1, 2);
 
 sleepers = [];
 
+SendPackGuid();
 SendName();
 SendType();
 
