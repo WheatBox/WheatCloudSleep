@@ -11,5 +11,6 @@
   "permission_file": "config/permission.txt",
   "bad_word_list": "config/bad_word.txt",
   "stop_char_list": "config/stop_char.txt",
-  "content_filter_super_mode": 1
+  "content_filter_super_mode": 1,
+  "cloudpack_guid": "请在此处填入场景包的Guid。Please write cloudpack's guid here."
 }
