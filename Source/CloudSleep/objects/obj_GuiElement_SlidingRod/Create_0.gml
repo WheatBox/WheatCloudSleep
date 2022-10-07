@@ -1,11 +1,6 @@
 labelText = "";
 
-variableType = 0; // 0 = globalvar, 1 = struct variable, 2 = instance variable
-
-variableIns = noone;
-variableStruct = {};
-
-variableName = "";
+pMyVar = {};
 
 variableMin = 0;
 variableMax = 0;

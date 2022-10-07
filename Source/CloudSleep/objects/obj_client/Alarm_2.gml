@@ -21,8 +21,7 @@ slidingRodOutFocusLayerAlphaIns = GuiElement_CreateSlidingRod(
 	, (48 + 1) * 0
 	, "睡客重叠物体透明度"
 	, _slidingRodOutFocusLayerAlphaWidth
-	, 0, 0
-	, "gDecoratesOverlappingSleeperAlpha"
+	, make_wheat_ptr(EWheatPtrType.Global, 0, "gDecoratesOverlappingSleeperAlpha")
 	, 0, 1
 	, function(n) { n *= 10; return round(n) / 10; }
 );
@@ -33,8 +32,7 @@ slidingRodSleepersLabelAlphaIns = GuiElement_CreateSlidingRod(
 	, (48 + 1) * 1
 	, "睡客名称标签透明度"
 	, _slidingRodSleepersLabelAlphaWidth
-	, 0, 0
-	, "gSleepersLabelAlpha"
+	, make_wheat_ptr(EWheatPtrType.Global, 0, "gSleepersLabelAlpha")
 	, 0, 1
 	, function(n) { n *= 10; return round(n) / 10; }
 );
@@ -45,8 +43,7 @@ slidingRodShowSleeperIdIns = GuiElement_CreateSlidingRod(
 	, (48 + 1) * 2
 	, "显示睡客ID"
 	, _slidingRodShowSleeperIdWidth
-	, 0, 0
-	, "gShowSleeperId"
+	, make_wheat_ptr(EWheatPtrType.Global, 0, "gShowSleeperId")
 	, 0, 1
 	, function(n) { return round(n); }
 );

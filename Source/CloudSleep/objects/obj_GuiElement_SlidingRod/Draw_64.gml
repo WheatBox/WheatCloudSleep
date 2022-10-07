@@ -32,40 +32,10 @@ if(GUI_MouseGuiOnMe(x, rodTop - handleHeight / 2, x + width, rodBottom + handleH
 	}
 }
 
-var _varNum = 0;
-switch(variableType) {
-	case 0:
-		if(variable_global_exists(variableName)) {
-			_varNum = variable_global_get(variableName);
-			
-			if(_draggingVarNum != undefined) {
-				variable_global_set(variableName, _draggingVarNum);
-			}
-		}
-		break;
-	case 1:
-		if(CheckStructCanBeUse(variableStruct))
-		if(variable_struct_exists(variableStruct, variableName)) {
-			_varNum = variable_struct_get(variableStruct, variableName);
-			
-			if(_draggingVarNum != undefined) {
-				variable_struct_set(variableStruct, variableName, _draggingVarNum);
-			}
-		}
-		break;
-	case 2:
-		if(InstanceExists(variableIns))
-		if(variable_instance_exists(variableIns, variableName)) {
-			_varNum = variable_instance_get(variableIns, variableName);
-			
-			if(_draggingVarNum != undefined) {
-				variable_instance_set(variableIns, variableName, _draggingVarNum);
-			}
-		}
-		break;
-}
-if(is_real(_varNum) == false) {
-	_varNum = 0;
+var _varNum = pMyVar.value();
+_varNum ??= 0;
+if(_draggingVarNum != undefined) {
+	pMyVar.set(_draggingVarNum);
 }
 
 var handleX = rodLeft + (_varNum - variableMin) / (variableMax - variableMin) * (rodRight - rodLeft);
