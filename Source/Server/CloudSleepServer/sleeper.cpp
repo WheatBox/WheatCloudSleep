@@ -9,6 +9,7 @@
 #include "traffic_recorder.h"
 #include "violation_detector.h"
 #include "wheat_command.h"
+#include "config.h"
 
 namespace wheat
 {
@@ -179,10 +180,18 @@ asio::awaitable<void> Sleeper::Reader()
                     },
                     [this](CmdPos cmd) { m_pos = cmd.pos; },
                     [this](CmdMove cmd) { m_pos = cmd.pos; },
-                    [this](CmdVoteKickStart cmd) { 
+                    [this, &forward](CmdVoteKickStart cmd) { 
                         if (m_is_administrator)
                         {
-                            m_room.VoteKickStart(cmd.kick_id);
+                            auto timenow = std::chrono::steady_clock::now();
+                            auto nowVoteTimeRate = std::chrono::duration_cast<std::chrono::seconds>(timenow - m_lastVoteTime).count();
+                            if(nowVoteTimeRate > Config::Instance().vote_kick_ratetime_s) {
+                                m_room.VoteKickStart(cmd.kick_id);
+                                m_lastVoteTime = std::chrono::steady_clock::now();
+                            } else {
+                                forward = false;
+                                LOG_INFO("sleeper:%lld sent VoteKickStart, but too close to the last time", m_id);
+                            }
                         }
                         else
                         {

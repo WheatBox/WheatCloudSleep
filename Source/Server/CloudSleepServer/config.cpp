@@ -113,6 +113,7 @@ bool Config::ParseConfig(std::filesystem::path path)
         GET_CONFIG_ITEM_FROM_JSON(config_items, max_block_period_m);
         GET_CONFIG_ITEM_FROM_JSON(config_items, watch_period_m);
         GET_CONFIG_ITEM_FROM_JSON(config_items, max_watch_period_m);
+        GET_CONFIG_ITEM_FROM_JSON(config_items, vote_kick_ratetime_s);
         GET_CONFIG_ITEM_FROM_JSON(config_items, content_filter_super_mode);
 
         GET_CONFIG_ITEM_FROM_JSON__STRING(config_items, violation_rules_config_file);

@@ -372,8 +372,7 @@ namespace trie_tree
 		std::size_t wordLenTemp = 0;
 		trie_tree_node * currentNodeTemp = cur_node;
 
-		bool _GodDamnEveryThingIsAllFineButIFixedBugsAllOfTodayBeginFromTwelveToTwentyThreeOClockAndIDontKnowHowToNameThisVariableButICanTellYouThisBoolMeansWhetherAllBytesOfAnySensitiveWordHasBeenFoundWaitASecondCanThisVariableBeCompliedWellIDontKnowLetsJustTakeATryOhOneMoreThingThisVariableIsNotWrotenByWheatBoxEhhhYepImVerySure = false; // 是否找到过任意一个敏感词的所有字节
-		bool & booltemp = _GodDamnEveryThingIsAllFineButIFixedBugsAllOfTodayBeginFromTwelveToTwentyThreeOClockAndIDontKnowHowToNameThisVariableButICanTellYouThisBoolMeansWhetherAllBytesOfAnySensitiveWordHasBeenFoundWaitASecondCanThisVariableBeCompliedWellIDontKnowLetsJustTakeATryOhOneMoreThingThisVariableIsNotWrotenByWheatBoxEhhhYepImVerySure; // 多此亿举的引用，但是很酷
+		bool booltemp = false; // 是否找到过任意一个敏感词的所有字节
 		bool bFoundBeginChar = false;
 
 		for (std::size_t i = 0; i < len; ++i)
@@ -421,10 +420,10 @@ namespace trie_tree
 							stop_charFound = true;
 							break;
 						} else
-							if (stop_charset_.find(str.substr(iTemp, j)) != stop_charset_.end()) {
-								stop_charFound = true;
-								break;
-							}
+						if (stop_charset_.find(str.substr(iTemp, j)) != stop_charset_.end()) {
+							stop_charFound = true;
+							break;
+						}
 					}
 				}
 

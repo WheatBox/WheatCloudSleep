@@ -137,21 +137,28 @@ buttonOpenOurPhoneY = 0;
 buttonOpenOurPhone = noone;
 
 slidingRodOutFocusLayerAlphaIns = noone;
+
 slidingRodSleepersLabelAlphaIns = noone;
+slidingRodSleepersLabelScaleIns = noone;
+slidingRodSleepersChatScaleIns = noone;
+
 slidingRodShowSleeperIdIns = noone;
 
 alarm_set(2, 1); // 初始化各个 GUI组件
 
 
 MySynchMyGuiElementsPosition = function() {
-	static _SynchSlidingRodXScreenRightFunc = function(_insTemp) {
+	static _SynchSlidingRodXScreenRightFunc = function(_insTemp, _xToRight = undefined, _xToRightMultiply = 1) {
 		if(InstanceExists(_insTemp)) {
 			var _guiW = GuiWidth();
 			var _guiH = GuiHeight();
 			
+			_xToRight ??= _insTemp.width + 1;
+			_xToRight *= _xToRightMultiply;
+			
 			var _xTemp = _insTemp.x;
 			var _yTemp = _insTemp.y;
-			var _wTemp = _insTemp.width;
+			var _wTemp = _xToRight;
 			var _hTemp = _insTemp.height;
 			if(GUI_MouseGuiOnMe(_xTemp - 48, _yTemp, _xTemp + _wTemp + 48, _yTemp + _hTemp) && GetPositionXOnGUI(mouse_x) < _guiW + 48) {
 				_xTemp = lerp(_xTemp, _guiW - _wTemp, 0.2);
@@ -172,7 +179,11 @@ MySynchMyGuiElementsPosition = function() {
 	}
 	
 	_SynchSlidingRodXScreenRightFunc(slidingRodOutFocusLayerAlphaIns);
+	
 	_SynchSlidingRodXScreenRightFunc(slidingRodSleepersLabelAlphaIns);
+	_SynchSlidingRodXScreenRightFunc(slidingRodSleepersLabelScaleIns, , 2);
+	_SynchSlidingRodXScreenRightFunc(slidingRodSleepersChatScaleIns, , 3);
+	
 	_SynchSlidingRodXScreenRightFunc(slidingRodShowSleeperIdIns);
 }
 MySynchMyGuiElementsPosition();

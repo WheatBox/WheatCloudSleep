@@ -16,19 +16,36 @@ function DrawTextSetMid() {
 }
 
 function DrawChat(_x, _y, _chatText) {
-	draw_set_color(c_black);
+	static _drawChatSurf = -1;
+	static _drawChatSurfWidth = 0;
+	static _drawChatSurfHeight = 0;
+	
 	draw_set_font(fontRegular);
 	
-	var baseWidth = 58;
+	if(_drawChatSurf == -1 || surface_exists(_drawChatSurf) == false) {
+		_drawChatSurfWidth = string_width("乐") * 200;
+		_drawChatSurfHeight = 66;
+		_drawChatSurf = surface_create(_drawChatSurfWidth, _drawChatSurfHeight);
+	}
 	
-	draw_sprite_ext(spr_ChatBackground, 0, _x, _y + 2, (string_width(_chatText) + baseWidth) / sprite_get_width(spr_ChatBackground), 1, 0, c_white, 0.8);
-	draw_set_alpha(0.8);
-	draw_sprite(spr_ChatBackgroundTail, 0, _x, _y + 2);
+	if(surface_exists(_drawChatSurf)) {
+		var baseWidth = 58;
+		
+		surface_set_target(_drawChatSurf);
+		SurfaceClear();
+		
+		draw_sprite_ext(spr_ChatBackground, 0, _drawChatSurfWidth / 2, _drawChatSurfHeight / 2, (string_width(_chatText) + baseWidth) / sprite_get_width(spr_ChatBackground), 1, 0, c_white, 1.0);
+		draw_sprite_ext(spr_ChatBackgroundTail, 1, _drawChatSurfWidth / 2, _drawChatSurfHeight / 2, 1.0, 1.0, 0, c_white, 1.0);
+		
+		surface_reset_target();
+		
+		draw_surface_ext(_drawChatSurf, _x - _drawChatSurfWidth / 2 * gSleepersChatScale, _y - _drawChatSurfHeight / 2 * gSleepersChatScale + 2, gSleepersChatScale, gSleepersChatScale, 0, c_white, 0.8);
+	}
 	
-	draw_set_alpha(1.0);
+	draw_set_color(c_black);
 	
 	DrawTextSetMid();
-	draw_text(_x, _y, _chatText);
+	draw_text_transformed(_x, _y, _chatText, gSleepersChatScale, gSleepersChatScale, 0);
 	DrawTextSetLU();
 	
 	draw_set_color(c_white);
@@ -41,7 +58,7 @@ function IsNight() {
 	// show_debug_message([current_hour, current_minute]);
 	
 	if((current_hour > nightBeginHour || (current_hour == nightBeginHour && current_minute >= nightBeginMinute)) || current_hour <= nightEndHour) {
-		//return true;
+		return true;
 	}
 	
 	return false;

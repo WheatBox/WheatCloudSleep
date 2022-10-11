@@ -37,6 +37,9 @@ public:
     int watch_period_m = 2 * block_period_m;
     int max_watch_period_m = 2 * max_block_period_m;
 
+    // 客户端发起投票踢人的时间间隔限制，注意，是每一次成功发起投票进行计时，而不是投票结束后开始计时的
+    int vote_kick_ratetime_s = 15;
+
     // 屏蔽词系统的超级模式
     int content_filter_super_mode = 1;
 
