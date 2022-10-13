@@ -1,2 +1,3 @@
 delete vecChatHistory;
 delete vecChatHistorySleeperId;
+delete vecChatHistoryColor;

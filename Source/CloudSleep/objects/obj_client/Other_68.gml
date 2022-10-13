@@ -36,6 +36,9 @@ if(map[? "type"] == network_type_data) {
 						sleepers[mySleeperId].isMe = true;
 						sleepers[mySleeperId].sleeperId = mySleeperId;
 					}
+					
+					MyChatHistoryAddSystemMes("欢迎你，亲爱的睡客 " + _Args[0] + " ，来睡觉吧");
+					
 					break;
 				case CommandType.sleeper:
 					var arg = real(_Args[0]);
@@ -43,15 +46,19 @@ if(map[? "type"] == network_type_data) {
 						instance_destroy(sleepers[arg]);
 					}
 					sleepers[arg] = CreateSleeper(NewSleeperPosX, NewSleeperPosY);
-					sleepers[arg].x = 1000;
-					sleepers[arg].y = 1000;
 					sleepers[arg].sleeperId = arg;
+					
+					MyChatHistoryAddSystemMes("新睡客 " + _Args[0] + " 来睡觉了~");
+					
 					break;
 				case CommandType.name:
 					if(!MyCanUseSleeperId(mesSleeperId)) break;
 					
 					// sleepers[mesSleeperId].name = StringConverter_MultiByteToUTF8(_Args[0]);
 					sleepers[mesSleeperId].name = (_Args[0]);
+					
+					MyChatHistoryAddSystemMes("睡客 " + string(mesSleeperId) + " 设定名称为：" + _Args[0]);
+					
 					break;
 				case CommandType.type:
 					if(!MyCanUseSleeperId(mesSleeperId)) break;
@@ -63,8 +70,11 @@ if(map[? "type"] == network_type_data) {
 					if(!MyCanUseSleeperId(mesSleeperId)) break;
 					
 					if(InstanceExists(sleepers[mesSleeperId])) {
+						MyChatHistoryAddSystemMes("有睡客离开了 " + string(mesSleeperId) + " @" + sleepers[mesSleeperId].name);
+						
 						instance_destroy(sleepers[mesSleeperId]);
 					}
+					
 					break;
 					
 				case CommandType.sleep:
@@ -102,9 +112,11 @@ if(map[? "type"] == network_type_data) {
 					break;
 					
 				case CommandType.kick:
-					if(!MyCanUseSleeperId(mesSleeperId) || !MyCanUseSleeperId(real(_Args[0]))) break;
+					var _sleeperIdTemp = real(_Args[0]);
+					if(!MyCanUseSleeperId(mesSleeperId) || !MyCanUseSleeperId(_sleeperIdTemp)) break;
 					OnVote = true;
-					CreateKickShowVotes(mesSleeperId, real(_Args[0]));
+					CreateKickShowVotes(mesSleeperId, _sleeperIdTemp);
+					MyChatHistoryAddSystemMes("睡客 " + string(mesSleeperId) + " @" + sleepers[mesSleeperId].name + " 发起投票踢出 " + _Args[0] + " @" + sleepers[_sleeperIdTemp].name);
 					break;
 				case CommandType.agree:
 				case CommandType.refuse:
@@ -116,6 +128,8 @@ if(map[? "type"] == network_type_data) {
 				case CommandType.kickover:
 					OnVote = false;
 					if(instance_exists(obj_kickShowVotes)) {
+						MyChatHistoryAddSystemMes("投票结束，投票结果：同意 " + string(obj_kickShowVotes.agreesNum) + "，反对 " + string(obj_kickShowVotes.refusesNum));
+						
 						instance_destroy(obj_kickShowVotes);
 					}
 					break;
