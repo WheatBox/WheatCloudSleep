@@ -96,5 +96,14 @@ yBeforeSleep = y;
 sleeperId = -1;
 
 
+myArrChatHistory = [];
+
+MyRecordChatHistroy = function(str) {
+	array_push(myArrChatHistory, str);
+	if(array_length(myArrChatHistory) > OtherSleepersChatHistoryMaxLen) {
+		array_delete(myArrChatHistory, 0, 1);
+	}
+}
+
 inited = false;
 

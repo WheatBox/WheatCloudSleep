@@ -95,6 +95,7 @@ if(map[? "type"] == network_type_data) {
 					var _chatMes = (_Args[0]);
 					
 					sleepers[mesSleeperId].MyChat(_chatMes);
+					sleepers[mesSleeperId].MyRecordChatHistroy(_chatMes);
 					
 					MyChatHistoryAdd(mesSleeperId, _chatMes);
 					break;

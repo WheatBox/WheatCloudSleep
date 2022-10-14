@@ -58,5 +58,8 @@ gSleepersLabelScale = 1.0;
 gSleepersChatScale = 1.0;
 
 
+#macro OtherSleepersChatHistoryMaxLen 10
+
+
 #macro DEBUGMODE 1
 show_debug_overlay(DEBUGMODE);
