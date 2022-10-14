@@ -151,34 +151,45 @@ buttonOpenOurPhoneX = 0;
 buttonOpenOurPhoneY = 0;
 buttonOpenOurPhone = noone;
 
-slidingRodOutFocusLayerAlphaIns = noone;
-
 slidingRodSleepersLabelAlphaIns = noone;
 slidingRodSleepersLabelScaleIns = noone;
 slidingRodSleepersChatScaleIns = noone;
 
+slidingRodOutFocusLayerAlphaIns = noone;
+
 slidingRodShowSleeperIdIns = noone;
+slidingRodHideVoteKickIns = noone;
 
 alarm_set(2, 1); // 初始化各个 GUI组件
 
 
 MySynchMyGuiElementsPosition = function() {
-	static _SynchSlidingRodXScreenRightFunc = function(_insTemp, _xToRight = undefined, _xToRightMultiply = 1) {
+	static _SynchSlidingRodXScreenLeftFunc = function(_insTemp, _xToLeftMultiply = 1, _xToLeftMultiplyMax = 1) {
+		if(InstanceExists(_insTemp)) {
+			var _xTemp = _insTemp.x;
+			var _yTemp = _insTemp.y;
+			var _wTemp = _insTemp.width + 1;
+			var _hTemp = _insTemp.height;
+			if(GUI_MouseGuiOnMe(0 - 48, _yTemp, _xTemp + _wTemp + 48 + _wTemp * (_xToLeftMultiplyMax - _xToLeftMultiply), _yTemp + _hTemp) && GetPositionXOnGUI(mouse_x) > -48) {
+				_xTemp = lerp(_xTemp, 0 + _wTemp * (_xToLeftMultiply - 1), 0.2);
+			} else {
+				_xTemp = lerp(_xTemp, 0 + 32 - _wTemp * (_xToLeftMultiplyMax - _xToLeftMultiply + 1), 0.2);
+			}
+			_insTemp.x = _xTemp;
+		}
+	}
+	static _SynchSlidingRodXScreenRightFunc = function(_insTemp, _xToRightMultiply = 1, _xToRightMultiplyMax = 1) {
 		if(InstanceExists(_insTemp)) {
 			var _guiW = GuiWidth();
-			var _guiH = GuiHeight();
-			
-			_xToRight ??= _insTemp.width + 1;
-			_xToRight *= _xToRightMultiply;
 			
 			var _xTemp = _insTemp.x;
 			var _yTemp = _insTemp.y;
-			var _wTemp = _xToRight;
+			var _wTemp = _insTemp.width + 1;
 			var _hTemp = _insTemp.height;
-			if(GUI_MouseGuiOnMe(_xTemp - 48, _yTemp, _xTemp + _wTemp + 48, _yTemp + _hTemp) && GetPositionXOnGUI(mouse_x) < _guiW + 48) {
-				_xTemp = lerp(_xTemp, _guiW - _wTemp, 0.2);
+			if(GUI_MouseGuiOnMe(_xTemp - 48 - _wTemp * (_xToRightMultiplyMax - _xToRightMultiply), _yTemp, _guiW + 48, _yTemp + _hTemp) && GetPositionXOnGUI(mouse_x) < _guiW + 48) {
+				_xTemp = lerp(_xTemp, _guiW - _wTemp * _xToRightMultiply, 0.2);
 			} else {
-				_xTemp = lerp(_xTemp, _guiW - 32, 0.2);
+				_xTemp = lerp(_xTemp, _guiW - 32 + _wTemp * (_xToRightMultiplyMax - _xToRightMultiply), 0.2);
 			}
 			_insTemp.x = _xTemp;
 		}
@@ -193,13 +204,14 @@ MySynchMyGuiElementsPosition = function() {
 		buttonOpenOurPhone.y = buttonOpenOurPhoneY;
 	}
 	
-	_SynchSlidingRodXScreenRightFunc(slidingRodOutFocusLayerAlphaIns);
+	_SynchSlidingRodXScreenRightFunc(slidingRodSleepersLabelAlphaIns, 1, 3);
+	_SynchSlidingRodXScreenRightFunc(slidingRodSleepersLabelScaleIns, 2, 3);
+	_SynchSlidingRodXScreenRightFunc(slidingRodSleepersChatScaleIns, 3, 3);
 	
-	_SynchSlidingRodXScreenRightFunc(slidingRodSleepersLabelAlphaIns);
-	_SynchSlidingRodXScreenRightFunc(slidingRodSleepersLabelScaleIns, , 2);
-	_SynchSlidingRodXScreenRightFunc(slidingRodSleepersChatScaleIns, , 3);
+	_SynchSlidingRodXScreenRightFunc(slidingRodOutFocusLayerAlphaIns, 1, 1);
 	
-	_SynchSlidingRodXScreenRightFunc(slidingRodShowSleeperIdIns);
+	_SynchSlidingRodXScreenLeftFunc(slidingRodShowSleeperIdIns, 1, 2.5);
+	_SynchSlidingRodXScreenLeftFunc(slidingRodHideVoteKickIns, 2.5, 2.5);
 }
 MySynchMyGuiElementsPosition();
 

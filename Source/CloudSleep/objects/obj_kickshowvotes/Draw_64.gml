@@ -1,3 +1,7 @@
+if(gHideVoteKick) {
+	exit;
+}
+
 var str = string(whoVoteSleeperId) + "[@" + whoVoteName + "] 发起投票是否踢出 " + string(kickSleeperId) + "[@" + kickName + "]";
 str += "\n按下F1 同意踢出，当前同意人数：" + string(agreesNum);
 str += "\n按下F2 反对踢出，当前反对人数：" + string(refusesNum);

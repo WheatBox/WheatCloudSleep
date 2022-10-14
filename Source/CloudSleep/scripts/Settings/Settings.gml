@@ -56,10 +56,12 @@ globalvar gSleepersLabelAlpha, gSleepersLabelScale, gSleepersChatScale;
 gSleepersLabelAlpha = 0.7;
 gSleepersLabelScale = 1.0;
 gSleepersChatScale = 1.0;
+globalvar gHideVoteKick;
+gHideVoteKick = 0;
 
 
 #macro OtherSleepersChatHistoryMaxLen 10
 
 
-#macro DEBUGMODE 1
+#macro DEBUGMODE 0
 show_debug_overlay(DEBUGMODE);
