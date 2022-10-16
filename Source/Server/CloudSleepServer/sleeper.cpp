@@ -208,6 +208,7 @@ asio::awaitable<void> Sleeper::Reader()
                             LOG_INFO("sleeper:%lld's cloudpack's guid %s does not match the server", m_id, cmd.guid.c_str());
                         }
                     },
+                    [this](CmdEmote) {  }, // 嗯，表情消息应该没啥要处理的，不过还是留个位置好了
                     [](auto&&) { }
                 }, 
                 msgCommand);

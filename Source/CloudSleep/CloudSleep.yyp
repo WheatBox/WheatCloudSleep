@@ -47,6 +47,7 @@
     {"id":{"name":"textbox","path":"objects/textbox/textbox.yy",},"order":1,},
     {"id":{"name":"spr_SleeperHitbox","path":"sprites/spr_SleeperHitbox/spr_SleeperHitbox.yy",},"order":8,},
     {"id":{"name":"spr_ourPhone","path":"sprites/spr_ourPhone/spr_ourPhone.yy",},"order":0,},
+    {"id":{"name":"obj_emoteRoulette","path":"objects/obj_emoteRoulette/obj_emoteRoulette.yy",},"order":10,},
     {"id":{"name":"spr_ourApp_MusicPlayer_LoopModeStop","path":"sprites/spr_ourApp_MusicPlayer_LoopModeStop/spr_ourApp_MusicPlayer_LoopModeStop.yy",},"order":0,},
     {"id":{"name":"obj_mainMenu","path":"objects/obj_mainMenu/obj_mainMenu.yy",},"order":0,},
     {"id":{"name":"rm_MainMenu","path":"rooms/rm_MainMenu/rm_MainMenu.yy",},"order":2,},

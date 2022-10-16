@@ -97,7 +97,7 @@ void Room::GetUp(SleeperId id)
     auto iter = std::find(m_beds.begin(), m_beds.end(), id);
     if (iter != m_beds.end())
     {
-        LOG_INFO("%s, sleeper:%lld getup on bed:%d", __func__, id, iter - m_beds.begin() + 1);
+        LOG_INFO("%s, sleeper:%lld getup on bed:%d", __func__, id, iter - m_beds.begin());
         *iter = INVALID_SLEEPER_ID;
 
         // 起床时候重置该睡客记录的当前正在睡着的床位id

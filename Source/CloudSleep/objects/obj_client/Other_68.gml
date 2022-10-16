@@ -42,9 +42,9 @@ if(map[? "type"] == network_type_data) {
 					break;
 				case CommandType.sleeper:
 					var arg = real(_Args[0]);
-					if(MyCanUseSleeperId(arg)) {
-						instance_destroy(sleepers[arg]);
-					}
+					//if(MyCanUseSleeperId(arg)) {
+					//	instance_destroy(sleepers[arg]);
+					//}
 					sleepers[arg] = CreateSleeper(NewSleeperPosX, NewSleeperPosY);
 					sleepers[arg].sleeperId = arg;
 					
@@ -137,6 +137,11 @@ if(map[? "type"] == network_type_data) {
 					
 				case CommandType.error:
 					CommandError(_Args[0]);
+					break;
+					
+				case CommandType.emote:
+					if(!MyCanUseSleeperId(mesSleeperId)) break;
+					sleepers[mesSleeperId].MyEmote(real(_Args[0]));
 					break;
 			}
 		} catch(error) {

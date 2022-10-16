@@ -132,7 +132,9 @@ MyEnterToBedRoom = function() {
 	}
 	
 	
+	LoadSleeperEmoteSprites();
 	LoadBedSleepSprites();
+	DebugMes(gArrSleeperEmoteSprites);
 	DebugMes(gArrBedSleepSprites);
 	
 	

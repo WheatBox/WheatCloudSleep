@@ -5,7 +5,13 @@ if(chatTime > 0) {
 	chatTime--;
 	
 	var chatPosX = GetPositionXOnGUI(x);
-	var chatPosY = GetPositionYOnGUI(y - 200);
+	var chatPosY = 0;
+	
+	if(gSleepersLabelScale <= 0 || gSleepersLabelAlpha <= 0) {
+		chatPosY = GetPositionYOnGUI(bbox_top - 42);
+	} else {
+		chatPosY = GetPositionYOnGUI(bbox_top - 72);
+	}
 	
 	DrawChat(chatPosX, chatPosY, chatText);
 }
