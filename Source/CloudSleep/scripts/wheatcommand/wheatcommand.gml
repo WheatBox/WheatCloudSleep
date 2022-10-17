@@ -27,6 +27,8 @@ enum CommandType {
 	
 	emote,
 	
+	report,
+	
 };
 
 function GetCommandTypeFromString(buf) {
@@ -73,6 +75,9 @@ function GetCommandTypeFromString(buf) {
 			
 		case "emote":
 			return CommandType.emote;
+			
+		case "report":
+			return CommandType.report;
 	}
 	
 	return CommandType.unknown;
@@ -154,6 +159,11 @@ function CommandMakeMessage(_CommandType, params = undefined) {
 			
 		case CommandType.emote:
 			sendJson.Cmd = "emote";
+			sendJson.Args = string(params[0]);
+			break;
+			
+		case CommandType.report:
+			sendJson.Cmd = "report";
 			sendJson.Args = string(params[0]);
 			break;
 	}

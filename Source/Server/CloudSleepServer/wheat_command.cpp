@@ -111,6 +111,10 @@ namespace wheat
         {
             return CmdEmote{ std::stoi(args) };
         }
+        else if (command == "report")
+        {
+            return CmdReport{ args };
+        }
         else
         {
             throw std::runtime_error("invalid msg:" + std::string(msg));
@@ -220,6 +224,7 @@ namespace wheat
             [](CmdVoteKickOver) { return ProcCommand("kickover", "0"); },
             [](CmdError arg) { return ProcCommand("error", std::to_string(to_underlaying(arg.error_code))); },
             [](CmdEmote arg) { return ProcCommand("emote", std::to_string(arg.emote_id)); },
+            [](CmdReport arg) { return ProcCommand("report", "0"); },
             [](auto&&) { return std::string(); }
             }, cmd);
     }

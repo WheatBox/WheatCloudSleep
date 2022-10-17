@@ -3,7 +3,7 @@ arrOurApps = [
 	OurPhone_CreateOurApp(obj_ourApp_CustomWallpaper, spr_ourApp_CustomWallpaper),
 	OurPhone_CreateOurApp(obj_ourApp_MusicPlayer, spr_ourApp_MusicPlayer),
 	// OurPhone_CreateOurApp(obj_ourApp_WebBrowser, spr_ourApp_WebBrowser),
-	
+	OurPhone_CreateOurApp(obj_ourApp_Report, spr_ourApp_Report),
 ];
 
 depth = OurPhoneDepth;

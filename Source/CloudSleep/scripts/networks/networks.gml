@@ -122,6 +122,10 @@ function SendEmote(_emoteId) {
 	SendCommandEasy(CommandType.emote, [_emoteId]);
 }
 
+function SendReport(_reportContent) {
+	SendCommandEasy(CommandType.report, [_reportContent]);
+}
+
 
 function ChatCommand(str) {
 	var isChatCommand = true;
@@ -135,6 +139,15 @@ function ChatCommand(str) {
 				var strTemp = string_digits(args[1]);
 				if(strTemp != "") {
 					SendKick(real(strTemp));
+				}
+			}
+			break;
+			
+		case "/report":
+			if(array_length(args) >= 2) {
+				var strTemp = string(args[1]);
+				if(strTemp != "") {
+					SendReport(strTemp);
 				}
 			}
 			break;

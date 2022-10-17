@@ -72,6 +72,10 @@ const char* LogLevelToStr(LogLevel log_level)
         return "error";
     case LogLevel::FATAL:
         return "fatal";
+
+    case LogLevel::REPORT:
+        return "report";
+
     default:
         return "unknown";
     }

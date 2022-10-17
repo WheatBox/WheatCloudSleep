@@ -143,6 +143,10 @@ if(map[? "type"] == network_type_data) {
 					if(!MyCanUseSleeperId(mesSleeperId)) break;
 					sleepers[mesSleeperId].MyEmote(real(_Args[0]));
 					break;
+					
+				case CommandType.report:
+					GuiElement_CreateMessage("举报信息发送成功！");
+					break;
 			}
 		} catch(error) {
 			DebugMes([error.script, error.message]);

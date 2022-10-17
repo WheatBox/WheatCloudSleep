@@ -186,15 +186,29 @@ function GUI_DrawSurface_ext(surf, _xGui, _yGui, xscale, yscale, rot, col, alpha
 globalvar __CursorTEMP;
 __CursorTEMP = cr_default;
 function GUI_SetCursorHandpoint() {
-	if(window_get_cursor() != cr_handpoint) {
+	var curCursor = window_get_cursor();
+	if(
+		curCursor != cr_handpoint
+		&& curCursor != cr_beam
+	) {
 		window_set_cursor(cr_handpoint);
 	}
 	__CursorTEMP = cr_handpoint;
+}
+function GUI_SetCursorBeam() {
+	var curCursor = window_get_cursor();
+	if(
+		curCursor != cr_beam
+	) {
+		window_set_cursor(cr_beam);
+	}
+	__CursorTEMP = cr_beam;
 }
 function GUI_SetCursorDefault() {
 	var curCursor = window_get_cursor();
 	if(
 		curCursor == cr_handpoint
+		|| curCursor == cr_beam
 	) {
 		// 等到下一帧看看 GUI_SetCursorHandpoint(); 会不会被再次触发（也就是鼠标依然在按钮上）
 		// 如果再次触发，那么忽略，进行下一次检查的准备（__CursorTEMP = cr_default）

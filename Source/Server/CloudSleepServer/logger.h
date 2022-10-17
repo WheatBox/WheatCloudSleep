@@ -43,7 +43,9 @@ enum class LogLevel
     INFO,
     WARN,
     LEVEL_ERROR,
-    FATAL
+    FATAL,
+
+    REPORT
 };
 
 #define LOG_CONSOLE 1

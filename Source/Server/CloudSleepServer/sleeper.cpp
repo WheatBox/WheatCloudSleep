@@ -10,6 +10,7 @@
 #include "violation_detector.h"
 #include "wheat_command.h"
 #include "config.h"
+#include "report_recorder.h"
 
 namespace wheat
 {
@@ -209,6 +210,11 @@ asio::awaitable<void> Sleeper::Reader()
                         }
                     },
                     [this](CmdEmote) {  }, // 嗯，表情消息应该没啥要处理的，不过还是留个位置好了
+                    [this, &forward](CmdReport cmd) {
+                        forward = false;
+                        LOG_REPORT("sleeper:%lld report: %s", m_id, cmd.reportContent.c_str());
+                        Deliver(PackCommandWithId(m_id, CmdReport{ "0" }));
+                    },
                     [](auto&&) { }
                 }, 
                 msgCommand);
