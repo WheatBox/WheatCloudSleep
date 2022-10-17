@@ -24,6 +24,7 @@ project (${PROJECT_NAME})
 
 set (ASIO_DIR "third/asio/asio/include")
 set (JSON_DIR "third/json/include")
+set (CONFIG_DIR "config")
 set (INSTALL_DIR "install")
 
 # Override default install dir
@@ -40,7 +41,6 @@ file (GLOB CPP_FILES *.cpp)
 add_executable (${EXE_NAME}
     ${CPP_FILES}
     ${HEADER_FILES}
-	"cJSON.c"
 )
 
 target_include_directories (${EXE_NAME}
@@ -55,6 +55,11 @@ target_compile_features (${EXE_NAME}
 if (MSVC) # static link MultiThreaded lib
     set_property(TARGET ${EXE_NAME} PROPERTY
         MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+    # set UTF-8 compile for msvc
+    target_compile_options(
+        ${EXE_NAME}
+        PUBLIC "/utf-8"
+    )
 endif()
 
 if (UNIX) # Building on unix-like system, link pthread for asio.
@@ -74,6 +79,11 @@ if (UNIX) # Building on unix-like system, link pthread for asio.
     #)
 endif()
 
+# Install binary and config file
 install (TARGETS ${EXE_NAME}
     RUNTIME DESTINATION "."
+)
+
+install (DIRECTORY ${CONFIG_DIR}
+    DESTINATION "."
 )

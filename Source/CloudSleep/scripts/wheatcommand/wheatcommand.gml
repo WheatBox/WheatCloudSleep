@@ -21,6 +21,14 @@ enum CommandType {
 	refuse,
 	kickover,
 	
+	error,
+	
+	packguid,
+	
+	emote,
+	
+	report,
+	
 };
 
 function GetCommandTypeFromString(buf) {
@@ -58,6 +66,18 @@ function GetCommandTypeFromString(buf) {
 			return CommandType.refuse;
 		case "kickover":
 			return CommandType.kickover;
+		
+		case "error":
+			return CommandType.error;
+			
+		case "packguid":
+			return CommandType.packguid;
+			
+		case "emote":
+			return CommandType.emote;
+			
+		case "report":
+			return CommandType.report;
 	}
 	
 	return CommandType.unknown;
@@ -128,8 +148,40 @@ function CommandMakeMessage(_CommandType, params = undefined) {
 			
 		case CommandType.kickover:
 			break;
+			
+		case CommandType.error:
+			break;
+			
+		case CommandType.packguid:
+			sendJson.Cmd = "packguid";
+			sendJson.Args = PackGuid;
+			break;
+			
+		case CommandType.emote:
+			sendJson.Cmd = "emote";
+			sendJson.Args = string(params[0]);
+			break;
+			
+		case CommandType.report:
+			sendJson.Cmd = "report";
+			sendJson.Args = string(params[0]);
+			break;
 	}
 	
 	return json_stringify(sendJson);
+}
+
+
+function CommandError(_errorCode) {
+	switch(real(_errorCode)) {
+		case 1001:
+			show_message_async("错误！用户名中含有敏感词汇！");
+			GameRestart();
+			break;
+		case 1002:
+			show_message_async("错误！所选场景包与所连接的服务器指定的场景包不匹配！");
+			GameRestart();
+			break;
+	}
 }
 

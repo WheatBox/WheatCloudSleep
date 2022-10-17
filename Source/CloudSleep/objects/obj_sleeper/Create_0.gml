@@ -96,5 +96,36 @@ yBeforeSleep = y;
 sleeperId = -1;
 
 
+myArrChatHistory = [];
+
+MyRecordChatHistroy = function(str) {
+	array_push(myArrChatHistory, str);
+	if(array_length(myArrChatHistory) > OtherSleepersChatHistoryMaxLen) {
+		array_delete(myArrChatHistory, 0, 1);
+	}
+}
+
+
+emoteTimeMax = 60 * 4;
+emoteTime = emoteTimeMax;
+emoteAnimationTimeOffset = 60 * 0.1;
+
+emoteIndex = -1; // -1 为 无表情
+MyEmote = function(_emoteId) {
+	var _arrTemp = gArrSleeperEmoteSprites[type];
+	if(_emoteId < 0 || _emoteId >= array_length(_arrTemp)) {
+		return;
+	}
+	if(sprite_exists(_arrTemp[_emoteId]) == false) {
+		return;
+	}
+	
+	emoteTime = 0;
+	emoteIndex = _emoteId;
+	
+	
+}
+
+
 inited = false;
 

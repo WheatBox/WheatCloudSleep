@@ -16,19 +16,36 @@ function DrawTextSetMid() {
 }
 
 function DrawChat(_x, _y, _chatText) {
-	draw_set_color(c_black);
+	static _drawChatSurf = -1;
+	static _drawChatSurfWidth = 0;
+	static _drawChatSurfHeight = 0;
+	
 	draw_set_font(fontRegular);
 	
-	var baseWidth = 58;
+	if(_drawChatSurf == -1 || surface_exists(_drawChatSurf) == false) {
+		_drawChatSurfWidth = string_width("乐") * 200;
+		_drawChatSurfHeight = 66;
+		_drawChatSurf = surface_create(_drawChatSurfWidth, _drawChatSurfHeight);
+	}
 	
-	draw_sprite_ext(spr_ChatBackground, 0, _x, _y + 2, (string_width(_chatText) + baseWidth) / sprite_get_width(spr_ChatBackground), 1, 0, c_white, 0.8);
-	draw_set_alpha(0.8);
-	draw_sprite(spr_ChatBackgroundTail, 0, _x, _y + 2);
+	if(surface_exists(_drawChatSurf)) {
+		var baseWidth = 58;
+		
+		surface_set_target(_drawChatSurf);
+		SurfaceClear();
+		
+		draw_sprite_ext(spr_ChatBackground, 0, _drawChatSurfWidth / 2, _drawChatSurfHeight / 2, (string_width(_chatText) + baseWidth) / sprite_get_width(spr_ChatBackground), 1, 0, c_white, 1.0);
+		draw_sprite_ext(spr_ChatBackgroundTail, 1, _drawChatSurfWidth / 2, _drawChatSurfHeight / 2, 1.0, 1.0, 0, c_white, 1.0);
+		
+		surface_reset_target();
+		
+		draw_surface_ext(_drawChatSurf, _x - _drawChatSurfWidth / 2 * gSleepersChatScale, _y - _drawChatSurfHeight / 2 * gSleepersChatScale + 2, gSleepersChatScale, gSleepersChatScale, 0, c_white, 0.8);
+	}
 	
-	draw_set_alpha(1.0);
+	draw_set_color(c_black);
 	
 	DrawTextSetMid();
-	draw_text(_x, _y, _chatText);
+	draw_text_transformed(_x, _y, _chatText, gSleepersChatScale, gSleepersChatScale, 0);
 	DrawTextSetLU();
 	
 	draw_set_color(c_white);
@@ -201,6 +218,70 @@ function GameRestart() {
 		socket = undefined;
 	}
 	
+	ArrayClear(sendMessageQueue.Container);
+	
 	game_restart();
+}
+
+
+function GetCurrentTimeString(_withSecond) {
+	var res = "";
+	
+	var _hour = string(current_hour);
+	
+	var _minute = string(current_minute);
+	if(current_minute < 10) {
+		_minute = "0" + _minute;
+	}
+	
+	res = _hour + ":" + _minute;
+	
+	if(_withSecond) {
+		var _second = string(current_second);
+		if(current_second < 10) {
+			_second = "0" + _second;
+		}
+		res += ":" + _second;
+	}
+	
+	return res;
+}
+
+
+function SurfaceClear() {
+	draw_clear_alpha(c_black, 0.0);
+}
+
+function SurfaceClear_surf(surf) {
+	surface_set_target(surf);
+	draw_clear_alpha(c_black, 0.0);
+	surface_reset_target();
+}
+
+
+/// @desc 计算 scrollY
+function ScrollYCalculate(scrollY, scrollYSpeed, _guiTop, _guiBottom, _pageHeight) {
+	var top = _guiTop;
+	var bottom = _guiBottom;
+	
+	scrollY = -scrollY;
+	
+	if(mouse_wheel_up()) {
+		scrollY -= scrollYSpeed;
+		if(top + scrollY < 0) {
+			scrollY -= top + scrollY;
+		}
+	} else if(mouse_wheel_down()) {
+		if(_pageHeight >= bottom) {
+			scrollY += scrollYSpeed;
+			if(bottom + scrollY > _pageHeight) {
+				scrollY -= bottom + scrollY - _pageHeight;
+			}
+		}
+	}
+	
+	scrollY = -scrollY;
+	
+	return scrollY;
 }
 

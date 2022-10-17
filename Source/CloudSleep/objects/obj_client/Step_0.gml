@@ -85,3 +85,12 @@ if(myTextBox != noone) {
 	}
 }
 
+if(gShowSleeperId != showSleeperIdPrev) {
+	showSleeperIdPrev = gShowSleeperId;
+	
+	MyChatHistorySurfRefresh();
+}
+
+
+MySynchMyGuiElementsPosition();
+

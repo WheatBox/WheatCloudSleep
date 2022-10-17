@@ -1,9 +1,13 @@
 #pragma once
-#include <asio.hpp>
-#include <memory>
-#include <deque>
-#include <string>
+
 #include <atomic>
+#include <deque>
+#include <memory>
+#include <string>
+
+#include <asio.hpp>
+
+#include "content_filter.h"
 #include "wheat_command.h"
 
 namespace wheat
@@ -21,7 +25,7 @@ class Sleeper
 {
     using socket = asio::ip::tcp::socket;
 public:
-    Sleeper(Room& room, socket sock);
+    Sleeper(Room& room, socket sock, std::shared_ptr<ContentFilter> content_filter);
 
     void Start();
 
@@ -39,6 +43,10 @@ public:
     inline void ClearBedId() { m_bed_id = -1; }
 
 private:
+    bool EliminateBadWord(std::string& msg) const noexcept;
+
+    void SyncDeliver(const std::string& msg);
+
     asio::awaitable<void> Reader();
 
     asio::awaitable<void> Writer();
@@ -54,9 +62,13 @@ private:
     SleeperSex m_sex = 0;
     int m_bed_id = -1;
     Pos m_pos = INVALID_POS;
+    bool m_receivedPackGuid = false;
+    std::chrono::steady_clock::time_point m_lastVoteTime;
 
     asio::steady_timer m_timer;   //此定时器用于发送消息队列的同步，asio常用做法 
     std::deque<std::string> m_write_msgs;
+
+    std::shared_ptr<ContentFilter> m_content_filter;
 };
 
 

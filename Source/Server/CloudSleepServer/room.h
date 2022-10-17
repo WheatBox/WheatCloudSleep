@@ -1,8 +1,10 @@
 #pragma once
-#include <vector>
-#include <memory>
+
 #include <map>
+#include <memory>
 #include <string_view>
+#include <vector>
+
 #include "sleeper.h"
 #include "vote_counter.h"
 
@@ -50,6 +52,9 @@ private:
 
     bool m_is_voting = false;
     VoteCounter<SleeperId> m_vote_counter;
+
+public:
+    std::string m_packGuid = "";
 
 };
 

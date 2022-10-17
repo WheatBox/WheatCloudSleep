@@ -1,8 +1,12 @@
 #pragma once
 
 #include <filesystem>
+
 #include <asio/any_io_executor.hpp>
+
 #include "file_update_monitor.h"
+
+#include "content_filter.h"
 
 namespace wheat
 {
@@ -33,8 +37,18 @@ public:
     int watch_period_m = 2 * block_period_m;
     int max_watch_period_m = 2 * max_block_period_m;
 
+    // 客户端发起投票踢人的时间间隔限制，注意，是每一次成功发起投票进行计时，而不是投票结束后开始计时的
+    int vote_kick_ratetime_s = 15;
+
+    // 屏蔽词系统的超级模式
+    int content_filter_super_mode = 1;
+
     std::filesystem::path violation_rules_config_file;
     std::filesystem::path permission_file;
+    std::filesystem::path bad_word_list;
+    std::filesystem::path stop_char_list;
+
+    std::string cloudpack_guid = "";
 private:
     bool ParseConfig(std::filesystem::path path);
 
@@ -43,6 +57,9 @@ private:
     void UpdateConfig() const;
 private:
     asio::any_io_executor m_executor;
+
+public:
+    std::shared_ptr<ContentFilter> m_pContentFilter = nullptr;
 };
 
 

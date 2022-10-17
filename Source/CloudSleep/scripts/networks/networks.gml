@@ -65,46 +65,65 @@ function SendMessage(str) {
 	buffer_delete(buf);
 }
 
+
+function SendCommandEasy(_CommandType, _params = undefined) {
+	sendMessageQueue.push_back(CommandMakeMessage(_CommandType, _params));
+}
+
 function SendName(name = myName) {
-	sendMessageQueue.push_back(CommandMakeMessage(CommandType.name, [name]));
+	// sendMessageQueue.push_back(StringConverter_UTF8ToMultiByte(CommandMakeMessage(CommandType.name, [name])));
+	SendCommandEasy(CommandType.name, [name]);
 }
 
 function SendType(type = myType) {
-	sendMessageQueue.push_back(CommandMakeMessage(CommandType.type, [type]));
+	SendCommandEasy(CommandType.type, [type]);
 }
 
 function SendSleep(_bedSleepId) {
-	sendMessageQueue.push_back(CommandMakeMessage(CommandType.sleep, [_bedSleepId]));
+	SendCommandEasy(CommandType.sleep, [_bedSleepId]);
 }
 
 function SendGetup() {
-	sendMessageQueue.push_back(CommandMakeMessage(CommandType.getup));
+	SendCommandEasy(CommandType.getup);
 }
 
 function SendChat(_chatStr) {
 	if(!ChatCommand(_chatStr)) {
-		sendMessageQueue.push_back(CommandMakeMessage(CommandType.chat, [_chatStr]));
+		// sendMessageQueue.push_back(StringConverter_UTF8ToMultiByte(CommandMakeMessage(CommandType.chat, [_chatStr])));
+		SendCommandEasy(CommandType.chat, [_chatStr]);
 	}
 }
 
 function SendMove(_x, _y) {
-	sendMessageQueue.push_back(CommandMakeMessage(CommandType.move, [round(_x), round(_y)]));
+	SendCommandEasy(CommandType.move, [round(_x), round(_y)]);
 }
 
 function SendPos(_x, _y) {
-	sendMessageQueue.push_back(CommandMakeMessage(CommandType.pos, [round(_x), round(_y)]));
+	SendCommandEasy(CommandType.pos, [round(_x), round(_y)]);
 }
 
 function SendKick(sleeperId) {
-	sendMessageQueue.push_back(CommandMakeMessage(CommandType.kick, [sleeperId]));
+	SendCommandEasy(CommandType.kick, [sleeperId]);
 }
 
 function SendAgree() {
-	sendMessageQueue.push_back(CommandMakeMessage(CommandType.agree));
+	SendCommandEasy(CommandType.agree);
 }
 
 function SendRefuse() {
-	sendMessageQueue.push_back(CommandMakeMessage(CommandType.refuse));
+	SendCommandEasy(CommandType.refuse);
+}
+
+function SendPackGuid() {
+	SendCommandEasy(CommandType.packguid);
+}
+
+function SendEmote(_emoteId) {
+	SendCommandEasy(CommandType.emote, [_emoteId]);
+}
+
+function SendReport(_reportContent) {
+	SendCommandEasy(CommandType.report, [_reportContent]);
 }
 
 
@@ -120,6 +139,15 @@ function ChatCommand(str) {
 				var strTemp = string_digits(args[1]);
 				if(strTemp != "") {
 					SendKick(real(strTemp));
+				}
+			}
+			break;
+			
+		case "/report":
+			if(array_length(args) >= 2) {
+				var strTemp = string(args[1]);
+				if(strTemp != "") {
+					SendReport(strTemp);
 				}
 			}
 			break;

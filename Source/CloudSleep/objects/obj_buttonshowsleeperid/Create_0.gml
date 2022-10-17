@@ -9,3 +9,6 @@ height = 36;
 
 depth = GUIDepth;
 
+if(DEBUGMODE) {
+	x = 512;
+}

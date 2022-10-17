@@ -1,22 +1,27 @@
 #include "sleeper.h"
-#include "room.h"
-#include "wheat_command.h"
+
 #include <atomic>
-#include "logger.h"
-#include "violation_detector.h"
-#include "traffic_recorder.h"
+
 #include "black_list.h"
+#include "logger.h"
 #include "permission_mgr.h"
+#include "room.h"
+#include "traffic_recorder.h"
+#include "violation_detector.h"
+#include "wheat_command.h"
+#include "config.h"
+#include "report_recorder.h"
 
 namespace wheat
 {
 
-Sleeper::Sleeper(Room& room, socket sock)
+Sleeper::Sleeper(Room& room, socket sock, std::shared_ptr<ContentFilter> content_filter)
     : m_room(room)
     , m_id(MakeSleeperId())
     , m_sock(std::move(sock))
     , m_ip(m_sock.remote_endpoint().address().to_v4())
     , m_timer(m_sock.get_executor())
+    , m_content_filter(std::move(content_filter))
 {
     m_timer.expires_at(std::chrono::steady_clock::time_point::max());
     LOG_INFO("new sleeper, sleeper_id:%lld, remote_ip:%s", m_id, GetIp().c_str());
@@ -93,6 +98,26 @@ std::string Sleeper::MakeSelfInfo() const
     return info;
 }
 
+bool Sleeper::EliminateBadWord(std::string& msg) const noexcept
+{
+    bool modified = false;
+    while (true)
+    {
+        bool is_modified = m_content_filter->FilterContent(msg, '*'); // currently use '*'
+        if (!is_modified)
+        {
+            break;
+        }
+        modified = true;
+    }
+    return modified;
+}
+
+void Sleeper::SyncDeliver(const std::string& msg)
+{
+    asio::write(m_sock, asio::buffer(msg));
+}
+
 asio::awaitable<void> Sleeper::Reader()
 {
     try
@@ -102,7 +127,7 @@ asio::awaitable<void> Sleeper::Reader()
         while (true)
         {
             auto n = co_await asio::async_read_until(m_sock,
-                asio::dynamic_buffer(buffer, 4096), '\0', asio::use_awaitable);
+                asio::dynamic_buffer(buffer, 512), '\0', asio::use_awaitable);
             IPTrafficRecorder::Instance().OnData(m_ip, n * 8);
 
             try
@@ -114,6 +139,7 @@ asio::awaitable<void> Sleeper::Reader()
                 bool forward = true;
 
                 WheatCommand msgCommand = ParseCommand(msg);
+                WheatCommand replayMsgCommand;
 
                 std::visit(
                 overloaded{
@@ -124,24 +150,49 @@ asio::awaitable<void> Sleeper::Reader()
                             forward = false;
                     },
                     [this](CmdGetup) { m_room.GetUp(m_id); },
-                    [this](CmdName cmd) { 
+                    [this, &forward, &replayMsgCommand](CmdName cmd) { 
                         m_name = std::move(cmd.name); 
                         LOG_INFO("sleeper:%lld's name is:%s", m_id, m_name.c_str());
+                        // bool modified = EliminateBadWord(m_name);
+                        bool modified = ! m_content_filter->CheckContent(m_name);
+                        if(modified) {
+                            forward = false;
+                            replayMsgCommand = CmdError{ WheatErrorCode::InvalidName };
+                            // LOG_INFO("sleeper:%lld's name after modified is:%s", m_id, m_name.c_str());
+                            LOG_INFO("sleeper:%lld's name %s include bad word", m_id, m_name.c_str());
+                        }
                     },
                     [this](CmdType cmd) { 
                         // m_sex = std::move(cmd.sex); 
                         m_sex = cmd.sex;
                         LOG_INFO("sleeper:%lld's sex is:%d", m_id, m_sex);
                     },
-                    [this](CmdChat cmd) { 
+                    [this](CmdChat& cmd) { 
                         LOG_INFO("sleeper:%lld say:%s", m_id, cmd.msg.c_str());
+                        // auto t1 = std::chrono::steady_clock::now();
+                        bool modified = EliminateBadWord(cmd.msg);
+                        // auto t2 = std::chrono::steady_clock::now();
+                        // double dr_ms = std::chrono::duration<double, std::milli>(t2 - t1).count();
+                        // LOG_INFO("time: %lf ms.", dr_ms);
+                        if (modified)
+                        {
+                            LOG_INFO("sleeper:%lld after modified say:%s", m_id, cmd.msg.c_str());
+                        }
                     },
                     [this](CmdPos cmd) { m_pos = cmd.pos; },
                     [this](CmdMove cmd) { m_pos = cmd.pos; },
-                    [this](CmdVoteKickStart cmd) { 
+                    [this, &forward](CmdVoteKickStart cmd) { 
                         if (m_is_administrator)
                         {
-                            m_room.VoteKickStart(cmd.kick_id);
+                            auto timenow = std::chrono::steady_clock::now();
+                            auto nowVoteTimeRate = std::chrono::duration_cast<std::chrono::seconds>(timenow - m_lastVoteTime).count();
+                            if(nowVoteTimeRate > Config::Instance().vote_kick_ratetime_s) {
+                                m_room.VoteKickStart(cmd.kick_id);
+                                m_lastVoteTime = std::chrono::steady_clock::now();
+                            } else {
+                                forward = false;
+                                LOG_INFO("sleeper:%lld sent VoteKickStart, but too close to the last time", m_id);
+                            }
                         }
                         else
                         {
@@ -150,16 +201,46 @@ asio::awaitable<void> Sleeper::Reader()
                     },
                     [this, &forward](CmdVoteAgree) { m_room.Agree(m_id); forward = false; },
                     [this, &forward](CmdVoteRefuse) { m_room.Refuse(m_id); forward = false; },
+                    [this, &forward, &replayMsgCommand](CmdPackGuid cmd) {
+                        m_receivedPackGuid = true;
+                        forward = false;
+                        if(cmd.guid != m_room.m_packGuid) {
+                            replayMsgCommand = CmdError{ WheatErrorCode::InvalidScene };
+                            LOG_INFO("sleeper:%lld's cloudpack's guid %s does not match the server", m_id, cmd.guid.c_str());
+                        }
+                    },
+                    [this](CmdEmote) {  }, // 嗯，表情消息应该没啥要处理的，不过还是留个位置好了
+                    [this, &forward](CmdReport cmd) {
+                        forward = false;
+                        LOG_REPORT("sleeper:%lld report: %s", m_id, cmd.reportContent.c_str());
+                        Deliver(PackCommandWithId(m_id, CmdReport{ "0" }));
+                    },
                     [](auto&&) { }
                 }, 
                 msgCommand);
 
+                if (std::holds_alternative<CmdError>(replayMsgCommand))
+                {
+                    // Send back error message, stop socket, then break out
+                    SyncDeliver(PackCommandWithId(m_id, replayMsgCommand));
+                    Stop();
+                    break;
+                }
+
                 if (forward)
+                {
                     m_room.Deliver(PackCommandWithId(m_id, msgCommand));
+                }
             }
             catch (const std::exception& e)
             {
                 LOG_WARN("%s, ParseCommand failed, err:%s, sleeper_id:%lld", __func__, e.what(), m_id);
+            }
+
+            if(m_receivedPackGuid == false) {
+                LOG_INFO("sleeper:%lld's first message is not cloudpack's guid", m_id);
+                Stop();
+                break;
             }
 
             buffer.erase(0, n);

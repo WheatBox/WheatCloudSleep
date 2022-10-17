@@ -1,8 +1,10 @@
 #pragma once
-#include <stdio.h>
+
+#include <atomic>
 #include <string>
 #include <string_view>
-#include <atomic>
+
+#include <stdio.h>
 
 constexpr const char* GetFileName(std::string_view system_file_name)
 {
@@ -41,7 +43,9 @@ enum class LogLevel
     INFO,
     WARN,
     LEVEL_ERROR,
-    FATAL
+    FATAL,
+
+    REPORT
 };
 
 #define LOG_CONSOLE 1

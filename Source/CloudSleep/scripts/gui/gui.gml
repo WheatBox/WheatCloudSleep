@@ -1,6 +1,7 @@
 #macro GUIDepth -10000
 #macro GUIPageDepth -9900
 #macro GUIDragObjDepth -10100
+#macro GUIMessageDepth -10200
 
 #macro GUIDefaultColor #000037
 #macro GUIDangerousColor c_red
@@ -77,8 +78,8 @@ function GUI_MouseGuiOnMe_Radius(_x, _y, _radius) {
 
 function GUI_DrawText(_xGui, _yGui, str, onCenter = false) {
 	if(onCenter) {
-		var ha = fa_center;
-		var va = fa_middle;
+		var ha = draw_get_halign();
+		var va = draw_get_valign();
 		
 		draw_set_halign(fa_center);
 		draw_set_valign(fa_middle);
@@ -88,6 +89,22 @@ function GUI_DrawText(_xGui, _yGui, str, onCenter = false) {
 		draw_set_valign(va);
 	} else {
 		draw_text(_xGui, _yGui, str);
+	}
+}
+
+function GUI_DrawTextTransformed(_xGui, _yGui, str, xscale, yscale, angle, onCenter = false) {
+	if(onCenter) {
+		var ha = draw_get_halign();
+		var va = draw_get_valign();
+		
+		draw_set_halign(fa_center);
+		draw_set_valign(fa_middle);
+		draw_text_transformed(_xGui, _yGui, str, xscale, yscale, angle);
+		
+		draw_set_halign(ha);
+		draw_set_valign(va);
+	} else {
+		draw_text_transformed(_xGui, _yGui, str, xscale, yscale, angle);
 	}
 }
 
@@ -159,5 +176,47 @@ function GUI_DrawSprite_ext(spr, subimg, _xGui, _yGui, xscale, yscale, rot, col,
 
 function GUI_DrawSurface(surf, _xGui, _yGui) {
 	draw_surface(surf, _xGui, _yGui);
+}
+
+function GUI_DrawSurface_ext(surf, _xGui, _yGui, xscale, yscale, rot, col, alpha) {
+	draw_surface_ext(surf, _xGui, _yGui, xscale, yscale, rot, col, alpha);
+}
+
+
+globalvar __CursorTEMP;
+__CursorTEMP = cr_default;
+function GUI_SetCursorHandpoint() {
+	var curCursor = window_get_cursor();
+	if(
+		curCursor != cr_handpoint
+		&& curCursor != cr_beam
+	) {
+		window_set_cursor(cr_handpoint);
+	}
+	__CursorTEMP = cr_handpoint;
+}
+function GUI_SetCursorBeam() {
+	var curCursor = window_get_cursor();
+	if(
+		curCursor != cr_beam
+	) {
+		window_set_cursor(cr_beam);
+	}
+	__CursorTEMP = cr_beam;
+}
+function GUI_SetCursorDefault() {
+	var curCursor = window_get_cursor();
+	if(
+		curCursor == cr_handpoint
+		|| curCursor == cr_beam
+	) {
+		// 等到下一帧看看 GUI_SetCursorHandpoint(); 会不会被再次触发（也就是鼠标依然在按钮上）
+		// 如果再次触发，那么忽略，进行下一次检查的准备（__CursorTEMP = cr_default）
+		if(__CursorTEMP == cr_default) {
+			window_set_cursor(__CursorTEMP);
+		} else {
+			__CursorTEMP = cr_default;
+		}
+	}
 }
 

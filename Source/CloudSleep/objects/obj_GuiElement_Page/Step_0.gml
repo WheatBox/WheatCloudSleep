@@ -5,7 +5,7 @@ if(working == false) {
 	
 	if(GUI_MouseGuiOnMe(x, y, x + width, y + height)) {
 		gMouseOnGUI = true;
-		
+		/*
 		if(mouse_wheel_up()) {
 			if(scrollY > 0) {
 				MyScrollElements(scrollYSpeed);
@@ -17,7 +17,14 @@ if(working == false) {
 				MyScrollElements(-scrollYSpeed);
 				scrollY += scrollYSpeed;
 			}
-		}
+		}*/
+		
+		scrollY = ScrollYCalculate(scrollY, scrollYSpeed, 0, height, childElementsBottom);
+	}
+	
+	if(scrollY != scrollYPrev) {
+		MyScrollElements(scrollY - scrollYPrev);
+		scrollYPrev = scrollY;
 	}
 }
 

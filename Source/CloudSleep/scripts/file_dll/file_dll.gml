@@ -2,7 +2,8 @@
 
 /* StringConverter.dll */
 // https://github.com/JoyLeeSoft/StringConverter
-// g++ --share .\StringConverter.cpp -o .\StringConverter.dll -std=c++20 -static -DUNICODE
+// 我们使用的编译语句：
+//		g++ --share .\StringConverter.cpp -o .\StringConverter.dll -std=c++20 -static -DUNICODE
 
 // utf8 *StringConverter_MultiByteToUTF8(const multibyte *str)
 function StringConverter_MultiByteToUTF8(str) {
@@ -71,6 +72,135 @@ function FileRemove(file_name) {
 /// @desc system("");
 function systemCmd(str) {
 	static dllid = external_define("dll\\systemCmd.dll", "systemCmd", dll_cdecl, ty_real, 1, ty_string);
-	str = StringConverter_UTF8ToMultiByte(str);
+	static strPrev = "";
+	if(strPrev != str) {
+		str = StringConverter_UTF8ToMultiByte(str);
+		strPrev = str;
+	}
 	return external_call(dllid, str);
 }
+
+
+
+/* AudioPlayerDLL.dll */
+
+/// @desc 打开音频，正常播放返回 0，出错返回错误码
+function MciOpenAudio(filename, aliasname) {
+	static dllid = external_define("dll\\AudioPlayerDLL.dll", "MciOpenAudio", dll_cdecl, ty_real, 2, ty_string, ty_string);
+	/* 不写上这段也能正常播放 wav
+	var fname = GetNameFromFileName(filename, true);
+	if(string_copy(fname, string_length(fname) - 3, 4) == ".wav") {
+		aliasname += " type waveaudio";
+	}
+	*/
+	static fnamePrev = "";
+	static anamePrev = "";
+	if(fnamePrev != filename) {
+		filename = StringConverter_UTF8ToMultiByte(filename);
+		fnamePrev = filename;
+	}
+	if(anamePrev != aliasname) {
+		aliasname = StringConverter_UTF8ToMultiByte(aliasname);
+		anamePrev = aliasname;
+	}
+	return external_call(dllid, "\"" + filename + "\"", aliasname);
+}
+
+/// @desc 播放音频，正常播放返回 0，出错返回错误码
+/// @arg filename 可以为文件名(filename)，也可以别名(aliasname)，推荐使用别名
+function MciPlayAudio(filename) {
+	static dllid = external_define("dll\\AudioPlayerDLL.dll", "MciPlayAudio", dll_cdecl, ty_real, 1, ty_string);
+	static fnamePrev = "";
+	if(fnamePrev != filename) {
+		filename = StringConverter_UTF8ToMultiByte(filename);
+		fnamePrev = filename;
+	}
+	return external_call(dllid, filename);
+}
+
+/// @desc 暂停音频，正常暂停返回 0，出错返回错误码
+/// @arg filename 可以为文件名(filename)，也可以别名(aliasname)，推荐使用别名
+function MciPauseAudio(filename) {
+    static dllid = external_define("dll\\AudioPlayerDLL.dll", "MciPauseAudio", dll_cdecl, ty_real, 1, ty_string);
+	static fnamePrev = "";
+	if(fnamePrev != filename) {
+		filename = StringConverter_UTF8ToMultiByte(filename);
+		fnamePrev = filename;
+	}
+	return external_call(dllid, filename);
+}
+
+/// @desc 继续播放暂停的音频，正常回复返回 0，出错返回错误码
+/// @arg filename 可以为文件名(filename)，也可以别名(aliasname)，推荐使用别名
+function MciResumeAudio(filename) {
+    static dllid = external_define("dll\\AudioPlayerDLL.dll", "MciResumeAudio", dll_cdecl, ty_real, 1, ty_string);
+	static fnamePrev = "";
+	if(fnamePrev != filename) {
+		filename = StringConverter_UTF8ToMultiByte(filename);
+		fnamePrev = filename;
+	}
+	return external_call(dllid, filename);
+}
+
+/// @desc 停止且关闭音频，正常关闭返回 0，出错返回错误码
+/// @arg filename 可以为文件名(filename)，也可以别名(aliasname)，推荐使用别名
+function MciCloseAudio(filename) {
+    static dllid = external_define("dll\\AudioPlayerDLL.dll", "MciCloseAudio", dll_cdecl, ty_real, 1, ty_string);
+	static fnamePrev = "";
+	if(fnamePrev != filename) {
+		filename = StringConverter_UTF8ToMultiByte(filename);
+		fnamePrev = filename;
+	}
+	return external_call(dllid, filename);
+}
+
+/// @desc 获取音频状态，出错返回-1
+/// @arg filename 可以为文件名(filename)，也可以别名(aliasname)，推荐使用别名
+/// @arg status 要获取的状态
+function MciGetAudioStatus(filename, status) {
+	static dllid = external_define("dll\\AudioPlayerDLL.dll", "MciGetAudioStatus", dll_cdecl, ty_real, 2, ty_string, ty_string);
+	static fnamePrev = "";
+	if(fnamePrev != filename) {
+		filename = StringConverter_UTF8ToMultiByte(filename);
+		fnamePrev = filename;
+	}
+	return external_call(dllid, filename, status);
+}
+
+
+/// @desc 获取音频时长，单位：s，精确到 0.001s，出错返回-1
+/// @arg filename 可以为文件名(filename)，也可以别名(aliasname)，推荐使用别名
+function MciGetAudioLength(filename) {
+    static dllid = external_define("dll\\AudioPlayerDLL.dll", "MciGetAudioLength", dll_cdecl, ty_real, 1, ty_string);
+	static fnamePrev = "";
+	if(fnamePrev != filename) {
+		filename = StringConverter_UTF8ToMultiByte(filename);
+		fnamePrev = filename;
+	}
+	return external_call(dllid, filename);
+}
+
+/// @desc 获取音频当前播放进度，单位：s，精确到 0.001s，出错返回-1
+/// @arg filename 可以为文件名(filename)，也可以别名(aliasname)，推荐使用别名
+function MciGetAudioPosition(filename) {
+    static dllid = external_define("dll\\AudioPlayerDLL.dll", "MciGetAudioPosition", dll_cdecl, ty_real, 1, ty_string);
+	static fnamePrev = "";
+	if(fnamePrev != filename) {
+		filename = StringConverter_UTF8ToMultiByte(filename);
+		fnamePrev = filename;
+	}
+	return external_call(dllid, filename);
+}
+
+/// @desc 设置音频当前播放进度，单位：s，精确到 0.001s，出错返回错误码
+/// @arg filename 可以为文件名(filename)，也可以别名(aliasname)，推荐使用别名
+function MciSeekAudioPosition(filename, destPosition) {
+	static dllid = external_define("dll\\AudioPlayerDLL.dll", "MciSeekAudioPosition", dll_cdecl, ty_real, 2, ty_string, ty_real);
+	static fnamePrev = "";
+	if(fnamePrev != filename) {
+		filename = StringConverter_UTF8ToMultiByte(filename);
+		fnamePrev = filename;
+	}
+	return external_call(dllid, filename, destPosition);
+}
+

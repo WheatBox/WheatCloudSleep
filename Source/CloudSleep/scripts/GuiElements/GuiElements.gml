@@ -236,3 +236,31 @@ function GuiElement_CreateBedSleepSetter(_materialMasterArr, _materialId, _sprit
 	return ins;
 }
 
+function GuiElement_CreateMessage(_text) {
+	var ins = noone;
+	if(!InstanceExists(obj_GuiElement_Message)) {
+		ins = instance_create_depth(0, 0, GUIMessageDepth, obj_GuiElement_Message);
+	} else {
+		ins = obj_GuiElement_Message;
+	}
+
+	ins.MyAdd(_text);
+}
+
+/// @desc
+/// 参数 IntFunc 是个可以自定义的取整函数，但请注意该函数要有一个参数且要记得return，例如你可以这么写：function(n) { return round(n); }
+function GuiElement_CreateSlidingRod(_xGui, _yGui, _label, _width, _wheat_ptr, _varMin, _varMax, _IntFunc = undefined, _color = GUIDefaultColor) {
+	var ins = instance_create_depth(_xGui, _yGui, GUIDepth, obj_GuiElement_SlidingRod);
+	ins.labelText = _label;
+	ins.width = _width;
+	ins.pMyVar = _wheat_ptr;
+	ins.variableMin = _varMin;
+	ins.variableMax = _varMax;
+	if(_IntFunc != undefined) {
+		ins.MyIntFunc = _IntFunc;
+	}
+	ins.color = _color;
+	
+	return ins;
+}
+

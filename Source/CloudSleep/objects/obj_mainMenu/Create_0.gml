@@ -132,7 +132,9 @@ MyEnterToBedRoom = function() {
 	}
 	
 	
+	LoadSleeperEmoteSprites();
 	LoadBedSleepSprites();
+	DebugMes(gArrSleeperEmoteSprites);
 	DebugMes(gArrBedSleepSprites);
 	
 	
@@ -184,12 +186,12 @@ packagesPage = GuiElement_CreatePage(0, 0, "场景包列表", pageWidth, GuiHeig
 
 WORKFILEPATH = PACKAGESFILEPATH;
 
-systemCmd("md " + PACKAGESFILEPATH);
+MakeFolder(PACKAGESFILEPATH);
 
 GuiElement_PageAddElement(packagesPage, GuiElement_CreateButton_ext(pageWidth / 2, 0, "打开场景包所在文件夹", pageWidth - 32, 36
 	, , function() {
-		systemCmd("md " + PACKAGESFILEPATH);
-		systemCmd("start " + PACKAGESFILEPATH);
+		MakeFolder(PACKAGESFILEPATH);
+		OpenInExplorer(PACKAGESFILEPATH);
 	}
 ));
 

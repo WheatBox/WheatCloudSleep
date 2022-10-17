@@ -1,11 +1,22 @@
 #include "wheat_command.h"
+
 #include <stdexcept>
-#include "wheat_common.h"
-#include "cJSON.h"
+#include <type_traits>
+
+#include <nlohmann/json.hpp>
+
 #include "logger.h"
+#include "wheat_common.h"
 
 namespace wheat
 {
+    template <typename _Enum>
+    constexpr std::underlying_type_t<_Enum> to_underlaying(_Enum e) noexcept
+    {
+        return static_cast<std::underlying_type_t<_Enum>>(e);
+    }
+
+    using json = nlohmann::json;
 
     WheatCommand ParseCommand(std::string_view msg)
     {
@@ -21,81 +32,166 @@ namespace wheat
             throw std::runtime_error("invalid msg:" + std::string(msg));
         }*/
 
-        cJSON* pcjson_parsed = cJSON_CreateObject();
-        pcjson_parsed = cJSON_Parse(msg.data());
+        auto msg_obj = json::parse(msg);
 
-        cJSON* temp1 = (cJSON_GetObjectItem(pcjson_parsed, "Cmd"));
-        cJSON* temp2 = (cJSON_GetObjectItem(pcjson_parsed, "Args"));
-        if (temp1 == NULL || temp2 == NULL
-            || temp1->type == NULL || temp2->type == NULL) {
-            LOG_WARN("json get object fail");
+        auto iter = msg_obj.find("Cmd");
+        if (msg_obj.end() == iter)
+        {
             throw std::runtime_error("invalid msg:" + std::string(msg));
-            cJSON_Delete(pcjson_parsed);
         }
-        else {
-            std::string_view command = (temp1->valuestring);
-            std::string_view args = (temp2->valuestring);
+        std::string command = *iter;
 
-            auto make_pos = [](std::string_view pos_str) {
-                auto delim_pos = pos_str.find(',');
-                if (delim_pos == std::string::npos)
-                {
-                    throw std::runtime_error("invalid pos:" + std::string(pos_str));
-                    return INVALID_POS;
-                }
-                else
-                {
-                    return Pos{ atoi(pos_str.data()), atoi(pos_str.data() + delim_pos + 1) };
-                }
-            };
+        iter = msg_obj.find("Args");
+        if (msg_obj.end() == iter)
+        {
+            throw std::runtime_error("invalid msg:" + std::string(msg));
+        }
+        std::string args = *iter; 
 
-            if (command == "name")
+        auto make_pos = [](std::string_view pos_str) {
+            auto delim_pos = pos_str.find(',');
+            if (delim_pos == std::string::npos)
             {
-                return CmdName{ std::string(args) };
-            }
-            else if (command == "type")
-            {
-                return CmdType{ SleeperSex(std::stoi(std::string(args))) };
-            }
-            else if (command == "sleep")
-            {
-                return CmdSleep{ std::stoi(std::string(args)) };
-            }
-            else if (command == "getup")
-            {
-                return CmdGetup{ };
-            }
-            else if (command == "chat")
-            {
-                return CmdChat{ std::string(args) };
-            }
-            else if (command == "move")
-            {
-                return CmdMove{ make_pos(args) };
-            }
-            else if (command == "pos")
-            {
-                return CmdPos{ make_pos(args) };
-            }
-            else if (command == "kick")
-            {
-                return CmdVoteKickStart{ std::stoull(std::string(args)) };
-            }
-            else if (command == "agree")
-            {
-                // return CmdVoteAgree{ std::stoull(std::string(args)) }; 
-                return CmdVoteAgree{  };
-            }
-            else if (command == "refuse")
-            {
-                // return CmdVoteRefuse{ std::stoull(std::string(args)) }; 
-                return CmdVoteRefuse{  };
+                throw std::runtime_error("invalid pos:" + std::string(pos_str));
+                return INVALID_POS;
             }
             else
             {
-                throw std::runtime_error("invalid msg:" + std::string(msg));
+                return Pos{ atoi(pos_str.data()), atoi(pos_str.data() + delim_pos + 1) };
             }
+        };
+
+        if (command == "name")
+        {
+            return CmdName{ args };
         }
+        else if (command == "type")
+        {
+            return CmdType{ SleeperSex(std::stoi(args)) };
+        }
+        else if (command == "sleep")
+        {
+            return CmdSleep{ std::stoi(args) };
+        }
+        else if (command == "getup")
+        {
+            return CmdGetup{ };
+        }
+        else if (command == "chat")
+        {
+            return CmdChat{ args };
+        }
+        else if (command == "move")
+        {
+            return CmdMove{ make_pos(args) };
+        }
+        else if (command == "pos")
+        {
+            return CmdPos{ make_pos(args) };
+        }
+        else if (command == "kick")
+        {
+            return CmdVoteKickStart{ std::stoull(args) };
+        }
+        else if (command == "agree")
+        {
+            // return CmdVoteAgree{ std::stoull(std::string(args)) }; 
+            return CmdVoteAgree{  };
+        }
+        else if (command == "refuse")
+        {
+            // return CmdVoteRefuse{ std::stoull(std::string(args)) }; 
+            return CmdVoteRefuse{  };
+        }
+        else if (command == "packguid")
+        {
+            return CmdPackGuid{ args };
+        }
+        else if (command == "emote")
+        {
+            return CmdEmote{ std::stoi(args) };
+        }
+        else if (command == "report")
+        {
+            return CmdReport{ args };
+        }
+        else
+        {
+            throw std::runtime_error("invalid msg:" + std::string(msg));
+        }
+
+        // cJSON* pcjson_parsed = cJSON_CreateObject();
+        // pcjson_parsed = cJSON_Parse(msg.data());
+        // cJSON* temp1 = (cJSON_GetObjectItem(pcjson_parsed, "Cmd"));
+        // cJSON* temp2 = (cJSON_GetObjectItem(pcjson_parsed, "Args"));
+        // if (temp1 == nullptr || temp2 == nullptr
+        //     || temp1->type == 0 || temp2->type == 0) {
+        //     LOG_WARN("json get object fail");
+        //     throw std::runtime_error("invalid msg:" + std::string(msg));
+        //     cJSON_Delete(pcjson_parsed);
+        // }
+        // else {
+        //     std::string_view command = (temp1->valuestring);
+        //     std::string_view args = (temp2->valuestring);
+        //     auto make_pos = [](std::string_view pos_str) {
+        //         auto delim_pos = pos_str.find(',');
+        //         if (delim_pos == std::string::npos)
+        //         {
+        //             throw std::runtime_error("invalid pos:" + std::string(pos_str));
+        //             return INVALID_POS;
+        //         }
+        //         else
+        //         {
+        //             return Pos{ atoi(pos_str.data()), atoi(pos_str.data() + delim_pos + 1) };
+        //         }
+        //     };
+        //     if (command == "name")
+        //     {
+        //         return CmdName{ std::string(args) };
+        //     }
+        //     else if (command == "type")
+        //     {
+        //         return CmdType{ SleeperSex(std::stoi(std::string(args))) };
+        //     }
+        //     else if (command == "sleep")
+        //     {
+        //         return CmdSleep{ std::stoi(std::string(args)) };
+        //     }
+        //     else if (command == "getup")
+        //     {
+        //         return CmdGetup{ };
+        //     }
+        //     else if (command == "chat")
+        //     {
+        //         return CmdChat{ std::string(args) };
+        //     }
+        //     else if (command == "move")
+        //     {
+        //         return CmdMove{ make_pos(args) };
+        //     }
+        //     else if (command == "pos")
+        //     {
+        //         return CmdPos{ make_pos(args) };
+        //     }
+        //     else if (command == "kick")
+        //     {
+        //         return CmdVoteKickStart{ std::stoull(std::string(args)) };
+        //     }
+        //     else if (command == "agree")
+        //     {
+        //         // return CmdVoteAgree{ std::stoull(std::string(args)) }; 
+        //         return CmdVoteAgree{  };
+        //     }
+        //     else if (command == "refuse")
+        //     {
+        //         // return CmdVoteRefuse{ std::stoull(std::string(args)) }; 
+        //         return CmdVoteRefuse{  };
+        //     }
+        //     else
+        //     {
+        //         throw std::runtime_error("invalid msg:" + std::string(msg));
+        //     }
+        // }
     }
 
     std::string ProcCommand(std::string Cmd, std::string Arg1) {
@@ -126,13 +222,16 @@ namespace wheat
             [](CmdVoteKickStart arg) { return ProcCommand("kick", std::to_string(arg.kick_id)); },
             [](CmdVoteState arg) { return ProcCommand("agree", std::to_string(arg.argee), std::to_string(arg.refuse)); },
             [](CmdVoteKickOver) { return ProcCommand("kickover", "0"); },
+            [](CmdError arg) { return ProcCommand("error", std::to_string(to_underlaying(arg.error_code))); },
+            [](CmdEmote arg) { return ProcCommand("emote", std::to_string(arg.emote_id)); },
+            [](CmdReport arg) { return ProcCommand("report", "0"); },
             [](auto&&) { return std::string(); }
             }, cmd);
     }
 
     std::string PackCommandWithId(SleeperId id, const WheatCommand& cmd)
     {
-        std::string temp = PackCommand(cmd);//能力有限，先把Command的“}”删了，再把id作为addid,append
+        std::string temp = PackCommand(cmd);//鑳藉姏鏈夐檺锛屽厛鎶奀ommand鐨勨�渳鈥濆垹浜嗭紝鍐嶆妸id浣滀负addid,append
         // temp.erase(remove(temp.begin(), temp.end(), '}'), temp.end());
         temp = temp.substr(0, temp.size() - 2);
         temp.append(",\"Id\":\"" + std::to_string(id) + "\"}");

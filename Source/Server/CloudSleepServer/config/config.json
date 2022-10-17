@@ -1,12 +1,17 @@
 {
-    "listen_port": 11451,
-    "max_bed_num": 256,
-    "vote_wait_period_s": 10,
-    "traffic_upload_interval_ms":  1000,
-    "block_period_m": 10,
-    "max_block_period_m": 1440,
-    "watch_period_m": 20,
-    "max_watch_period_m": 2880,
-    "violation_rules_config_file": "rule.json",
-    "permission_file": "permission.txt"
+  "listen_port": 14514,
+  "max_bed_num": 256,
+  "vote_wait_period_s": 10,
+  "traffic_upload_interval_ms": 1000,
+  "block_period_m": 10,
+  "max_block_period_m": 1440,
+  "watch_period_m": 20,
+  "max_watch_period_m": 2880,
+  "vote_kick_ratetime_s": 20,
+  "violation_rules_config_file": "config/rule.json",
+  "permission_file": "config/permission.txt",
+  "bad_word_list": "config/bad_word.txt",
+  "stop_char_list": "config/stop_char.txt",
+  "content_filter_super_mode": 1,
+  "cloudpack_guid": "请在此处填入场景包的Guid。Please write cloudpack's guid here."
 }

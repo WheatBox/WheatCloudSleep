@@ -3,6 +3,7 @@
 #macro FILEPATH_decorates "\\contents\\decorates\\"
 #macro FILEPATH_beds "\\contents\\beds\\"
 
+#macro FILEPATH_sleepers_emotes "\\contents\\sleepers\\emotes\\"
 #macro FILEPATH_beds_bedsleep "\\contents\\beds\\bedsleep\\"
 
 #macro FILEJSON_sleepers "\\contents\\sleepers.json"
@@ -14,7 +15,7 @@
 
 #macro FILEJSON_TextboxPlaceHolders "\\contents\\TextboxPlaceHolders.json"
 
-//#macro PACKAGESFILEPATH ".\\packages\\"
+// #macro PACKAGESFILEPATH ".\\packages\\"
  #macro PACKAGESFILEPATH "F:\\packages\\"
 #macro WORKFILEPATH_default PACKAGESFILEPATH + PackName + "\\"
 
@@ -32,6 +33,7 @@ PackName = "";
 function SSingleStruct_Sleeper(_fname = "") constructor {
 	filename = _fname;
 	offset = [];
+	emotefilenames = [];
 };
 function SSingleStruct_Background(_fname = "") constructor {
 	filename = _fname;
@@ -81,7 +83,8 @@ gDecoratesSpritesStruct = DefaultSpritesStruct;
 gBedsSpritesStruct = DefaultSpritesStruct;
 
 // 例如 gBedSleepSpritesStruct[bed's materialId][sleeper's materialId (睡客皮肤 type)] = sprite_add(...);
-globalvar gArrBedSleepSprites;
+globalvar gArrSleeperEmoteSprites, gArrBedSleepSprites;
+gArrSleeperEmoteSprites = [{}];
 gArrBedSleepSprites = [{}];
 
 // Struct Scene Element
@@ -344,39 +347,73 @@ function CutIpPort(_ipport) {
 
 
 
-function LoadBedSleepSprites() {
-	gArrBedSleepSprites ??= [{}];
+function LoadSubSprites(_pDestArr, _pArrMasterMaterials, _strSubSpritesArrName, _FILEPATHtemp) {
+	if(_pDestArr.value() == undefined) {
+		_pDestArr.set([{}]);
+	}
+	var _destArr = _pDestArr.value();
+	var _arrMasterMaterials = _pArrMasterMaterials.value();
 	
-	var materialsSiz = array_length(gBedsStruct.materials);
+	var materialsSiz = array_length(_arrMasterMaterials);
 	for(var i = 0; i < materialsSiz; i++) { // i = materialId
-		if(array_length(gArrBedSleepSprites) < i + 1) {
-			gArrBedSleepSprites[i] = undefined;
+		if(array_length(_destArr) < i + 1) {
+			_destArr[i] = undefined;
 		}
-		gArrBedSleepSprites[i] ??= {};
+		_destArr[i] ??= {};
 		
-		var sleepfilenamesSiz = array_length(gBedsStruct.materials[i].sleepfilenames);
-		for(var j = 0; j < sleepfilenamesSiz; j++) {
-			if(gBedsStruct.materials[i].sleepfilenames[j] == 0) {
-				gArrBedSleepSprites[i][j] = -1;
+		var _subfilenamesSiz = 0;
+		var _subSpritesArr = _arrMasterMaterials[i][$ _strSubSpritesArrName];
+		if(_subSpritesArr != undefined)
+		if(is_array(_subSpritesArr))
+			_subfilenamesSiz = array_length(_subSpritesArr);
+		for(var j = 0; j < _subfilenamesSiz; j++) {
+			if(_subSpritesArr[j] == 0) {
+				_destArr[i][j] = -1;
 				continue;
 			}
 			
-			var _fname = gBedsStruct.materials[i].filename + "\\" + gBedsStruct.materials[i].sleepfilenames[j];
+			var _fname = _arrMasterMaterials[i].filename + "\\" + _subSpritesArr[j];
 			
-			var _spr = sprite_add(WORKFILEPATH + FILEPATH_beds_bedsleep + _fname, 1, false, true, 0, 0);
+			var _spr = sprite_add(WORKFILEPATH + _FILEPATHtemp + _fname, 1, false, true, 0, 0);
 			
 			var _xoffTemp = sprite_get_width(_spr) / 2;
 			var _yoffTemp = sprite_get_height(_spr) / 2;
-			if(variable_instance_exists(gBedsStruct.materials[i], "offset") == true)
-			if(is_array(gBedsStruct.materials[i].offset) == true)
-			if(array_length(gBedsStruct.materials[i].offset) >= 2) {
-				_xoffTemp = gBedsStruct.materials[i].offset[0];
-				_yoffTemp = gBedsStruct.materials[i].offset[1];
+			if(variable_instance_exists(_arrMasterMaterials[i], "offset") == true)
+			if(is_array(_arrMasterMaterials[i].offset) == true)
+			if(array_length(_arrMasterMaterials[i].offset) >= 2) {
+				_xoffTemp = _arrMasterMaterials[i].offset[0];
+				_yoffTemp = _arrMasterMaterials[i].offset[1];
 			}
 			sprite_set_offset(_spr, _xoffTemp, _yoffTemp);
 			
-			gArrBedSleepSprites[i][j] = _spr;
+			_destArr[i][j] = _spr;
 		}
 	}
+}
+
+function LoadSleeperEmoteSprites() {
+	LoadSubSprites(
+		make_wheat_ptr(EWheatPtrType.Global, 0, "gArrSleeperEmoteSprites")
+		, make_wheat_ptr(EWheatPtrType.Struct, gSleepersStruct, "materials")
+		, "emotefilenames"
+		, FILEPATH_sleepers_emotes
+	);
+}
+
+function LoadBedSleepSprites() {
+	LoadSubSprites(
+		make_wheat_ptr(EWheatPtrType.Global, 0, "gArrBedSleepSprites")
+		, make_wheat_ptr(EWheatPtrType.Struct, gBedsStruct, "materials")
+		, "sleepfilenames"
+		, FILEPATH_beds_bedsleep
+	);
+}
+
+
+function OpenInExplorer(fname) {
+	systemCmd("start \"\" \"" + fname + "\"");
+}
+function MakeFolder(fname) {
+	systemCmd("md \"" + fname + "\"");
 }
 

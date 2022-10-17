@@ -31,6 +31,7 @@ alarm_set(1, 2);
 
 sleepers = [];
 
+SendPackGuid();
 SendName();
 SendType();
 
@@ -54,6 +55,7 @@ MyCanUseSleeperId = function(sleeperId) {
 
 vecChatHistory = new vector(); 
 vecChatHistorySleeperId = new vector();
+vecChatHistoryColor = new vector();
 vecChatHistorySizeMax = ChatHistoryMaxLines;
 chatHistoryOn = false;
 surfChatHistory = undefined;
@@ -62,6 +64,20 @@ chatHistoryShowSizeMax = 15;
 chatHistoryScrollY = 0;
 chatHistoryScrollYSpeed = GUIScrollYSpeed;
 chatHistoryStringSingleLineHeight = string_height("乐");
+
+MyChatHistoryAdd_Basic = function(str, sleeperId = -1, color = c_white) {
+	vecChatHistory.push_back(string(str));
+	vecChatHistorySleeperId.push_back(sleeperId);
+	vecChatHistoryColor.push_back(color);
+	
+	if(vecChatHistory.size() > vecChatHistorySizeMax) {
+		array_delete(vecChatHistory.Container, 0, 1);
+		array_delete(vecChatHistorySleeperId.Container, 0, 1);
+		array_delete(vecChatHistoryColor.Container, 0, 1);
+	}
+	
+	MyChatHistorySurfRefresh();
+}
 
 MyChatHistoryAdd = function(sleeperId, str) {
 	if(MyCanUseSleeperId(sleeperId) == false || MyCanUseSleeperId(mySleeperId) == false) {
@@ -72,15 +88,7 @@ MyChatHistoryAdd = function(sleeperId, str) {
 		return;
 	}
 	
-	vecChatHistory.push_back("[@" + string(sleepers[sleeperId].name) + "]: " + string(str));
-	vecChatHistorySleeperId.push_back(sleeperId);
-	
-	if(vecChatHistory.size() > vecChatHistorySizeMax) {
-		array_delete(vecChatHistory.Container, 0, 1);
-		array_delete(vecChatHistorySleeperId.Container, 0, 1);
-	}
-	
-	MyChatHistorySurfRefresh();
+	MyChatHistoryAdd_Basic("[@" + string(sleepers[sleeperId].name) + "]: " + string(str), sleeperId);
 }
 
 MyChatHistorySurfInit = function() {
@@ -93,24 +101,28 @@ MyChatHistorySurfRefresh = function() {
 		MyChatHistorySurfInit();
 	}
 	
+	surface_set_target(surfChatHistory);
+	
+	SurfaceClear();
+	
+	draw_set_alpha(1);
+	
 	var chatHistoryLen = vecChatHistory.size();
 	var strChatHistory = "";
 	for(var i = 0; i < chatHistoryLen; i++) {
+		strChatHistory = "";
 		if(gShowSleeperId) {
-			strChatHistory += string(vecChatHistorySleeperId.Container[i]);
+			if(vecChatHistorySleeperId.Container[i] >= 0)
+				strChatHistory += string(vecChatHistorySleeperId.Container[i]);
 		}
-		strChatHistory += vecChatHistory.Container[i] + "\n";
+		strChatHistory += vecChatHistory.Container[i];
+		
+		draw_set_color(vecChatHistoryColor.Container[i]);
+		draw_text(0, 0 + i * chatHistoryStringSingleLineHeight, strChatHistory);
 	}
 	
-	surface_set_target(surfChatHistory);
-	
-	draw_clear_alpha(c_black, 0.0);
-	
-	draw_set_color(c_white);
-	draw_set_alpha(1);
-	draw_text(0, 0, strChatHistory);
-	
 	surface_reset_target();
+	draw_set_color(c_white);
 	
 	
 	if(vecChatHistory.size() > 0) {
@@ -129,25 +141,114 @@ MyChatHistorySurfRefresh = function() {
 	}
 }
 
+MyChatHistoryAddSystemMes = function(str) {
+	MyChatHistoryAdd_Basic(str, , c_yellow);
+}
+
+
+
+buttonOpenOurPhoneX = 0;
+buttonOpenOurPhoneY = 0;
+buttonOpenOurPhone = noone;
+
+slidingRodSleepersLabelAlphaIns = noone;
+slidingRodSleepersLabelScaleIns = noone;
+slidingRodSleepersChatScaleIns = noone;
+
+slidingRodOutFocusLayerAlphaIns = noone;
+
+slidingRodShowSleeperIdIns = noone;
+slidingRodHideVoteKickIns = noone;
+
+alarm_set(2, 1); // 初始化各个 GUI组件
+
+
+MySynchMyGuiElementsPosition = function() {
+	static _SynchSlidingRodXScreenLeftFunc = function(_insTemp, _xToLeftMultiply = 1, _xToLeftMultiplyMax = 1) {
+		if(InstanceExists(_insTemp)) {
+			var _xTemp = _insTemp.x;
+			var _yTemp = _insTemp.y;
+			var _wTemp = _insTemp.width + 1;
+			var _hTemp = _insTemp.height;
+			if(GUI_MouseGuiOnMe(0 - 48, _yTemp, _xTemp + _wTemp + 48 + _wTemp * (_xToLeftMultiplyMax - _xToLeftMultiply), _yTemp + _hTemp) && GetPositionXOnGUI(mouse_x) > -48) {
+				_xTemp = lerp(_xTemp, 0 + _wTemp * (_xToLeftMultiply - 1), 0.2);
+			} else {
+				_xTemp = lerp(_xTemp, 0 + 32 - _wTemp * (_xToLeftMultiplyMax - _xToLeftMultiply + 1), 0.2);
+			}
+			_insTemp.x = _xTemp;
+		}
+	}
+	static _SynchSlidingRodXScreenRightFunc = function(_insTemp, _xToRightMultiply = 1, _xToRightMultiplyMax = 1) {
+		if(InstanceExists(_insTemp)) {
+			var _guiW = GuiWidth();
+			
+			var _xTemp = _insTemp.x;
+			var _yTemp = _insTemp.y;
+			var _wTemp = _insTemp.width + 1;
+			var _hTemp = _insTemp.height;
+			if(GUI_MouseGuiOnMe(_xTemp - 48 - _wTemp * (_xToRightMultiplyMax - _xToRightMultiply), _yTemp, _guiW + 48, _yTemp + _hTemp) && GetPositionXOnGUI(mouse_x) < _guiW + 48) {
+				_xTemp = lerp(_xTemp, _guiW - _wTemp * _xToRightMultiply, 0.2);
+			} else {
+				_xTemp = lerp(_xTemp, _guiW - 32 + _wTemp * (_xToRightMultiplyMax - _xToRightMultiply), 0.2);
+			}
+			_insTemp.x = _xTemp;
+		}
+	}
+	
+	var _guiW = GuiWidth();
+	var _guiH = GuiHeight();
+	if(InstanceExists(buttonOpenOurPhone)) {
+		buttonOpenOurPhoneX = _guiW - 64;
+		buttonOpenOurPhoneY = _guiH - 32;
+		buttonOpenOurPhone.x = buttonOpenOurPhoneX;
+		buttonOpenOurPhone.y = buttonOpenOurPhoneY;
+	}
+	
+	_SynchSlidingRodXScreenRightFunc(slidingRodSleepersLabelAlphaIns, 1, 3);
+	_SynchSlidingRodXScreenRightFunc(slidingRodSleepersLabelScaleIns, 2, 3);
+	_SynchSlidingRodXScreenRightFunc(slidingRodSleepersChatScaleIns, 3, 3);
+	
+	_SynchSlidingRodXScreenRightFunc(slidingRodOutFocusLayerAlphaIns, 1, 1);
+	
+	_SynchSlidingRodXScreenLeftFunc(slidingRodShowSleeperIdIns, 1, 2.5);
+	_SynchSlidingRodXScreenLeftFunc(slidingRodHideVoteKickIns, 2.5, 2.5);
+}
+MySynchMyGuiElementsPosition();
+
+showSleeperIdPrev = gShowSleeperId;
+
+
 myTextBox = noone;
 
 textboxPlaceHolders = [""];
 
-if(file_exists(WORKFILEPATH + FILEJSON_TextboxPlaceHolders)) {
-	var _jsonTemp = "";
-	
-	var file = file_text_open_read(WORKFILEPATH + FILEJSON_TextboxPlaceHolders);
-	while(!file_text_eoln(file)) {
-		var _lineTemp = file_text_readln(file);
+try {
+	if(file_exists(WORKFILEPATH + FILEJSON_TextboxPlaceHolders)) {
+		var _jsonTemp = "";
 		
-		_lineTemp = string_replace_all(_lineTemp, "$NAME", string(myName));
+		var file = file_text_open_read(WORKFILEPATH + FILEJSON_TextboxPlaceHolders);
+		while(!file_text_eoln(file)) {
+			var _lineTemp = file_text_readln(file);
+			
+			_lineTemp = string_replace_all(_lineTemp, "$NAME", string(myName));
+			
+			_jsonTemp += _lineTemp;
+		}
+		file_text_close(file);
 		
-		_jsonTemp += _lineTemp;
+		if(_jsonTemp != "") {
+			textboxPlaceHolders = json_parse(_jsonTemp);
+		}
 	}
-	file_text_close(file);
+} catch(error) {
+	DebugMes([error.script, error.message]);
 	
-	if(_jsonTemp != "") {
-		textboxPlaceHolders = json_parse(_jsonTemp);
-	}
+	textboxPlaceHolders = ["无法正确读取聊天框背景占位文字"];
 }
 
+
+
+
+if(DEBUGMODE) {
+	debugStrBufs = "";
+}

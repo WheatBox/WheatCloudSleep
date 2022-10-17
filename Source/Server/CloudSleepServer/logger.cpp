@@ -1,9 +1,12 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include "logger.h"
+
 #include <chrono>
-#include <stdarg.h>
-#include <asio.hpp>
 #include <mutex>
+
+#include <stdarg.h>
+
+#include <asio.hpp>
 
 #ifdef _WIN32
 #include <Windows.h>
@@ -69,6 +72,10 @@ const char* LogLevelToStr(LogLevel log_level)
         return "error";
     case LogLevel::FATAL:
         return "fatal";
+
+    case LogLevel::REPORT:
+        return "report";
+
     default:
         return "unknown";
     }

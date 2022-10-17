@@ -7,8 +7,11 @@ var mx = GetPositionXOnGUI(mouse_x),
 	vi = point_in_rectangle(mx, my, sx, sy, sx + draw.dw, sy + draw.dh);
 
 if (vi != curt.vi) {
-	window_set_cursor(vi ? cr_beam : cr_default);
+	// window_set_cursor(vi ? cr_beam : cr_default);
 	curt.vi = vi;
+}
+if(vi) {
+	GUI_SetCursorBeam();
 }
 
 var dc = draw.dc - 1;
