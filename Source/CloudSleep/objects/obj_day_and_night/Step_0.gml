@@ -1,6 +1,7 @@
-daytime = (current_hour + current_minute / 60) / 24;
+if(gAutoDayNight)
+	daytime = (current_hour + current_minute / 60);
 
-var time = daytime;
+var time = daytime / 24;
 
 key_previous = min(floor(time * keytimesCount), keytimesCount - 1);
 key_next = (key_previous + 1) mod keytimesCount;

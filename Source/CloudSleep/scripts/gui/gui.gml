@@ -10,8 +10,9 @@
 #macro GUIDefaultAlpha 0.6
 #macro GUIHighLightAlpha 0.3
 
-globalvar gMouseOnGUI;
+globalvar gMouseOnGUI, gMouseDraggingSlidingRodIns;
 gMouseOnGUI = false;
+gMouseDraggingSlidingRodIns = noone;
 
 globalvar __halignTemp, __valignTemp, __colTemp, __alphaTemp;
 __halignTemp = fa_left;

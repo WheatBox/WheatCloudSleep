@@ -58,6 +58,8 @@ gSleepersLabelScale = 1.0;
 gSleepersChatScale = 1.0;
 globalvar gHideVoteKick;
 gHideVoteKick = 0;
+globalvar gAutoDayNight;
+gAutoDayNight = 1;
 
 
 #macro OtherSleepersChatHistoryMaxLen 10

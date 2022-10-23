@@ -264,3 +264,20 @@ function GuiElement_CreateSlidingRod(_xGui, _yGui, _label, _width, _wheat_ptr, _
 	return ins;
 }
 
+/// @desc
+/// 参数 IntFunc 是个可以自定义的取整函数，但请注意该函数要有一个参数且要记得return，例如你可以这么写：function(n) { return round(n); }
+function GuiElement_CreateSlidingRod_Time(_xGui, _yGui, _label, _width, _wheat_ptr, _varMin, _varMax, _IntFunc = undefined, _color = GUIDefaultColor) {
+	var ins = instance_create_depth(_xGui, _yGui, GUIDepth, obj_GuiElement_SlidingRod_Time);
+	ins.labelText = _label;
+	ins.width = _width;
+	ins.pMyVar = _wheat_ptr;
+	ins.variableMin = _varMin;
+	ins.variableMax = _varMax;
+	if(_IntFunc != undefined) {
+		ins.MyIntFunc = _IntFunc;
+	}
+	ins.color = _color;
+	
+	return ins;
+}
+

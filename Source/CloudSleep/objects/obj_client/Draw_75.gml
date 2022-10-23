@@ -63,6 +63,15 @@ if(myTextBox != noone) {
 	}
 }
 
+draw_set_color(c_black);
+draw_set_alpha(0.5);
+
+var _emoteTipTest = "按住~键打开表情轮盘";
+GUI_DrawRectangle(0, 0, string_width(_emoteTipTest) * 0.8, 32 * 0.8);
+
 draw_set_color(c_white);
+
+GUI_DrawTextTransformed(0, 0, _emoteTipTest, 0.8, 0.8, 0, false);
+
 draw_set_alpha(1.0);
 

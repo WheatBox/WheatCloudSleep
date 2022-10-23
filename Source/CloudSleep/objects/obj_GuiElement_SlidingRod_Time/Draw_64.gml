@@ -64,4 +64,6 @@ if(_handleHightlight) {
 
 draw_set_alpha(1.0);
 
-GUI_DrawTextTransformed(x + 2, y, labelText + " " + string(_varNum) + "∈[" + string(variableMin) + "," + string(variableMax) + "]", 0.8, 0.8, 0, false);
+var _varNumDrawHour = floor(_varNum);
+var _varNumDrawMinute = round(frac(_varNum) * 60);
+GUI_DrawTextTransformed(x + 2, y, labelText + " " + string(_varNumDrawHour) + ":" + string(_varNumDrawMinute) + "∈[" + string(variableMin) + "," + string(variableMax) + "]", 0.8, 0.8, 0, false);
