@@ -48,11 +48,13 @@ draw_set_color(color);
 GUI_DrawRectangle(handleX - handleWidth / 2, rodY - handleHeight / 2, handleX + handleWidth / 2, rodY + handleHeight / 2);
 
 if(gMouseDraggingSlidingRodIns == id) {
-	window_mouse_set(_mouseXGui, rodY);
+	var _windowMouseX = window_mouse_get_x();
 	
-	if(_mouseXGui < rodLeft)
+	window_mouse_set(_windowMouseX, rodY);
+	
+	if(_windowMouseX < rodLeft)
 		window_mouse_set(rodLeft, rodY);
-	else if(_mouseXGui > rodRight)
+	else if(_windowMouseX > rodRight)
 		window_mouse_set(rodRight, rodY);
 }
 
