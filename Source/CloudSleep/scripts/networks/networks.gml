@@ -131,11 +131,12 @@ function ChatCommand(str) {
 	var isChatCommand = true;
 	
 	var args = CutStringToArray(str, " ");
-	DebugMes(args);
+	var argnum = array_length(args);
+	DebugMes([argnum, args]);
 	
 	switch(args[0]) {
 		case "/kick":
-			if(array_length(args) >= 2) {
+			if(argnum >= 2) {
 				var strTemp = string_digits(args[1]);
 				if(strTemp != "") {
 					SendKick(real(strTemp));
@@ -144,9 +145,12 @@ function ChatCommand(str) {
 			break;
 			
 		case "/report":
-			if(array_length(args) >= 2) {
-				var strTemp = string(args[1]);
-				if(strTemp != "") {
+			if(argnum >= 2) {
+				var strTemp = "";
+				for(var i = 1; i < argnum; i++) {
+					strTemp += string(args[i]) + " ";
+				}
+				if(strTemp != "" && string_length(strTemp) != string_count(" ", strTemp)) {
 					SendReport(strTemp);
 				}
 			}
