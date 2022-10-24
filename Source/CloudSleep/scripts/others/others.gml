@@ -285,3 +285,33 @@ function ScrollYCalculate(scrollY, scrollYSpeed, _guiTop, _guiBottom, _pageHeigh
 	return scrollY;
 }
 
+function StringAutoWarp(str, _strboxWidth) {
+	var res = str;
+	
+	var _l = 1, _sublen = 1, _lines = 0;
+	for(var i = 0; i < string_length(str); i++) {
+		if(string_width(string_copy(str, _l, _sublen + 1)) > _strboxWidth) {
+			res = string_insert("\n", res, _l + _sublen + _lines);
+			_l += _sublen;
+			_sublen = 1;
+			_lines++;
+		} else {
+			_sublen++;
+		}
+	}
+	
+	return res;
+}
+
+function SurfaceClearArea(_left, _top, _right, _bottom) {
+	SaveDrawSettings();
+	
+	gpu_set_blendmode(bm_subtract);
+	draw_set_alpha(1.0);
+	draw_set_color(c_white);
+	draw_rectangle(_left, _top, _right, _bottom, false);
+	gpu_set_blendmode(bm_normal);
+	
+	LoadDrawSettings();
+}
+

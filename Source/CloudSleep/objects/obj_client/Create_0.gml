@@ -38,6 +38,21 @@ SendType();
 synchPosRateTime = 5 * 60; // 五秒向服务器发送一次自己的坐标，让其它客户端进行同步
 alarm_set(0, synchPosRateTime);
 
+/// @desc 获取最小的还在线的睡客ID
+MyGetSleeperIdMin = function() {
+	static res = 10000;
+	
+	var _len = array_length(sleepers);
+	for(var i = res; i < _len; i++) {
+		if(MyCanUseSleeperId(i) == false) {
+			res = i + 1;
+		} else {
+			break;
+		}
+	}
+	return res;
+}
+
 MyGetSleeperIdMax = function() {
 	return array_length(sleepers) - 1;
 }
@@ -48,6 +63,8 @@ MyCanUseSleeperId = function(sleeperId) {
 		return false;
 	}
 	if(!instance_exists(sleepers[sleeperId])) {
+		return false;
+	} else if(sleepers[sleeperId] == 0) {
 		return false;
 	}
 	return true;

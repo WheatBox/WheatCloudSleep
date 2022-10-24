@@ -12,14 +12,16 @@ function OurPhoneGUI_MouseGuiOnMe(left, top, right, bottom) {
 }
 
 
-function OurPhoneGuiElement_TextBox(_x, _y, _width, _height, _maxStringLength, _placeHolder) constructor {
+function OurPhoneGuiElement_TextBox(_x, _y, _width, _height, _maxStringLength = -1, _placeHolder = "", _textScale = 1.0) constructor {
 	x = _x;
 	y = _y;
 	width = _width;
 	height = _height;
-	maxStringLength = _maxStringLength;
+	maxStringLength = _maxStringLength; // 若为 -1 则为自动
 	
 	placeHolder = _placeHolder;
+	
+	textScale = _textScale;
 	
 	haveFocus = false;
 	
@@ -28,7 +30,7 @@ function OurPhoneGuiElement_TextBox(_x, _y, _width, _height, _maxStringLength, _
 	
 	myCursorX = 0;
 	myCursorY = 0;
-	myCursorHeight = string_height("乐");
+	myCursorHeight = string_height("乐") * textScale;
 	myCursorShow = false;
 	myCursorShakeTimeMax = 30;
 	myCursorShakeTime = myCursorShakeTimeMax;
@@ -52,9 +54,9 @@ function OurPhoneGuiElement_TextBox(_x, _y, _width, _height, _maxStringLength, _
 		
 		if(myString == "") {
 			draw_set_color(c_gray);
-			GUI_DrawText(x, y, placeHolder, false);
+			GUI_DrawTextTransformed(x, y, placeHolder, textScale, textScale, 0, false);
 		} else {
-			GUI_DrawText(x, y, myDrawString, false);
+			GUI_DrawTextTransformed(x, y, myDrawString, textScale, textScale, 0, false);
 		}
 		
 		draw_set_color(c_white);
@@ -119,13 +121,23 @@ function OurPhoneGuiElement_TextBox(_x, _y, _width, _height, _maxStringLength, _
 		}
 		
 		if(_myStringChanged = true) {
-			if(string_length(myString) > maxStringLength) {
-				myString = string_copy(myString, 1, maxStringLength);
+			if(maxStringLength != -1) {
+				if(string_length(myString) > maxStringLength) {
+					myString = string_copy(myString, 1, maxStringLength);
+				}
+				
+				MyAlignCursorPosAndAutoWarp();
+			} else {
+				MyAlignCursorPosAndAutoWarp();
+				
+				while(string_height(myDrawString) * textScale > height && myString != "") {
+					var _lenTemp = string_length(myDrawString) - string_last_pos("\n", myDrawString);
+					
+					myString = string_copy(myString, 1, string_length(myString) - _lenTemp);
+					
+					MyAlignCursorPosAndAutoWarp();
+				}
 			}
-		}
-		
-		if(_myStringChanged) {
-			MyAlignCursorPosAndAutoWarp();
 		}
 	}
 	
@@ -136,23 +148,12 @@ function OurPhoneGuiElement_TextBox(_x, _y, _width, _height, _maxStringLength, _
 	}
 	
 	static MyAlignCursorPosAndAutoWarp = function() {
-		myDrawString = myString;
-		var _l = 1, _sublen = 1, _lines = 0;
-		for(var i = 0; i < string_length(myString); i++) {
-			if(string_width(string_copy(myString, _l, _sublen + 1)) > width) {
-				myDrawString = string_insert("\n", myDrawString, _l + _sublen + _lines);
-				_l += _sublen;
-				_sublen = 1;
-				_lines++;
-			} else {
-				_sublen++;
-			}
-		}
+		myDrawString = StringAutoWarp(myString, width / textScale);
 		
 		var _lastLine = string_last_pos("\n", myDrawString);
-		myCursorX = string_width(string_copy(myDrawString, _lastLine + 1, string_length(myDrawString) - _lastLine));
-		myCursorY = string_height("乐") * string_count("\n", myDrawString);
-		myCursorHeight = string_height("乐");
+		myCursorX = string_width(string_copy(myDrawString, _lastLine + 1, string_length(myDrawString) - _lastLine)) * textScale;
+		myCursorY = string_height("乐") * textScale * string_count("\n", myDrawString);
+		myCursorHeight = string_height("乐") * textScale;
 	}
 	
 	static GetContent = function() {
@@ -162,5 +163,63 @@ function OurPhoneGuiElement_TextBox(_x, _y, _width, _height, _maxStringLength, _
 	static ClearContent = function() {
 		myString = "";
 		MyAlignCursorPosAndAutoWarp();
+	}
+}
+
+function OurPhoneGuiElement_Button(_x, _y, _width, _height, _labelText, _FuncPressedArgs = [], _FuncPressed = function(args) {}, _color = c_black, _alpha = 1.0, _textColor = c_white, _textScale = 1.0, _textOnCenter = true) constructor {
+	x = _x;
+	y = _y;
+	width = _width;
+	height = _height;
+	
+	labelText = _labelText;
+	
+	MyFuncPressedArgs = _FuncPressedArgs;
+	MyFuncPressed = _FuncPressed;
+	
+	color = _color;
+	alpha = _alpha;
+	textColor = _textColor;
+	textScale = _textScale;
+	textOnCenter = _textOnCenter;
+	
+	static Draw = function(_highlight = false) {
+		draw_set_color(color);
+		draw_set_alpha(alpha);
+		
+		GUI_DrawRectangle(x, y, x + width, y + height, false);
+		
+		draw_set_color(textColor);
+		GUI_DrawTextTransformed(x + width / 2, y + height / 2, labelText, textScale, textScale, 0, textOnCenter);
+		
+		draw_set_color(c_white);
+		
+		if(_highlight) {
+			draw_set_alpha(GUIHighLightAlpha);
+			GUI_DrawRectangle(x, y, x + width, y + height, false);
+		}
+		draw_set_alpha(1);
+	}
+	
+	/// @desc 返回值：-1 = 鼠标没有触及，0 = 鼠标在上面没按下，1 = 鼠标按下了
+	static CheckAndWorkPressed = function() {
+		if(OurPhoneGUI_MouseGuiOnMe(x, y, x + width, y + height)) {
+			GUI_SetCursorHandpoint();
+			
+			if(MouseLeftPressed()) {
+				MyFuncPressed(MyFuncPressedArgs);
+				
+				return 1;
+			} else {
+				return 0;
+			}
+		} else {
+			return -1;
+		}
+	}
+	
+	static WorkEasy = function() {
+		var _highlight = CheckAndWorkPressed();
+		Draw(_highlight != -1);
 	}
 }
