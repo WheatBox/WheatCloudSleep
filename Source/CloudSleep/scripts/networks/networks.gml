@@ -126,6 +126,10 @@ function SendReport(_reportContent) {
 	SendCommandEasy(CommandType.report, [_reportContent]);
 }
 
+function SendPriChat(_destSleeperId, _chatStr) {
+	SendCommandEasy(CommandType.prichat, [_destSleeperId, _chatStr]);
+}
+
 
 function ChatCommand(str) {
 	var isChatCommand = true;

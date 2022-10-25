@@ -67,6 +67,10 @@ function OurPhoneGuiElement_TextBox(_x, _y, _width, _height, _maxStringLength = 
 			GUI_SetCursorBeam();
 			
 			if(MouseLeftPressed()) {
+				if(haveFocus == false) {
+					keyboard_string = "";
+				}
+				
 				haveFocus = true;
 				
 				myCursorShow = true;

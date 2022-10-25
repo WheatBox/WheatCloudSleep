@@ -36,7 +36,11 @@ public:
 
     void Refuse(SleeperId id);
 
+    bool IsSleeperInRoom(SleeperId id);
+
     void Deliver(std::string_view msg);
+
+    void DeliverTo(SleeperId destSleeperId, std::string & msg);
 
 private:
     void DeliverToAll(const std::string& msg);

@@ -147,6 +147,10 @@ if(map[? "type"] == network_type_data) {
 				case CommandType.report:
 					GuiElement_CreateMessage("举报信息发送成功！");
 					break;
+				case CommandType.prichat:
+					if(!InstanceExists(obj_ourApp_Chat)) break;
+					obj_ourApp_Chat.MyReceiveMessage(real(_Args[0]), real(_Args[1]), string(_Args[2]));
+					break;
 			}
 		} catch(error) {
 			DebugMes([error.script, error.message]);

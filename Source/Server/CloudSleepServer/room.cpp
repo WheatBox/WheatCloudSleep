@@ -160,9 +160,28 @@ void Room::Refuse(SleeperId id)
     }
 }
 
+bool Room::IsSleeperInRoom(SleeperId id) {
+    auto iter = m_sleepers.find(id);
+    if (iter == m_sleepers.end())
+    {
+        LOG_INFO("%s, sleeper:%lld not in room", __func__, id);
+        return false;
+    }
+    return true;
+}
+
 void Room::Deliver(std::string_view msg)
 {
     DeliverToAll(std::string(msg));
+}
+
+void Room::DeliverTo(SleeperId destSleeperId, std::string & msg) {
+    auto iter = m_sleepers.find(destSleeperId);
+    if(iter == m_sleepers.end()) {
+        LOG_INFO("%s, sleeper:%lld not in room", __func__, destSleeperId);
+        return;
+    }
+    iter->second->Deliver(msg);
 }
 
 void Room::DeliverToAll(const std::string& msg)

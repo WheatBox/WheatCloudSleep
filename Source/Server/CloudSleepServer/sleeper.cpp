@@ -217,6 +217,26 @@ asio::awaitable<void> Sleeper::Reader()
                         LOG_REPORT("sleeper:%lld report: %s", m_id, cmd.reportContent.c_str());
                         Deliver(PackCommandWithId(m_id, CmdReport{ "0" }));
                     },
+                    [this, &forward](CmdPriChat cmd) {
+                        forward = false;
+
+                        cmd.src_id = m_id;
+                        LOG_INFO("sleeper:%lld prichat %lld,: %s", cmd.src_id, cmd.dest_id, cmd.msg.c_str());
+
+                        if(m_room.IsSleeperInRoom(cmd.dest_id) == false) {
+                            return;
+                        }
+                        
+                        bool modified = EliminateBadWord(cmd.msg);
+                        if (modified)
+                        {
+                            LOG_INFO("sleeper:%lld prichat %lld after modified:%s", cmd.src_id, cmd.dest_id, cmd.msg.c_str());
+                        }
+
+                        std::string _replyMsgTemp = PackCommandWithId(cmd.src_id, cmd);
+                        m_room.DeliverTo(cmd.dest_id, _replyMsgTemp);
+                        m_room.DeliverTo(cmd.src_id, _replyMsgTemp);
+                    },
                     [](auto&&) { }
                 }, 
                 msgCommand);
