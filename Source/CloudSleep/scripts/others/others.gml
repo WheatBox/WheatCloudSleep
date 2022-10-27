@@ -179,6 +179,8 @@ function ArrayClear(array) {
 }
 
 function GameRestart() {
+	instance_activate_all();
+	
 	gSleepersStruct = DefaultStructSleepers;
 	gBackgroundsStruct = DefaultStructBackgrounds;
 	gDecoratesStruct = DefaultStructDecorates;
@@ -315,3 +317,18 @@ function SurfaceClearArea(_left, _top, _right, _bottom) {
 	LoadDrawSettings();
 }
 
+/// @desc 将该函数放在 obj_camera 中
+function InstancesOptimize() {
+	static prepareFrames = 5; // 考虑到初始化问题，提供5帧预备时间
+	
+	if(prepareFrames > 0) {
+		prepareFrames--;
+		return;
+	}
+	
+	instance_deactivate_object(obj_background);
+	instance_deactivate_object(obj_decorate);
+	
+	var i = 64;
+	instance_activate_region(CameraX() - i, CameraY() - i, CameraWidth() + i * 2, CameraHeight() + i * 2, true);
+}

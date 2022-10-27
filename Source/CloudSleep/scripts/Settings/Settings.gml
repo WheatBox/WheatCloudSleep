@@ -66,4 +66,4 @@ gAutoDayNight = 1;
 
 
 #macro DEBUGMODE 0
-show_debug_overlay(DEBUGMODE);
+show_debug_overlay(DEBUGMODE | 1);

@@ -27,3 +27,5 @@ if((w != windowWidth || h != windowHeight) && surface_exists(application_surface
 	windowHeight = h;
 }
 
+InstancesOptimize();
+
