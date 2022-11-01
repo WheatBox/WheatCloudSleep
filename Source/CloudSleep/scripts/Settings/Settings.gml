@@ -1,5 +1,5 @@
 // 当前客户端版本
-#macro ClientVersion "WheatCloudSleep_v1.0.0"
+#macro ClientVersion "WheatCloudSleep_v1"
 
 // 关于该客户端的信息
 #macro ClientAbout (\
@@ -15,8 +15,11 @@
 	"\t" + "github@WheatBox\n"\
 )
 
+// 镜头最远拖拽距离
+#macro CameraMaxDragDistance 1200
+
 // 聊天记录的接收范围的圆的半径，单位：像素
-#macro ChatHistoryRecordMaxDistance 3200
+#macro ChatHistoryRecordMaxDistance 4400 // 3200 + 1200
 
 // 聊天记录的最大记录条数
 #macro ChatHistoryMaxLines 100
