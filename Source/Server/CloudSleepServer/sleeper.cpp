@@ -256,7 +256,7 @@ asio::awaitable<void> Sleeper::Reader()
             }
             catch (const std::exception& e)
             {
-                LOG_WARN("%s, ParseCommand failed, err:%s, sleeper_id:%lld", __func__, e.what(), m_id);
+                LOG_WARN("%s, ParseCommand failed, command: %s, err:%s, sleeper_id:%lld", __func__, buffer.data(), e.what(), m_id);
             }
 
             if(m_receivedPackGuid == false) {

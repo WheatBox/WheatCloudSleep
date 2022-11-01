@@ -14,6 +14,12 @@ globalvar gMouseOnGUI, gMouseDraggingSlidingRodIns;
 gMouseOnGUI = false;
 gMouseDraggingSlidingRodIns = noone;
 
+// 关于该变量的相关设置在 obj_camera 里
+globalvar __MouseOnGUIBackswing;
+__MouseOnGUIBackswing = 0;
+
+#macro IsMouseOnGUI (__MouseOnGUIBackswing > 0)
+
 globalvar __halignTemp, __valignTemp, __colTemp, __alphaTemp;
 __halignTemp = fa_left;
 __valignTemp = fa_top;

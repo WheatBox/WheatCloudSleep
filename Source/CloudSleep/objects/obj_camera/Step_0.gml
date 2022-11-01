@@ -3,7 +3,7 @@ if(canControlDelayTime > 0) {
 	exit;
 }
 
-if(gMouseOnGUI == false) {
+if(IsMouseOnGUI == false) {
 	mouseCameraMoveLock = false;
 } else {
 	mouseCameraMoveLock = true;
@@ -11,9 +11,9 @@ if(gMouseOnGUI == false) {
 
 var cameraW = camera_get_view_width(view_camera[0]);
 var cameraH = camera_get_view_height(view_camera[0]);
-if(gMouseOnGUI == false && mouse_wheel_up() && CameraScale(0, true) > 0.1 && CameraScale(1, true) > 0.1) {
+if(IsMouseOnGUI == false && mouse_wheel_up() && CameraScale(0, true) > 0.1 && CameraScale(1, true) > 0.1) {
 	camera_set_view_size(view_camera[0], cameraW * scaleMulitply, cameraH * scaleMulitply);
-} else if(gMouseOnGUI == false && mouse_wheel_down() && CameraScale(0, true) < 3 && CameraScale(1, true) < 3) {
+} else if(IsMouseOnGUI == false && mouse_wheel_down() && CameraScale(0, true) < 3 && CameraScale(1, true) < 3) {
 	camera_set_view_size(view_camera[0], cameraW / scaleMulitply, cameraH / scaleMulitply);
 }
 
@@ -58,5 +58,11 @@ if(findingPlayer && InstanceExists(obj_client)) {
 }
 
 
-
-gMouseOnGUI = false;
+if(__MouseOnGUIBackswing > 0) {
+	__MouseOnGUIBackswing--;
+}
+if(gMouseOnGUI) {
+	gMouseOnGUI = false;
+	
+	__MouseOnGUIBackswing = 1;
+}
