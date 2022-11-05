@@ -131,7 +131,7 @@ function GuiElement_PageAlign(_pageIns) {
 	var ins = noone;
 	for(var i = 0; i < _len; i++) {
 		ins = _pageIns.vecChildElements.Container[i];
-		ins.y = _pageIns.y + 32 - _pageIns.scrollY;
+		ins.y = _pageIns.y + 32 + _pageIns.scrollY;
 		
 		for(var j = 0; j <= i; j++) {
 			ins.y += _pageIns.vecChildElementsHeight.Container[j];
