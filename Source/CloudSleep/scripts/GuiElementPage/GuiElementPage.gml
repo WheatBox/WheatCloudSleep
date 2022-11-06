@@ -49,7 +49,7 @@ function GuiElement_PageAddElement(pageIns, elementIns, elementHeight = undefine
 			
 			ins.y -= insYTemp;
 			
-			childElementsBottom = ins.y + vecChildElementsHeight.back();
+			childElementsBottom = ins.y + vecChildElementsHeight.back() - scrollY;
 			
 			instance_deactivate_object(ins);
 		}
@@ -143,7 +143,7 @@ function GuiElement_PageAlign(_pageIns) {
 	}
 	
 	if(InstanceExists(ins)) {
-		_pageIns.childElementsBottom = ins.y + _pageIns.vecChildElementsHeight.back();
+		_pageIns.childElementsBottom = ins.y + _pageIns.vecChildElementsHeight.back() - _pageIns.scrollY;
 	}
 }
 
