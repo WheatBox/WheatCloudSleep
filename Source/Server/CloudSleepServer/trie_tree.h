@@ -12,6 +12,7 @@
 #include <string>
 #include <utility>
 #include <vector>
+#include <cstring>
 
 #include "utf8tools.h"
 

@@ -238,7 +238,7 @@ namespace wheat
             [](CmdVoteKickOver) { return ProcCommand("kickover", "0"); },
             [](CmdError arg) { return ProcCommand("error", std::to_string(to_underlaying(arg.error_code))); },
             [](CmdEmote arg) { return ProcCommand("emote", std::to_string(arg.emote_id)); },
-            [](CmdReport arg) { return ProcCommand("report", "0"); },
+            [](CmdReport) { return ProcCommand("report", "0"); },
             [](CmdPriChat arg) { return ProcCommand("prichat", std::to_string(arg.src_id), std::to_string(arg.dest_id), arg.msg); },
             [](auto&&) { return std::string(); }
             }, cmd);
