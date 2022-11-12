@@ -12,6 +12,6 @@ https://wheatbox.lanzoue.com/b01851r7a
 
 ### RemoveDuplicatesLines
 
-除去一个文本文件中重复的行，主要是用于给敏感词文件去重来用的。
+除去一个文本文件中重复的词（以空格分割 或 一行一个  为一个单位），主要是用于给敏感词文件去重来用的。
 
-Remove duplicate lines in a text file, mainly used to de-duplicate sensitive word files.
+Remove duplicate words in a text file (Space division or one line as a unit), mainly used to de-duplicate sensitive word files.

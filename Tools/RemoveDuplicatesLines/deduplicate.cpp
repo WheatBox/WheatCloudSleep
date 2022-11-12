@@ -63,18 +63,16 @@ int main(int argc, char * argv[]) {
 
     std::unordered_map<std::string, bool> mapDuplicate;
     while(!fin.eof()) {
-        char sztemp[1024] = {'\0'};
-        memset(sztemp, 0, sizeof(sztemp));
+        std::string strtemp;
 
-        fin.getline(sztemp, sizeof(sztemp));
+        fin >> strtemp;
 
-        std::string strtemp = sztemp;
         if(mapDuplicate.find(strtemp) == mapDuplicate.end()) {
             mapDuplicate[strtemp] = true;
             outstr += strtemp + "\n";
         } else {
             if(printon) {
-                std::cout << "Found duplicate line: " << sztemp << std::endl;
+                std::cout << "Found duplicate word: " << strtemp.c_str() << std::endl;
             }
             duplicationNum++;
         }
@@ -82,7 +80,7 @@ int main(int argc, char * argv[]) {
 
     fout << outstr.c_str();
 
-    std::cout << "Over~ Removed " << duplicationNum << " lines.\nOutput file: " << outputfilename.c_str() << std::endl;
+    std::cout << "Over~ Removed " << duplicationNum << " words.\nOutput file: " << outputfilename.c_str() << std::endl;
 
     return 0;
 }
