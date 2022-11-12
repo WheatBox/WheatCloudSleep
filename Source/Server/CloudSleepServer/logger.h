@@ -8,7 +8,12 @@
 
 constexpr const char* GetFileName(std::string_view system_file_name)
 {
+#ifdef _WIN32
     auto pos = system_file_name.rfind('\\');
+#else
+    auto pos = system_file_name.rfind('/');
+#endif // _WIN32
+
     if (pos != std::string::npos)
     {
         return system_file_name.substr(pos + 1).data();
