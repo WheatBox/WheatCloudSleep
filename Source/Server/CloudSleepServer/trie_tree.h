@@ -195,10 +195,13 @@ namespace trie_tree
 		trie_tree_node* cur_node = root_;
 		for (std::size_t i = 0; i < len; ++i)
 		{
+			if(i == len - 1 && word[i] == '\r') {
+				break;
+			}
 			cur_node = get_or_add_child_node(cur_node, word[i]);
-	}
+		}
 		cur_node->word_end = true;
-}
+	}
 
 	_BASIC_TRIE_TREE_FUNC_
 		void basic_trie_tree<_CType>::add_word(const std::basic_string<_CType>& word)
@@ -264,9 +267,14 @@ namespace trie_tree
 	_BASIC_TRIE_TREE_FUNC_
 		void basic_trie_tree<_CType>::add_stop_char(const _CType * stop_char)
 	{
-		stop_charset_.emplace(std::basic_string<_CType>(stop_char));
+		std::basic_string<_CType> str(stop_char);
+		if(str[str.length() - 1] == '\r') {
+			str = str.substr(0, str.length() - 1);
+		}
 
-		std::size_t len = strlen(stop_char);
+		stop_charset_.emplace(str);
+
+		std::size_t len = str.length();
 		if(len > stop_charMaxLen) {
 			stop_charMaxLen = len;
 		}
