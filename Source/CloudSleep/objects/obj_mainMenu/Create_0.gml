@@ -134,8 +134,8 @@ MyEnterToBedRoom = function() {
 	
 	LoadSleeperEmoteSprites();
 	LoadBedSleepSprites();
-	DebugMes(gArrSleeperEmoteSprites);
-	DebugMes(gArrBedSleepSprites);
+	// DebugMes(gArrSleeperEmoteSprites);
+	// DebugMes(gArrBedSleepSprites);
 	
 	
 	WriteMyName();

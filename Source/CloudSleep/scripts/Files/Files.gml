@@ -250,10 +250,10 @@ function LoadCloudPack(_loadSleepers, _loadOthers) {
 		FileWrite(WORKFILEPATH + FILEJSON_scene, _changedjson);
 	}
 	
-	DebugMes([gSleepersStruct, gSleepersSpritesStruct, gSceneStruct.sleepers]);
-	DebugMes([gBackgroundsStruct, gBackgroundsSpritesStruct, gSceneStruct.backgrounds]);
-	DebugMes([gDecoratesStruct, gDecoratesSpritesStruct, gSceneStruct.decorates]);
-	DebugMes([gBedsStruct, gBedsSpritesStruct, gSceneStruct.beds]);
+	//DebugMes([gSleepersStruct, gSleepersSpritesStruct, gSceneStruct.sleepers]);
+	//DebugMes([gBackgroundsStruct, gBackgroundsSpritesStruct, gSceneStruct.backgrounds]);
+	//DebugMes([gDecoratesStruct, gDecoratesSpritesStruct, gSceneStruct.decorates]);
+	//DebugMes([gBedsStruct, gBedsSpritesStruct, gSceneStruct.beds]);
 }
 
 function SaveCloudPack() {

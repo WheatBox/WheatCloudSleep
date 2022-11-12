@@ -60,7 +60,8 @@ if(keyboard_check_pressed(vk_space) && findingPlayer == false && mouseCameraMove
 }
 
 
-if(findingPlayer && InstanceExists(obj_client)) {
+if(findingPlayer && InstanceExists(obj_client))
+if(obj_client.MyCanUseSleeperId(mySleeperId)) {
 	findingPlayerCurveX += 0.01;
 	cameraCenterX = MyCameraLinear(findingPlayerCurveX, findingPlayerStartX, obj_client.sleepers[mySleeperId].x);
 	cameraCenterY = MyCameraLinear(findingPlayerCurveX, findingPlayerStartY, obj_client.sleepers[mySleeperId].y - 44);

@@ -9,7 +9,7 @@ if(map[? "type"] == network_type_data) {
 		if(buf == "") {
 			continue;
 		}
-		DebugMes("buf:" + string(buf));
+		// DebugMes("buf:" + string(buf));
 		
 		if(DEBUGMODE && string_height(debugStrBufs) <= 720 / 0.7) {
 			debugStrBufs += string(buf) + "\n";

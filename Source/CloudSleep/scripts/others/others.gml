@@ -222,6 +222,10 @@ function GameRestart() {
 	
 	ArrayClear(sendMessageQueue.Container);
 	
+	mySleeperId = -1;
+	
+	__InstanceOptimizePrepareFrames = __InstanceOptimizePrepareFramesMax;
+	
 	game_restart();
 }
 
@@ -317,12 +321,13 @@ function SurfaceClearArea(_left, _top, _right, _bottom) {
 	LoadDrawSettings();
 }
 
+globalvar __InstanceOptimizePrepareFrames, __InstanceOptimizePrepareFramesMax;
+__InstanceOptimizePrepareFramesMax = 5;
+__InstanceOptimizePrepareFrames = __InstanceOptimizePrepareFramesMax; // 考虑到初始化问题，提供5帧预备时间
 /// @desc 将该函数放在 obj_camera 中
 function InstancesOptimize() {
-	static prepareFrames = 5; // 考虑到初始化问题，提供5帧预备时间
-	
-	if(prepareFrames > 0) {
-		prepareFrames--;
+	if(__InstanceOptimizePrepareFrames > 0) {
+		__InstanceOptimizePrepareFrames--;
 		return;
 	}
 	
