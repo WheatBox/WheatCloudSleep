@@ -67,7 +67,10 @@ function SSingleStruct_Bed(_fname = "") constructor {
 	sleepers : [],\
 	backgrounds : [],\
 	decorates : [],\
-	beds : []\
+	beds : [],\
+	\
+	\// 默认背景 materialId
+	defaultBackground : -1,\
 }
 
 globalvar gSleepersStruct, gBackgroundsStruct, gDecoratesStruct, gBedsStruct;
@@ -231,6 +234,8 @@ function LoadCloudPack(_loadSleepers, _loadOthers) {
 		gSceneStruct[$ "backgrounds"] ??= [];
 		gSceneStruct[$ "decorates"] ??= [];
 		gSceneStruct[$ "beds"] ??= [];
+		
+		gSceneStruct[$ "defaultBackground"] ??= -1;
 	}
 	
 	

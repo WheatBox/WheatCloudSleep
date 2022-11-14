@@ -86,6 +86,7 @@
     {"id":{"name":"animcurve_cameraLinear","path":"animcurves/animcurve_cameraLinear/animcurve_cameraLinear.yy",},"order":0,},
     {"id":{"name":"spr_bedHitbox","path":"sprites/spr_bedHitbox/spr_bedHitbox.yy",},"order":3,},
     {"id":{"name":"obj_ourApp_Report","path":"objects/obj_ourApp_Report/obj_ourApp_Report.yy",},"order":6,},
+    {"id":{"name":"obj_SceneDefaultBackground","path":"objects/obj_SceneDefaultBackground/obj_SceneDefaultBackground.yy",},"order":4,},
     {"id":{"name":"obj_ourApp_MusicPlayer","path":"objects/obj_ourApp_MusicPlayer/obj_ourApp_MusicPlayer.yy",},"order":3,},
     {"id":{"name":"rm_connect","path":"rooms/rm_connect/rm_connect.yy",},"order":0,},
   ],

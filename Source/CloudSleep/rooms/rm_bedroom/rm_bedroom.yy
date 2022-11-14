@@ -22,6 +22,7 @@
         {"resourceType":"GMRInstance","resourceVersion":"1.0","name":"inst_789A1EDA","properties":[],"isDnd":false,"objectId":{"name":"obj_camera","path":"objects/obj_camera/obj_camera.yy",},"inheritCode":false,"hasCreationCode":false,"colour":4294967295,"rotation":0.0,"scaleX":1.0,"scaleY":1.0,"imageIndex":0,"imageSpeed":1.0,"inheritedItemId":null,"frozen":false,"ignore":false,"inheritItemSettings":false,"x":0.0,"y":-32.0,},
         {"resourceType":"GMRInstance","resourceVersion":"1.0","name":"inst_4C06198D","properties":[],"isDnd":false,"objectId":{"name":"obj_ourPhone","path":"objects/obj_ourPhone/obj_ourPhone.yy",},"inheritCode":false,"hasCreationCode":false,"colour":4294967295,"rotation":0.0,"scaleX":1.0,"scaleY":1.0,"imageIndex":0,"imageSpeed":1.0,"inheritedItemId":null,"frozen":false,"ignore":false,"inheritItemSettings":false,"x":896.0,"y":704.0,},
         {"resourceType":"GMRInstance","resourceVersion":"1.0","name":"inst_17C8E9BA","properties":[],"isDnd":false,"objectId":{"name":"obj_emoteRoulette","path":"objects/obj_emoteRoulette/obj_emoteRoulette.yy",},"inheritCode":false,"hasCreationCode":false,"colour":4294967295,"rotation":0.0,"scaleX":1.0,"scaleY":1.0,"imageIndex":0,"imageSpeed":1.0,"inheritedItemId":null,"frozen":false,"ignore":false,"inheritItemSettings":false,"x":-32.0,"y":-96.0,},
+        {"resourceType":"GMRInstance","resourceVersion":"1.0","name":"inst_6324C0EE","properties":[],"isDnd":false,"objectId":{"name":"obj_SceneDefaultBackground","path":"objects/obj_SceneDefaultBackground/obj_SceneDefaultBackground.yy",},"inheritCode":false,"hasCreationCode":false,"colour":4294967295,"rotation":0.0,"scaleX":1.0,"scaleY":1.0,"imageIndex":0,"imageSpeed":1.0,"inheritedItemId":null,"frozen":false,"ignore":false,"inheritItemSettings":false,"x":-96.0,"y":-32.0,},
       ],"visible":true,"depth":0,"userdefinedDepth":false,"inheritLayerDepth":false,"inheritLayerSettings":false,"gridX":32,"gridY":32,"layers":[],"hierarchyFrozen":false,"effectEnabled":true,"effectType":null,"properties":[],},
     {"resourceType":"GMRInstanceLayer","resourceVersion":"1.0","name":"Instances_1","instances":[
         {"resourceType":"GMRInstance","resourceVersion":"1.0","name":"inst_419DC6D7","properties":[],"isDnd":false,"objectId":{"name":"obj_day_and_night","path":"objects/obj_day_and_night/obj_day_and_night.yy",},"inheritCode":false,"hasCreationCode":false,"colour":4294967295,"rotation":0.0,"scaleX":1.0,"scaleY":1.0,"imageIndex":0,"imageSpeed":1.0,"inheritedItemId":null,"frozen":false,"ignore":false,"inheritItemSettings":false,"x":-64.0,"y":64.0,},
@@ -41,6 +42,7 @@
     {"name":"inst_4C06198D","path":"rooms/rm_bedroom/rm_bedroom.yy",},
     {"name":"inst_419DC6D7","path":"rooms/rm_bedroom/rm_bedroom.yy",},
     {"name":"inst_17C8E9BA","path":"rooms/rm_bedroom/rm_bedroom.yy",},
+    {"name":"inst_6324C0EE","path":"rooms/rm_bedroom/rm_bedroom.yy",},
   ],
   "inheritCreationOrder": false,
   "sequenceId": null,
