@@ -72,6 +72,7 @@ if(map[? "type"] == network_type_data) {
 					if(InstanceExists(sleepers[mesSleeperId])) {
 						MyChatHistoryAddSystemMes("有睡客离开了 " + string(mesSleeperId) + " @" + sleepers[mesSleeperId].name);
 						
+						sleepers[mesSleeperId].MyGetup();
 						instance_destroy(sleepers[mesSleeperId]);
 					}
 					
