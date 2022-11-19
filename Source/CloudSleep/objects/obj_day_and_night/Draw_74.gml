@@ -3,7 +3,7 @@ if(!surface_exists(surf_lights)) {
 	tex_lights = surface_get_texture(surf_lights);
 }
 
-surface_set_target(surf_lights);
+// surface_set_target(surf_lights);
 /*
 draw_clear(c_black);
 gpu_set_blendmode(bm_add);
@@ -23,7 +23,7 @@ with(obj_lightParent) {
 gpu_set_tex_filter(false);
 gpu_set_blendmode(bm_normal);
 */
-surface_reset_target();
+// surface_reset_target();
 
 
 shader_set(shader);

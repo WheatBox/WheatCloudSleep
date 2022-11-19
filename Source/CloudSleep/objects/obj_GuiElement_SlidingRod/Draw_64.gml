@@ -16,6 +16,12 @@ var _mouseXGui = GetPositionXOnGUI(mouse_x);
 
 var _draggingVarNum = undefined;
 var _handleHightlight = false;
+
+if(IsMouseOnOurPhone) {
+	if(gMouseDraggingSlidingRodIns == id)
+		if(MouseLeftHold() == false)
+			gMouseDraggingSlidingRodIns = noone;
+} else
 if((gMouseDraggingSlidingRodIns == id || gMouseDraggingSlidingRodIns == noone) && GUI_MouseGuiOnMe(x, rodTop - handleHeight / 2, x + width, rodBottom + handleHeight / 2)) {
 	gMouseOnGUI = true;
 	gMouseDraggingSlidingRodIns = id;

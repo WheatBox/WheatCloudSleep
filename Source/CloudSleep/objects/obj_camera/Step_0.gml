@@ -78,3 +78,12 @@ if(gMouseOnGUI) {
 	
 	__MouseOnGUIBackswing = 1;
 }
+
+if(__MouseOnOurPhoneBackswing > 0) {
+	__MouseOnOurPhoneBackswing--;
+}
+if(gMouseOnOurPhone) {
+	gMouseOnOurPhone = false;
+	
+	__MouseOnOurPhoneBackswing = 1;
+}

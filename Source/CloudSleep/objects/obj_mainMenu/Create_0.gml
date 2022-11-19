@@ -9,7 +9,7 @@ textboxIpPortX = textboxNameX;
 textboxIpPortY = 0;
 textboxIpPortWidth = textboxNameWidth;
 textboxIpPortHeight = textboxNameHeight;
-textboxIpPort = textbox_create(textboxIpPortX, textboxIpPortY, textboxIpPortWidth, textboxIpPortHeight, PackIpPort, "要连接的服务器地址", 32, fontRegular, function() {});
+textboxIpPort = textbox_create(textboxIpPortX, textboxIpPortY, textboxIpPortWidth, textboxIpPortHeight, PackIpPort, "要连接的服务器地址", 1024, fontRegular, function() {});
 textbox_set_font(textboxIpPort, fontRegular, GUIDefaultColor, textboxIpPortHeight, 0);
 
 
