@@ -310,7 +310,8 @@ function SaveCloudPack() {
 	"mainclient":"xxxxxxxx",
 	"mainclient_howtoget":"xxxxxxxx",
 	"compatibleclients":"xxxxxx$$xxxxxx$$xxxx",
-	"ipport":"xxx.xxx.xxx.xxx:xxxxx"
+	"ipport":"xxx.xxx.xxx.xxx:xxxxx",
+	"description":"xxxxxxxx"
 }
 */
 
