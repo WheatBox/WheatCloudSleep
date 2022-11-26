@@ -6,7 +6,14 @@ if(
 	keyboard_check_direct(0xC0) // "`“ 和 ”~" 键
 	&& window_has_focus()
 ) {
-	working = true;
+	if(instance_exists(obj_client))
+	if(InstanceExists(obj_client.myTextBox)) {
+		if(obj_client.myTextBox.curt.fo == false) {
+			working = true;
+		}
+	} else {
+		working = true;
+	}
 } else {
 	if(working) {
 		if(_outOfRange) {
