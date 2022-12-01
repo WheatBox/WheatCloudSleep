@@ -38,7 +38,9 @@ Enter键 - 聊天 | Enter - Chat
 
 ## 关于文本输入框
 
-文本输入框使用的是 bilibili UP主 星竍 的代码，这里是BV号：BV1qP4y1s7jt，我使用的是仅单行版本
+文本输入框使用的是 bilibili UP主 星竍 的代码，这里是BV号：BV1qP4y1s7jt，我使用的是仅单行版本，Github：https://github.com/THEASK-CN/GMS2-Textbox-Single-Line
+
+上述库中的文本输入框的代码为 CC0-1.0 协议
 
 文本输入框的仅单行版本原版代码里面有个BUG（我不知道别的版本有没有），那就是当镜头的位置不是(0, 0)的时候，虽然文本输入框绘制的位置依然在镜头上，但是判定没有跟随上，还在原来的位置
 
