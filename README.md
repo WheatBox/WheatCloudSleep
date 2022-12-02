@@ -1,5 +1,7 @@
 # WheatCloudSleep
 
+# 最新的开发进度请切换到 cmake-asio-server 分支查看！master分支仅作为阶段性的代码暂存
+
 ## 停服了，正在整改
 
 ## 整改的时间里也没闲着，久等了，编辑器：https://github.com/WheatBox/CloudSleepEngine ，新客户端和新服务端也在保持开发中
