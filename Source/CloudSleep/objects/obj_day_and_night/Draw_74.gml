@@ -3,13 +3,13 @@ if(!surface_exists(surf_lights)) {
 	tex_lights = surface_get_texture(surf_lights);
 }
 
-surface_set_target(surf_lights);
+// surface_set_target(surf_lights);
 /*
 draw_clear(c_black);
 gpu_set_blendmode(bm_add);
 gpu_set_tex_filter(true);
 
-var lights_strength = abs(daytime - 0.5) + 0.5;
+var lights_strength = abs(daytime / 24 - 0.5) + 0.5;
 lights_strength = 1;
 var vx = camera_get_view_x(view_camera[0]);
 var vy = camera_get_view_y(view_camera[0]);
@@ -23,7 +23,7 @@ with(obj_lightParent) {
 gpu_set_tex_filter(false);
 gpu_set_blendmode(bm_normal);
 */
-surface_reset_target();
+// surface_reset_target();
 
 
 shader_set(shader);

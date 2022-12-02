@@ -15,8 +15,8 @@ if(myOurAppSurf == -1) {
 if(myOurAppIconAlpha > 0.05) {
 	var arrOurAppsSiz = array_length(arrOurApps);
 	var j = 0, ij = 0;
-	for(var i = 0; ij < arrOurAppsSiz; { i++; ij = j + (4 * i); }) {
-		for(j = 0; j < 4 && ij < arrOurAppsSiz; { j++; ij = j + (4 * i); }) {
+	for(var i = 0; ij < arrOurAppsSiz; { i++; j = 0; ij = j + (4 * i); }) {
+		for(; j < 4 && ij < arrOurAppsSiz; { j++; ij = j + (4 * i); }) {
 			if(InstanceExists(arrOurApps[ij].ins) && sprite_exists(arrOurApps[ij].iconSpr)) {
 				
 				// 关于ourApp里的x和y的作用详见 obj_ourAppParent

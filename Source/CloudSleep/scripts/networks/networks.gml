@@ -3,12 +3,13 @@ serverIP = "";
 serverPort = -1;
 socket = undefined;
 
-globalvar PackGuid, PackMainClient, PackMainClientHowToGet, PackArrCompatibleClients, PackIpPort;
+globalvar PackGuid, PackMainClient, PackMainClientHowToGet, PackArrCompatibleClients, PackIpPort, PackDescription;
 PackGuid = "";
 PackMainClient = "";
 PackMainClientHowToGet = "";
 PackArrCompatibleClients = [""];
 PackIpPort = "";
+PackDescription = "";
 
 globalvar sendMessageQueue;
 sendMessageQueue = new vector();
@@ -126,16 +127,21 @@ function SendReport(_reportContent) {
 	SendCommandEasy(CommandType.report, [_reportContent]);
 }
 
+function SendPriChat(_destSleeperId, _chatStr) {
+	SendCommandEasy(CommandType.prichat, [_destSleeperId, _chatStr]);
+}
+
 
 function ChatCommand(str) {
 	var isChatCommand = true;
 	
 	var args = CutStringToArray(str, " ");
-	DebugMes(args);
+	var argnum = array_length(args);
+	DebugMes([argnum, args]);
 	
 	switch(args[0]) {
 		case "/kick":
-			if(array_length(args) >= 2) {
+			if(argnum >= 2) {
 				var strTemp = string_digits(args[1]);
 				if(strTemp != "") {
 					SendKick(real(strTemp));
@@ -144,9 +150,12 @@ function ChatCommand(str) {
 			break;
 			
 		case "/report":
-			if(array_length(args) >= 2) {
-				var strTemp = string(args[1]);
-				if(strTemp != "") {
+			if(argnum >= 2) {
+				var strTemp = "";
+				for(var i = 1; i < argnum; i++) {
+					strTemp += string(args[i]) + " ";
+				}
+				if(strTemp != "" && string_length(strTemp) != string_count(" ", strTemp)) {
 					SendReport(strTemp);
 				}
 			}

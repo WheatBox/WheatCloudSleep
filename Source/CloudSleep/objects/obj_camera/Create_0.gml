@@ -13,7 +13,7 @@ camera_set_view_pos(view_camera[0], cameraCenterX - camera_get_view_width(view_c
 canControlDelayTime = 2;
 
 findingPlayer = true;
-findingPlayerCurveX = 0;
+findingPlayerCurveX = 1;
 findingPlayerStartX = cameraCenterX;
 findingPlayerStartY = cameraCenterY;
 

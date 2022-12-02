@@ -2,7 +2,7 @@ event_inherited();
 
 titleHeight = 32;
 
-mySleeperIdTextbox = new OurPhoneGuiElement_TextBox(4, 36, OurPhoneScreenWidth - 4 - 4, 28, 16, "睡客ID号码，例如 10014"); 
+mySleeperIdTextbox = new OurPhoneGuiElement_TextBox(4, 36, OurPhoneScreenWidth - 4 - 4, 28, 16, "目标睡客ID或名称（选填）"); 
 myReasonTextbox = new OurPhoneGuiElement_TextBox(
 	4
 	, 36 + 28 + 4

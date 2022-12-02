@@ -20,11 +20,18 @@ if(PackName != packNamePrevious) {
 		_structTemp[$ "ipport"] ??= "";
 		PackIpPort = _structTemp.ipport;
 		
+		_structTemp[$ "description"] ??= "";
+		PackDescription = _structTemp.description;
+		
 		DebugMes(PackGuid);
 		DebugMes(PackMainClient);
 		DebugMes(PackMainClientHowToGet);
 		DebugMes(PackArrCompatibleClients);
 		DebugMes(PackIpPort);
+		DebugMes(PackDescription);
+		
+		PackMainClientHowToGet = string_replace_all(PackMainClientHowToGet, "\\n", "\n");
+		PackDescription = string_replace_all(PackDescription, "\\n", "\n");
 		
 	} catch(error) {
 		PackName = packNamePrevious;
@@ -49,10 +56,10 @@ if(PackName != packNamePrevious) {
 			}
 			
 			if(_isCompatible) {
-				attentionText = "当前客户端版本与场景包兼容，但可能会有错误\n通过以下方式获得最合适于该场景包的客户端：\n" + attentionText;
+				attentionText += "当前客户端版本与场景包兼容，但可能会有错误\n通过以下方式获得最合适于该场景包的客户端：\n" + attentionText;
 				attentionTextColor = GUIWarningColor;
 			} else {
-				attentionText = "当前客户端版本与场景包不兼容\n通过以下方式获得最合适于该场景包的客户端：\n" + attentionText;
+				attentionText += "当前客户端版本与场景包不兼容\n通过以下方式获得最合适于该场景包的客户端：\n" + attentionText;
 				attentionTextColor = GUIDangerousColor;
 				
 				myEnterLock = true;

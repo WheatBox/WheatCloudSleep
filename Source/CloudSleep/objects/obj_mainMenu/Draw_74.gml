@@ -13,17 +13,22 @@ if(CheckStructCanBeUse(gSleepersSpritesStruct))
 if(variable_struct_exists(gSleepersSpritesStruct, "sprites"))
 if(is_array(gSleepersSpritesStruct.sprites)) {
 	
+	var _strPackDescriptionHeight = string_height(PackDescription);
+	
 	var _attenX = pageWidth + 16;
 	var _attenY = 16 + string_height("乐");
+	
+	GUI_DrawText(_attenX, _attenY - scrollY, PackDescription, false);
+	
 	draw_set_color(attentionTextColor);
 	draw_set_alpha(GUIDefaultAlpha);
-	GUI_DrawRectangle(_attenX, _attenY - scrollY, _attenX + string_width(attentionText), _attenY - scrollY + string_height(attentionText), false);
+	GUI_DrawRectangle(_attenX, _attenY - scrollY + _strPackDescriptionHeight, _attenX + string_width(attentionText), _attenY - scrollY + _strPackDescriptionHeight + string_height(attentionText), false);
 	draw_set_color(c_black);
 	draw_set_alpha(1.0);
-	GUI_DrawText(_attenX, _attenY - scrollY, attentionText, false);
+	GUI_DrawText(_attenX, _attenY - scrollY + _strPackDescriptionHeight, attentionText, false);
 	
 	var xoffAdd = 352;
-	var yoffAdd = 64 - scrollY + string_height(attentionText);
+	var yoffAdd = 64 - scrollY + string_height(attentionText) + _strPackDescriptionHeight;
 	var iWidth = round((GuiWidth() - xoffAdd) / myImageMinimumWidthHeight);
 	var iy = 0;
 	for(var i = 0; i < array_length(gSleepersSpritesStruct.sprites); i++) {

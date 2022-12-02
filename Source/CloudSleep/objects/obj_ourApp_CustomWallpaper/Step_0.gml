@@ -83,6 +83,8 @@ for(var i = 0; i < arrWallpaperFilenameSiz; { i++; yTemp += yTempAdd; }) {
 					break;
 				case ":defaultSpr":
 					OurPhone_LoadWallpaperDefault();
+					
+					OurPhone_WriteWallpaper("");
 					break;
 				default:
 					OurPhone_WriteWallpaper(arrWallpaperFilename[i]);

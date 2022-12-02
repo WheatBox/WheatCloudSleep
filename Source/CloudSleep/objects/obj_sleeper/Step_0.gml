@@ -23,9 +23,10 @@ if(myPathDestX != undefined && myPathDestY != undefined) {
 		if(willSleep) {
 			willSleep = false;
 			
-			var _bedIns = collision_circle(x, y, 32, obj_bed, false, true);
-			if(_bedIns != noone) {
-				SendSleep(_bedIns.bedSleepId);
+			var _bedInsList = ds_list_create();
+			var _bedInsListLen = collision_circle_list(x, y, 32, obj_bed, false, true, _bedInsList, true);
+			if(_bedInsListLen) {
+				SendSleep(_bedInsList[| 0].bedSleepId);
 			}
 		}
 	}

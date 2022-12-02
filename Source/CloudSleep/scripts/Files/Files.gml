@@ -15,8 +15,8 @@
 
 #macro FILEJSON_TextboxPlaceHolders "\\contents\\TextboxPlaceHolders.json"
 
-// #macro PACKAGESFILEPATH ".\\packages\\"
- #macro PACKAGESFILEPATH "F:\\packages\\"
+ #macro PACKAGESFILEPATH ".\\packages\\"
+// #macro PACKAGESFILEPATH "F:\\packages\\"
 #macro WORKFILEPATH_default PACKAGESFILEPATH + PackName + "\\"
 
 // #macro WORKFILEPATH ".\\packages\\" + PackName + "\\"
@@ -67,7 +67,10 @@ function SSingleStruct_Bed(_fname = "") constructor {
 	sleepers : [],\
 	backgrounds : [],\
 	decorates : [],\
-	beds : []\
+	beds : [],\
+	\
+	\// 默认背景 materialId
+	defaultBackground : -1,\
 }
 
 globalvar gSleepersStruct, gBackgroundsStruct, gDecoratesStruct, gBedsStruct;
@@ -231,6 +234,8 @@ function LoadCloudPack(_loadSleepers, _loadOthers) {
 		gSceneStruct[$ "backgrounds"] ??= [];
 		gSceneStruct[$ "decorates"] ??= [];
 		gSceneStruct[$ "beds"] ??= [];
+		
+		gSceneStruct[$ "defaultBackground"] ??= -1;
 	}
 	
 	
@@ -250,10 +255,10 @@ function LoadCloudPack(_loadSleepers, _loadOthers) {
 		FileWrite(WORKFILEPATH + FILEJSON_scene, _changedjson);
 	}
 	
-	DebugMes([gSleepersStruct, gSleepersSpritesStruct, gSceneStruct.sleepers]);
-	DebugMes([gBackgroundsStruct, gBackgroundsSpritesStruct, gSceneStruct.backgrounds]);
-	DebugMes([gDecoratesStruct, gDecoratesSpritesStruct, gSceneStruct.decorates]);
-	DebugMes([gBedsStruct, gBedsSpritesStruct, gSceneStruct.beds]);
+	//DebugMes([gSleepersStruct, gSleepersSpritesStruct, gSceneStruct.sleepers]);
+	//DebugMes([gBackgroundsStruct, gBackgroundsSpritesStruct, gSceneStruct.backgrounds]);
+	//DebugMes([gDecoratesStruct, gDecoratesSpritesStruct, gSceneStruct.decorates]);
+	//DebugMes([gBedsStruct, gBedsSpritesStruct, gSceneStruct.beds]);
 }
 
 function SaveCloudPack() {
@@ -305,7 +310,8 @@ function SaveCloudPack() {
 	"mainclient":"xxxxxxxx",
 	"mainclient_howtoget":"xxxxxxxx",
 	"compatibleclients":"xxxxxx$$xxxxxx$$xxxx",
-	"ipport":"xxx.xxx.xxx.xxx:xxxxx"
+	"ipport":"xxx.xxx.xxx.xxx:xxxxx",
+	"description":"xxxxxxxx"
 }
 */
 

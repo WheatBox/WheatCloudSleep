@@ -7,6 +7,7 @@
 #macro OurAppIconBboxHeight 50
 
 #macro FILEPATH_ourPhoneWallpapers (SavePath + "ourPhoneWallpapers\\")
+#macro FILEPATH_ourPhonePhotos (SavePath + "ourPhonePhotos\\")
 
 globalvar FILEPATH_ourPhoneMusics;
 FILEPATH_ourPhoneMusics = "";
@@ -25,6 +26,21 @@ FILEPATH_ourPhoneMusics = "";
 	surface_reset_target();\
 	pressed = false;\
 }
+
+// ourPhone 的实际坐标
+globalvar gOurPhoneX, gOurPhoneY;
+gOurPhoneX = 0;
+gOurPhoneY = 0;
+
+
+globalvar gMouseOnOurPhone;
+gMouseOnOurPhone = false;
+
+// 关于该变量的相关设置在 obj_camera 里
+globalvar __MouseOnOurPhoneBackswing;
+__MouseOnOurPhoneBackswing = 0;
+
+#macro IsMouseOnOurPhone (__MouseOnOurPhoneBackswing > 0)
 
 
 globalvar gMouseOnOurPhoneX, gMouseOnOurPhoneY;
@@ -121,7 +137,7 @@ function OurPhone_ReadMusicDirectory() {
 	try {
 		ini_open(FILEINI_Settings);
 		
-		var _newDir = ini_read_string("ourPhone", "musicDir", "D:\\Music\\");
+		var _newDir = ini_read_string("ourPhone", "musicDir", "");
 		if(!directory_exists(_newDir)) {
 			MakeFolder(_newDir);
 		}

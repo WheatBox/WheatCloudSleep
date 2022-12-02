@@ -187,8 +187,10 @@ asio::awaitable<void> Sleeper::Reader()
                             auto timenow = std::chrono::steady_clock::now();
                             auto nowVoteTimeRate = std::chrono::duration_cast<std::chrono::seconds>(timenow - m_lastVoteTime).count();
                             if(nowVoteTimeRate > Config::Instance().vote_kick_ratetime_s) {
-                                m_room.VoteKickStart(cmd.kick_id);
-                                m_lastVoteTime = std::chrono::steady_clock::now();
+                                if(m_room.VoteKickStart(cmd.kick_id) == false)
+                                    forward = false;
+                                else
+                                    m_lastVoteTime = std::chrono::steady_clock::now();
                             } else {
                                 forward = false;
                                 LOG_INFO("sleeper:%lld sent VoteKickStart, but too close to the last time", m_id);
@@ -215,6 +217,26 @@ asio::awaitable<void> Sleeper::Reader()
                         LOG_REPORT("sleeper:%lld report: %s", m_id, cmd.reportContent.c_str());
                         Deliver(PackCommandWithId(m_id, CmdReport{ "0" }));
                     },
+                    [this, &forward](CmdPriChat cmd) {
+                        forward = false;
+
+                        cmd.src_id = m_id;
+                        LOG_INFO("sleeper:%lld prichat %lld,: %s", cmd.src_id, cmd.dest_id, cmd.msg.c_str());
+
+                        if(m_room.IsSleeperInRoom(cmd.dest_id) == false) {
+                            return;
+                        }
+                        
+                        bool modified = EliminateBadWord(cmd.msg);
+                        if (modified)
+                        {
+                            LOG_INFO("sleeper:%lld prichat %lld after modified:%s", cmd.src_id, cmd.dest_id, cmd.msg.c_str());
+                        }
+
+                        std::string _replyMsgTemp = PackCommandWithId(cmd.src_id, cmd);
+                        m_room.DeliverTo(cmd.dest_id, _replyMsgTemp);
+                        m_room.DeliverTo(cmd.src_id, _replyMsgTemp);
+                    },
                     [](auto&&) { }
                 }, 
                 msgCommand);
@@ -234,7 +256,7 @@ asio::awaitable<void> Sleeper::Reader()
             }
             catch (const std::exception& e)
             {
-                LOG_WARN("%s, ParseCommand failed, err:%s, sleeper_id:%lld", __func__, e.what(), m_id);
+                LOG_WARN("%s, ParseCommand failed, command: %s, err:%s, sleeper_id:%lld", __func__, buffer.data(), e.what(), m_id);
             }
 
             if(m_receivedPackGuid == false) {

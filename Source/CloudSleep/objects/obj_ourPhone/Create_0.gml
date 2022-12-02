@@ -4,6 +4,9 @@ arrOurApps = [
 	OurPhone_CreateOurApp(obj_ourApp_MusicPlayer, spr_ourApp_MusicPlayer),
 	// OurPhone_CreateOurApp(obj_ourApp_WebBrowser, spr_ourApp_WebBrowser),
 	OurPhone_CreateOurApp(obj_ourApp_Report, spr_ourApp_Report),
+	OurPhone_CreateOurApp(obj_ourApp_Chat, spr_ourApp_Chat),
+	OurPhone_CreateOurApp(obj_ourApp_Camera, spr_ourApp_Camera),
+	OurPhone_CreateOurApp(obj_ourApp_Photos, spr_ourApp_Photos),
 ];
 
 depth = OurPhoneDepth;
@@ -20,6 +23,11 @@ yAdd = yAddBegin;
 xAdd = x - 1280;
 
 mouseOnMe = false;
+mouseOnScreen = false;
+
+mouseDragXOff = 0;
+mouseDragYOff = 0;
+mouseDragging = false;
 
 
 MyWork = function() {
@@ -53,9 +61,6 @@ buttonHomeMouseOnMe = false;
 MyCheckMouseOnButtonHome = function() {
 	static widthHalf = buttonHomeWidth / 2;
 	static heightHalf = buttonHomeHeight / 2;
-	
-	buttonHomeX = x + 200;
-	buttonHomeY = y + 432 + 22;
 	
 	if(GUI_MouseGuiOnMe(buttonHomeX - widthHalf, buttonHomeY - heightHalf, buttonHomeX + widthHalf, buttonHomeY + heightHalf)) {
 		return true;

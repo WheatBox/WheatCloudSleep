@@ -11,7 +11,7 @@ serverPort = real(serverAddressData[1]);
 */
 socket = network_create_socket(network_socket_tcp);
 
-network_set_config(network_config_connect_timeout, 3000);
+network_set_config(network_config_connect_timeout, 10000);
 network_connect_raw_async(socket, serverIP, serverPort);
 
 getDrawDots = function() {

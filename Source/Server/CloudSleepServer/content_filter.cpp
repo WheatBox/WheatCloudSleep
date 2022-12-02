@@ -12,6 +12,8 @@ namespace wheat
             trie_tree_.add_word(word);
         }
 
+        trie_tree_.add_stop_char(" ");
+
         for (const auto& stop_char : stop_char_list)
         {
             trie_tree_.add_stop_char(stop_char.c_str());
@@ -30,10 +32,11 @@ namespace wheat
         while (!word_list_file_stream.eof())
         {
             std::string word;
-            std::getline(word_list_file_stream, word);
+            word_list_file_stream >> word;
             trie_tree_.add_word(word);
         }
 
+        trie_tree_.add_stop_char(" ");
 
         std::ifstream stop_char_list_file_stream(stop_char_list_filename);
         if (!stop_char_list_file_stream.is_open())
@@ -44,7 +47,7 @@ namespace wheat
         while (!stop_char_list_file_stream.eof())
         {
             std::string stop_char;
-            std::getline(stop_char_list_file_stream, stop_char);
+            stop_char_list_file_stream >> stop_char;
             trie_tree_.add_stop_char(stop_char.c_str());
         }
     }

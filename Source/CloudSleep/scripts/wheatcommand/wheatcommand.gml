@@ -28,7 +28,7 @@ enum CommandType {
 	emote,
 	
 	report,
-	
+	prichat,
 };
 
 function GetCommandTypeFromString(buf) {
@@ -78,6 +78,8 @@ function GetCommandTypeFromString(buf) {
 			
 		case "report":
 			return CommandType.report;
+		case "prichat":
+			return CommandType.prichat;
 	}
 	
 	return CommandType.unknown;
@@ -87,7 +89,7 @@ function GetCommandTypeFromString(buf) {
 /// @arg _CommandType CommandType.xxxxx
 /// @arg params（可能为字符串，数字，数组）
 function CommandMakeMessage(_CommandType, params = undefined) {
-	var sendJson = { Cmd:"", Args:"" };
+	var sendJson = { Cmd:"", Args:[""] };
 	
 	switch(_CommandType) {
 		case CommandType.yourid:
@@ -96,12 +98,12 @@ function CommandMakeMessage(_CommandType, params = undefined) {
 		
 		case CommandType.name:
 			sendJson.Cmd = "name";
-			sendJson.Args = params[0];
+			sendJson.Args[0] = params[0];
 			break;
 			
 		case CommandType.type:
 			sendJson.Cmd = "type";
-			sendJson.Args = string(params[0]);
+			sendJson.Args[0] = string(params[0]);
 			break;
 			
 		case CommandType.leave:
@@ -109,41 +111,43 @@ function CommandMakeMessage(_CommandType, params = undefined) {
 			
 		case CommandType.sleep:
 			sendJson.Cmd = "sleep";
-			sendJson.Args = string(params[0]);
+			sendJson.Args[0] = string(params[0]);
 			break;
 			
 		case CommandType.getup:
 			sendJson.Cmd = "getup";
-			sendJson.Args = "0";
+			sendJson.Args[0] = "0";
 			break;
 			
 		case CommandType.chat:
 			sendJson.Cmd = "chat";
-			sendJson.Args = params[0];
+			sendJson.Args[0] = string(params[0]);
 			break;
 			
 		case CommandType.move:
 			sendJson.Cmd = "move";
-			sendJson.Args = string(params[0]) + "," + string(params[1]);
+			sendJson.Args[0] = string(params[0]);
+			sendJson.Args[1] = string(params[1]);
 			break;
 		case CommandType.pos:
 			sendJson.Cmd = "pos";
-			sendJson.Args = string(params[0]) + "," + string(params[1]);
+			sendJson.Args[0] = string(params[0]);
+			sendJson.Args[1] = string(params[1]);
 			break;
 			
 		case CommandType.kick:
 			sendJson.Cmd = "kick";
-			sendJson.Args = string(params[0]);
+			sendJson.Args[0] = string(params[0]);
 			break;
 			
 		case CommandType.agree:
 			sendJson.Cmd = "agree";
-			sendJson.Args = "0";
+			sendJson.Args[0] = "0";
 			break;
 			
 		case CommandType.refuse:
 			sendJson.Cmd = "refuse";
-			sendJson.Args = "0";
+			sendJson.Args[0] = "0";
 			break;
 			
 		case CommandType.kickover:
@@ -154,18 +158,23 @@ function CommandMakeMessage(_CommandType, params = undefined) {
 			
 		case CommandType.packguid:
 			sendJson.Cmd = "packguid";
-			sendJson.Args = PackGuid;
+			sendJson.Args[0] = PackGuid;
 			break;
 			
 		case CommandType.emote:
 			sendJson.Cmd = "emote";
-			sendJson.Args = string(params[0]);
+			sendJson.Args[0] = string(params[0]);
 			break;
 			
 		case CommandType.report:
 			sendJson.Cmd = "report";
-			sendJson.Args = string(params[0]);
+			sendJson.Args[0] = string(params[0]);
 			break;
+		case CommandType.prichat:
+			sendJson.Cmd = "prichat";
+			sendJson.Args[0] = "0";
+			sendJson.Args[1] = string(params[0]);
+			sendJson.Args[2] = params[1];
 	}
 	
 	return json_stringify(sendJson);

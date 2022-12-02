@@ -11,7 +11,7 @@ MySleep = function(_sleeperType) {
 	if(sprite_exists(gArrBedSleepSprites[materialId][_sleeperType])) {
 		sprite_index = gArrBedSleepSprites[materialId][_sleeperType];
 	}
-	DebugMes(["BedSleep", materialId, _sleeperType, sprite_index])
+	// DebugMes(["BedSleep", materialId, _sleeperType, sprite_index])
 }
 
 MyGetup = function() {

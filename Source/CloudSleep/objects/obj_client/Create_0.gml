@@ -38,6 +38,21 @@ SendType();
 synchPosRateTime = 5 * 60; // 五秒向服务器发送一次自己的坐标，让其它客户端进行同步
 alarm_set(0, synchPosRateTime);
 
+/// @desc 获取最小的还在线的睡客ID
+MyGetSleeperIdMin = function() {
+	static res = 10000;
+	
+	var _len = array_length(sleepers);
+	for(var i = res; i < _len; i++) {
+		if(MyCanUseSleeperId(i) == false) {
+			res = i + 1;
+		} else {
+			break;
+		}
+	}
+	return res;
+}
+
 MyGetSleeperIdMax = function() {
 	return array_length(sleepers) - 1;
 }
@@ -48,6 +63,8 @@ MyCanUseSleeperId = function(sleeperId) {
 		return false;
 	}
 	if(!instance_exists(sleepers[sleeperId])) {
+		return false;
+	} else if(sleepers[sleeperId] == 0) {
 		return false;
 	}
 	return true;
@@ -159,6 +176,9 @@ slidingRodOutFocusLayerAlphaIns = noone;
 
 slidingRodShowSleeperIdIns = noone;
 slidingRodHideVoteKickIns = noone;
+slidingRodAutoDayNightIns = noone;
+
+slidingRodDayTimeIns = noone;
 
 alarm_set(2, 1); // 初始化各个 GUI组件
 
@@ -170,7 +190,7 @@ MySynchMyGuiElementsPosition = function() {
 			var _yTemp = _insTemp.y;
 			var _wTemp = _insTemp.width + 1;
 			var _hTemp = _insTemp.height;
-			if(GUI_MouseGuiOnMe(0 - 48, _yTemp, _xTemp + _wTemp + 48 + _wTemp * (_xToLeftMultiplyMax - _xToLeftMultiply), _yTemp + _hTemp) && GetPositionXOnGUI(mouse_x) > -48) {
+			if(gMouseDraggingSlidingRodIns == _insTemp || GUI_MouseGuiOnMe(0 - 48, _yTemp, _xTemp + _wTemp + 48 + _wTemp * (_xToLeftMultiplyMax - _xToLeftMultiply), _yTemp + _hTemp) && GetPositionXOnGUI(mouse_x) > -48) {
 				_xTemp = lerp(_xTemp, 0 + _wTemp * (_xToLeftMultiply - 1), 0.2);
 			} else {
 				_xTemp = lerp(_xTemp, 0 + 32 - _wTemp * (_xToLeftMultiplyMax - _xToLeftMultiply + 1), 0.2);
@@ -186,7 +206,7 @@ MySynchMyGuiElementsPosition = function() {
 			var _yTemp = _insTemp.y;
 			var _wTemp = _insTemp.width + 1;
 			var _hTemp = _insTemp.height;
-			if(GUI_MouseGuiOnMe(_xTemp - 48 - _wTemp * (_xToRightMultiplyMax - _xToRightMultiply), _yTemp, _guiW + 48, _yTemp + _hTemp) && GetPositionXOnGUI(mouse_x) < _guiW + 48) {
+			if(gMouseDraggingSlidingRodIns == _insTemp || GUI_MouseGuiOnMe(_xTemp - 48 - _wTemp * (_xToRightMultiplyMax - _xToRightMultiply), _yTemp, _guiW + 48, _yTemp + _hTemp) && GetPositionXOnGUI(mouse_x) < _guiW + 48) {
 				_xTemp = lerp(_xTemp, _guiW - _wTemp * _xToRightMultiply, 0.2);
 			} else {
 				_xTemp = lerp(_xTemp, _guiW - 32 + _wTemp * (_xToRightMultiplyMax - _xToRightMultiply), 0.2);
@@ -210,8 +230,11 @@ MySynchMyGuiElementsPosition = function() {
 	
 	_SynchSlidingRodXScreenRightFunc(slidingRodOutFocusLayerAlphaIns, 1, 1);
 	
-	_SynchSlidingRodXScreenLeftFunc(slidingRodShowSleeperIdIns, 1, 2.5);
-	_SynchSlidingRodXScreenLeftFunc(slidingRodHideVoteKickIns, 2.5, 2.5);
+	_SynchSlidingRodXScreenLeftFunc(slidingRodShowSleeperIdIns, 1, 4);
+	_SynchSlidingRodXScreenLeftFunc(slidingRodHideVoteKickIns, 2.5, 4);
+	_SynchSlidingRodXScreenLeftFunc(slidingRodAutoDayNightIns, 4, 4);
+	
+	_SynchSlidingRodXScreenLeftFunc(slidingRodDayTimeIns, 1, 1);
 }
 MySynchMyGuiElementsPosition();
 

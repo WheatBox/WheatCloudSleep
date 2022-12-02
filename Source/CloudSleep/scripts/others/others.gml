@@ -179,6 +179,8 @@ function ArrayClear(array) {
 }
 
 function GameRestart() {
+	instance_activate_all();
+	
 	gSleepersStruct = DefaultStructSleepers;
 	gBackgroundsStruct = DefaultStructBackgrounds;
 	gDecoratesStruct = DefaultStructDecorates;
@@ -219,6 +221,10 @@ function GameRestart() {
 	}
 	
 	ArrayClear(sendMessageQueue.Container);
+	
+	mySleeperId = -1;
+	
+	__InstanceOptimizePrepareFrames = __InstanceOptimizePrepareFramesMax;
 	
 	game_restart();
 }
@@ -285,3 +291,49 @@ function ScrollYCalculate(scrollY, scrollYSpeed, _guiTop, _guiBottom, _pageHeigh
 	return scrollY;
 }
 
+function StringAutoWarp(str, _strboxWidth) {
+	var res = str;
+	
+	var _l = 1, _sublen = 1, _lines = 0;
+	for(var i = 0; i < string_length(str); i++) {
+		if(string_width(string_copy(str, _l, _sublen + 1)) > _strboxWidth) {
+			res = string_insert("\n", res, _l + _sublen + _lines);
+			_l += _sublen;
+			_sublen = 1;
+			_lines++;
+		} else {
+			_sublen++;
+		}
+	}
+	
+	return res;
+}
+
+function SurfaceClearArea(_left, _top, _right, _bottom) {
+	SaveDrawSettings();
+	
+	gpu_set_blendmode(bm_subtract);
+	draw_set_alpha(1.0);
+	draw_set_color(c_white);
+	draw_rectangle(_left, _top, _right, _bottom, false);
+	gpu_set_blendmode(bm_normal);
+	
+	LoadDrawSettings();
+}
+
+globalvar __InstanceOptimizePrepareFrames, __InstanceOptimizePrepareFramesMax;
+__InstanceOptimizePrepareFramesMax = 5;
+__InstanceOptimizePrepareFrames = __InstanceOptimizePrepareFramesMax; // 考虑到初始化问题，提供5帧预备时间
+/// @desc 将该函数放在 obj_camera 中
+function InstancesOptimize() {
+	if(__InstanceOptimizePrepareFrames > 0) {
+		__InstanceOptimizePrepareFrames--;
+		return;
+	}
+	
+	instance_deactivate_object(obj_background);
+	instance_deactivate_object(obj_decorate);
+	
+	var i = 64;
+	instance_activate_region(CameraX() - i, CameraY() - i, CameraWidth() + i * 2, CameraHeight() + i * 2, true);
+}

@@ -9,7 +9,7 @@ if(map[? "type"] == network_type_data) {
 		if(buf == "") {
 			continue;
 		}
-		DebugMes("buf:" + string(buf));
+		// DebugMes("buf:" + string(buf));
 		
 		if(DEBUGMODE && string_height(debugStrBufs) <= 720 / 0.7) {
 			debugStrBufs += string(buf) + "\n";
@@ -72,6 +72,7 @@ if(map[? "type"] == network_type_data) {
 					if(InstanceExists(sleepers[mesSleeperId])) {
 						MyChatHistoryAddSystemMes("有睡客离开了 " + string(mesSleeperId) + " @" + sleepers[mesSleeperId].name);
 						
+						sleepers[mesSleeperId].MyGetup();
 						instance_destroy(sleepers[mesSleeperId]);
 					}
 					
@@ -146,6 +147,10 @@ if(map[? "type"] == network_type_data) {
 					
 				case CommandType.report:
 					GuiElement_CreateMessage("举报信息发送成功！");
+					break;
+				case CommandType.prichat:
+					if(!InstanceExists(obj_ourApp_Chat)) break;
+					obj_ourApp_Chat.MyReceiveMessage(real(_Args[0]), real(_Args[1]), string(_Args[2]));
 					break;
 			}
 		} catch(error) {

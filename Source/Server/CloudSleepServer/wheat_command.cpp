@@ -46,9 +46,10 @@ namespace wheat
         {
             throw std::runtime_error("invalid msg:" + std::string(msg));
         }
-        std::string args = *iter; 
-
-        auto make_pos = [](std::string_view pos_str) {
+        // std::string args = *iter;
+        std::vector<std::string> args = iter->get<std::vector<std::string>>();
+        
+        /*auto make_pos = [](std::string_view pos_str) {
             auto delim_pos = pos_str.find(',');
             if (delim_pos == std::string::npos)
             {
@@ -59,19 +60,23 @@ namespace wheat
             {
                 return Pos{ atoi(pos_str.data()), atoi(pos_str.data() + delim_pos + 1) };
             }
+        };*/
+
+        auto make_pos = [](std::string posx, std::string posy) {
+            return Pos{ atoi(posx.data()), atoi(posy.data()) };
         };
 
         if (command == "name")
         {
-            return CmdName{ args };
+            return CmdName{ args[0] };
         }
         else if (command == "type")
         {
-            return CmdType{ SleeperSex(std::stoi(args)) };
+            return CmdType{ SleeperSex(std::stoi(args[0])) };
         }
         else if (command == "sleep")
         {
-            return CmdSleep{ std::stoi(args) };
+            return CmdSleep{ std::stoi(args[0]) };
         }
         else if (command == "getup")
         {
@@ -79,19 +84,19 @@ namespace wheat
         }
         else if (command == "chat")
         {
-            return CmdChat{ args };
+            return CmdChat{ args[0] };
         }
         else if (command == "move")
         {
-            return CmdMove{ make_pos(args) };
+            return CmdMove{ make_pos(args[0], args[1]) };
         }
         else if (command == "pos")
         {
-            return CmdPos{ make_pos(args) };
+            return CmdPos{ make_pos(args[0], args[1]) };
         }
         else if (command == "kick")
         {
-            return CmdVoteKickStart{ std::stoull(args) };
+            return CmdVoteKickStart{ std::stoull(args[0]) };
         }
         else if (command == "agree")
         {
@@ -105,15 +110,19 @@ namespace wheat
         }
         else if (command == "packguid")
         {
-            return CmdPackGuid{ args };
+            return CmdPackGuid{ args[0] };
         }
         else if (command == "emote")
         {
-            return CmdEmote{ std::stoi(args) };
+            return CmdEmote{ std::stoi(args[0]) };
         }
         else if (command == "report")
         {
-            return CmdReport{ args };
+            return CmdReport{ args[0] };
+        }
+        else if (command == "prichat")
+        {
+            return CmdPriChat{ 0, std::stoull(args[1]), args[2] };
         }
         else
         {
@@ -206,6 +215,11 @@ namespace wheat
         return ret + '\0';
     }
 
+    std::string ProcCommand(std::string Cmd, std::string Arg1, std::string Arg2, std::string Arg3) {
+        std::string ret = "{\"Cmd\":\"" + Cmd + "\",\"Args\" : [\"" + Arg1 + "\",\"" + Arg2 + "\",\"" + Arg3 + "\"] }";
+        return ret + '\0';
+    }
+
     std::string PackCommand(const WheatCommand& cmd)
     {
         return std::visit(overloaded{
@@ -224,7 +238,8 @@ namespace wheat
             [](CmdVoteKickOver) { return ProcCommand("kickover", "0"); },
             [](CmdError arg) { return ProcCommand("error", std::to_string(to_underlaying(arg.error_code))); },
             [](CmdEmote arg) { return ProcCommand("emote", std::to_string(arg.emote_id)); },
-            [](CmdReport arg) { return ProcCommand("report", "0"); },
+            [](CmdReport) { return ProcCommand("report", "0"); },
+            [](CmdPriChat arg) { return ProcCommand("prichat", std::to_string(arg.src_id), std::to_string(arg.dest_id), arg.msg); },
             [](auto&&) { return std::string(); }
             }, cmd);
     }

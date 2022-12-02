@@ -12,16 +12,23 @@ var rodRight = x + width - handleWidth / 2;
 var rodBottom = rodY + 4;
 GUI_DrawRectangle(rodLeft, rodTop, rodRight, rodBottom, false);
 
+var _mouseXGui = GetPositionXOnGUI(mouse_x);
+
 var _draggingVarNum = undefined;
 var _handleHightlight = false;
-if(GUI_MouseGuiOnMe(x, rodTop - handleHeight / 2, x + width, rodBottom + handleHeight / 2)) {
+
+if(IsMouseOnOurPhone) {
+	if(gMouseDraggingSlidingRodIns == id)
+		if(MouseLeftHold() == false)
+			gMouseDraggingSlidingRodIns = noone;
+} else
+if((gMouseDraggingSlidingRodIns == id || gMouseDraggingSlidingRodIns == noone) && GUI_MouseGuiOnMe(x, rodTop - handleHeight / 2, x + width, rodBottom + handleHeight / 2)) {
 	gMouseOnGUI = true;
+	gMouseDraggingSlidingRodIns = id;
 	
 	_handleHightlight = true;
 	
 	if(MouseLeftHold()) {
-		var _mouseXGui = GetPositionXOnGUI(mouse_x);
-		
 		_draggingVarNum = variableMin + (_mouseXGui - rodLeft) / (rodRight - rodLeft) * (variableMax - variableMin);
 		
 		var _draggingVarNumAfterMyIntFunc = MyIntFunc(_draggingVarNum);
@@ -29,8 +36,12 @@ if(GUI_MouseGuiOnMe(x, rodTop - handleHeight / 2, x + width, rodBottom + handleH
 		_draggingVarNum = clamp(_draggingVarNumAfterMyIntFunc, variableMin, variableMax);
 	} else {
 		GUI_SetCursorHandpoint();
+		
+		gMouseDraggingSlidingRodIns = noone;
 	}
-}
+} else if(gMouseDraggingSlidingRodIns == id)
+	if(MouseLeftHold() == false)
+		gMouseDraggingSlidingRodIns = noone;
 
 var _varNum = pMyVar.value();
 _varNum ??= 0;
@@ -41,6 +52,17 @@ if(_draggingVarNum != undefined) {
 var handleX = rodLeft + (_varNum - variableMin) / (variableMax - variableMin) * (rodRight - rodLeft);
 draw_set_color(color);
 GUI_DrawRectangle(handleX - handleWidth / 2, rodY - handleHeight / 2, handleX + handleWidth / 2, rodY + handleHeight / 2);
+
+if(gMouseDraggingSlidingRodIns == id) {
+	var _windowMouseX = window_mouse_get_x();
+	
+	window_mouse_set(_windowMouseX, rodY);
+	
+	if(_windowMouseX < rodLeft)
+		window_mouse_set(rodLeft, rodY);
+	else if(_windowMouseX > rodRight)
+		window_mouse_set(rodRight, rodY);
+}
 
 draw_set_color(c_white);
 if(_handleHightlight) {

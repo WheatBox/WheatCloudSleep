@@ -65,7 +65,7 @@ slidingRodOutFocusLayerAlphaIns = GuiElement_CreateSlidingRod(
 var _slidingRodShowSleeperIdWidth = 96;
 slidingRodShowSleeperIdIns = GuiElement_CreateSlidingRod(
 	0
-	, 0
+	, 32
 	, "显示睡客ID"
 	, _slidingRodShowSleeperIdWidth
 	, make_wheat_ptr(EWheatPtrType.Global, 0, "gShowSleeperId")
@@ -76,11 +76,33 @@ slidingRodShowSleeperIdIns = GuiElement_CreateSlidingRod(
 var _slidingRodHideVoteKickWidth = _slidingRodShowSleeperIdWidth;
 slidingRodHideVoteKickIns = GuiElement_CreateSlidingRod(
 	0
-	, 0
+	, 32
 	, "隐藏投票框"
 	, _slidingRodHideVoteKickWidth
 	, make_wheat_ptr(EWheatPtrType.Global, 0, "gHideVoteKick")
 	, 0, 1
 	, function(n) { return round(n); }
+);
+
+var _slidingRodAutoDayNightWidth = _slidingRodShowSleeperIdWidth;
+slidingRodAutoDayNightIns = GuiElement_CreateSlidingRod(
+	0
+	, 32
+	, "自动昼夜循环"
+	, _slidingRodHideVoteKickWidth
+	, make_wheat_ptr(EWheatPtrType.Global, 0, "gAutoDayNight")
+	, 0, 1
+	, function(n) { return round(n); }
+);
+
+var _slidingRodDayTimeWidth = 512;
+slidingRodDayTimeIns = GuiElement_CreateSlidingRod_Time(
+	0
+	, 32 + 48 + 1
+	, "昼夜时间"
+	, _slidingRodDayTimeWidth
+	, make_wheat_ptr(EWheatPtrType.Ins, obj_day_and_night, "daytime")
+	, 0, 24
+	, function(n) { gAutoDayNight = false; n *= 100; return round(n) / 100; }
 );
 

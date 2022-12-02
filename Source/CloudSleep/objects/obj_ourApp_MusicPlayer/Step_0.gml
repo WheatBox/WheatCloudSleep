@@ -105,11 +105,7 @@ if(musicIsPlaying) {
 }
 
 
-gpu_set_blendmode(bm_subtract);
-draw_set_alpha(1.0);
-draw_set_color(c_white);
-draw_rectangle(0, screenHeight - bottomHeight, 0 + screenWidth, screenHeight, false);
-gpu_set_blendmode(bm_normal);
+SurfaceClearArea(0, screenHeight - bottomHeight, 0 + screenWidth, screenHeight);
 
 draw_set_alpha(0.6);
 draw_set_color(c_black);
