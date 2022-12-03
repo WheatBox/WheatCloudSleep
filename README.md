@@ -2,9 +2,7 @@
 
 # 最新的开发进度请切换到 cmake-asio-server 分支查看！master分支仅作为阶段性的代码暂存
 
-## 停服了，正在整改
-
-## 整改的时间里也没闲着，久等了，编辑器：https://github.com/WheatBox/CloudSleepEngine ，新客户端和新服务端也在保持开发中
+## 编辑器：https://github.com/WheatBox/CloudSleepEngine
 
 ## 如何编译？看这里：https://docs.qq.com/doc/DTHlKbHROTWNMYUd1
 
@@ -20,9 +18,9 @@ Client(GameMaker) Source Path: 客户端(GameMaker)源代码路径： ./Source/C
 
 ## 那么我该如何进入官方寝室睡觉呢？
 
-在这期视频的简介区可以下载到编译后的可执行文件 https://www.bilibili.com/video/bv1rT411F78r
+在这期视频的简介区可以下载到编译后的可执行文件 https://www.bilibili.com/video/BV1gD4y1Y72T
 
-The compiled executable can be downloaded in the introduction area of this video: https://www.bilibili.com/video/bv1rT411F78r
+The compiled executable can be downloaded in the introduction area of this video: https://www.bilibili.com/video/BV1gD4y1Y72T
 
 ## 进入寝室后如何睡觉？
 
