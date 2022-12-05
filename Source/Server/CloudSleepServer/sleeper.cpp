@@ -187,13 +187,14 @@ asio::awaitable<void> Sleeper::Reader()
                             auto timenow = std::chrono::steady_clock::now();
                             auto nowVoteTimeRate = std::chrono::duration_cast<std::chrono::seconds>(timenow - m_lastVoteTime).count();
                             if(nowVoteTimeRate > Config::Instance().vote_kick_ratetime_s) {
+                                LOG_INFO("sleeper:%lld sent VoteKickStart.", m_id);
                                 if(m_room.VoteKickStart(cmd.kick_id) == false)
                                     forward = false;
                                 else
                                     m_lastVoteTime = std::chrono::steady_clock::now();
                             } else {
                                 forward = false;
-                                LOG_INFO("sleeper:%lld sent VoteKickStart, but too close to the last time", m_id);
+                                LOG_INFO("but too close to the last time");
                             }
                         }
                         else
