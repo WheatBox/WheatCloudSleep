@@ -1,5 +1,7 @@
 # WheatCloudSleep
 
+# 最新的开发进度请切换到 cmake-asio-server 分支查看！master分支仅作为阶段性的代码暂存
+
 ## 停服了，正在整改
 
 ## 整改的时间里也没闲着，久等了，编辑器：https://github.com/WheatBox/CloudSleepEngine ，新客户端和新服务端也在保持开发中
@@ -36,7 +38,9 @@ Enter键 - 聊天 | Enter - Chat
 
 ## 关于文本输入框
 
-文本输入框使用的是 bilibili UP主 星竍 的代码，这里是BV号：BV1qP4y1s7jt，我使用的是仅单行版本
+文本输入框使用的是 bilibili UP主 星竍 的代码，这里是BV号：BV1qP4y1s7jt，我使用的是仅单行版本，Github：https://github.com/THEASK-CN/GMS2-Textbox-Single-Line
+
+上述库中的文本输入框的代码为 CC0-1.0 协议
 
 （注：在ourPhone中使用的文本框是我自己写的，不过因为功能不全就没太广泛使用）
 

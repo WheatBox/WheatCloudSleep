@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #ifndef TRIE_TREE_HPP_
 #define TRIE_TREE_HPP_
 
