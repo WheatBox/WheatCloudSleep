@@ -188,6 +188,7 @@ void Room::DeliverToAll(const std::string& msg)
 {
     for (const auto& [_, sleeper] : m_sleepers)
     {
+        if(sleeper->m_receivedPackGuid)
         sleeper->Deliver(std::string(msg));
     }
 }
@@ -203,7 +204,7 @@ void Room::VoteKickOver(SleeperId id, const std::string& ip)
     m_is_voting = false;
     auto [agree, refuse] = m_vote_counter.GetVotes();
     LOG_INFO("%s, %llu agree and %llu refuse", __func__, agree, refuse);
-    if (agree >= 2 * refuse && agree > 1)
+    if (agree >= 2 * refuse && agree > 2)
     {
         auto iter = m_sleepers.find(id);
         if (iter != m_sleepers.end())

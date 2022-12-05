@@ -50,6 +50,9 @@ private:
     asio::awaitable<void> Reader();
 
     asio::awaitable<void> Writer();
+
+public:
+    bool m_receivedPackGuid = false;
 private:
     Room& m_room;
     SleeperId m_id;
@@ -62,7 +65,6 @@ private:
     SleeperSex m_sex = 0;
     int m_bed_id = -1;
     Pos m_pos = INVALID_POS;
-    bool m_receivedPackGuid = false;
     std::chrono::steady_clock::time_point m_lastVoteTime;
 
     asio::steady_timer m_timer;   //此定时器用于发送消息队列的同步，asio常用做法 
