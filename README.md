@@ -1,12 +1,10 @@
 # WheatCloudSleep
 
-# 最新的开发进度请切换到 cmake-asio-server 分支查看！master分支仅作为阶段性的代码暂存
+### 编辑器：https://github.com/WheatBox/CloudSleepEngine
 
-## 编辑器：https://github.com/WheatBox/CloudSleepEngine
+### 如何编译？看这里：https://docs.qq.com/doc/DTHlKbHROTWNMYUd1
 
-## 如何编译？看这里：https://docs.qq.com/doc/DTHlKbHROTWNMYUd1
-
-## 十分感谢 @B1aNB1aN 和 @ymx-mshk 和 @zhhhhhhhh 的帮助！！Very Thanks for @B1aNB1aN And @ymx-mshk And @zhhhhhhhh !!
+### 十分感谢 @B1aNB1aN 和 @ymx-mshk 和 @zhhhhhhhh 的帮助！！Very Thanks for @B1aNB1aN And @ymx-mshk And @zhhhhhhhh !!
 
 Wheat Cloud Sleep software, which is meaningless. All you need to do is just open the software and lie down to sleep.
 
