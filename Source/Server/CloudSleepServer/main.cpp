@@ -41,6 +41,7 @@ std::unique_ptr<wheat::ContentFilter> BuildDefaultContentFilter()
     // bad_words.push_back("在这里写入默认敏感词");
     // bad_words.push_back("像这样");
     // bad_words.push_back("一行一个");
+    // 下面的 stop_chars 也是同理
 
     std::vector<std::string> stop_chars;
     stop_chars.push_back(",");
